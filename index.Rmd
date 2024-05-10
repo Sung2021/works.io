@@ -1,0 +1,72 @@
+---
+title: "Work temporay storage"
+subtitle: ""
+author: ""
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br>
+
+### Color Palette  
+
+
+* [**ggsci**](https://nanx.me/ggsci/)
+* [**harrypotter**](https://github.com/aljrico/harrypotter)
+* [**wesanderson**](https://github.com/karthik/wesanderson)
+
+
+* [**paletteer**](https://emilhvitfeldt.github.io/paletteer/)
+
+
+* [**dittoSeq**](https://bioconductor.org/packages/release/bioc/vignettes/dittoSeq/inst/doc/dittoSeq.html)
+
+
+<br><hr><br>
+
+
+# DFCI  
+<br><br><br>
+
+
+### Belfer laboratory collaboration   
+
+**PDX model RNA-seq analysis**  
+
+  * [TCSA/ADC correlation and heatmap](Paweletz/PDX_RNA_seq_Cloud_correlation.24.05.05.moreHeatmaps.html)
+
+
+
+**Daiichi 2024**  
+
+  * [TCSA/ADC correlation and heatmap](Paweletz/Daiichi/Daiichi2024_30342.24.05.07.html)
+
+
+
+
+**NK**  
+
+  * [GESA plot request](Barbie/RNA_seq_Fig4_Request.24.05.03.GSEAPlots.html)
+
+
+
+
+<br><br><br>
+
+### MGH laboratory collaboration   
+
+
+**ITK-SYK RNA-seq**  
+
+  * [DEG: overlapping genes GSEA](Team_SJ/DEG/RNA_seq_SJ.data.filteredTPM.DEG.24.05.01.html)
+  * [DEG_kmeans 24.04.24](Team_SJ/DEG/RNA_seq_SJ.data.filteredTPM.DEG.24.04.24.html)
+
+<br><br>
+
+
+# Link repository   
+
+[Linux software](reference/references.html)

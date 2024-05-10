@@ -1,0 +1,73 @@
+---
+title: "Reference Pages"
+subtitle: "Useful links"
+author: ""
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<br>
+
+<a href="https://sung2021.github.io/works.io/">Back to Main Page</a> <br>
+
+<br><br><br>
+
+### Complex upset plot
+
+[complex upset plot tutorial](https://krassowski.github.io/complex-upset/articles/Examples_R.html)
+
+
+<br><br>
+
+### Cluster evaluation
+
+[ClustEval](https://clusteval.readthedocs.io/en/stable/gettingstarted.html)   
+[Github: ClustEval](https://github.com/ramhiser/clusteval)
+<br><br>
+
+
+### FastQ Screen
+
+FastQ Screen allows you to screen a library of sequences in FastQ format against a set of sequence databases so you can see if the composition of the library matches with what you expect.
+
+[FastQ Screen website](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)
+
+<br><br>
+
+### MultiQC
+
+[MultiQC official website](http://multiqc.info/)
+
+#### Installing MultiQC
+
+MultiQC is a tool written in Python that aggregates results from various bioinformatics tools into a single report. It can be installed using `pip`:
+
+``` bash
+pip install multiqc
+```
+
+#### Running MultiQC
+
+MultiQC operates from the command line. It automatically scans the current directory (or specified directories) for supported files to generate a summary report.
+
+1.  **Basic Usage**: To run MultiQC in the current directory:
+
+``` bash
+multiqc .
+```
+
+2.  **Specifying Directories**: To analyze files in a specific directory:
+
+``` bash
+multiqc /path/to/data
+```
+
+3.  **Customizing Reports**: To specify the report name and output directory:
+
+``` bash
+multiqc /path/to/data -n report_name.html -o /path/to/output
+```

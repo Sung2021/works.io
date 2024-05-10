@@ -1,0 +1,98 @@
+---
+title: "CellRanger Docker"
+date: "`r format(Sys.Date())`"
+output:
+  rmarkdown::html_document:
+    code_folding: show
+    number_sections: FALSE
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, eval= F, message=F, warning=F)
+```
+
+# Hardware Requirements
+
+CPU:Minimum: 8 cores, 16 or more cores recommended.  
+RAM: Minimum: 16 GB, Recommended: 64 GB or more.   
+Disk Space: Minimum: 500 GB of available space. Recommended: 1 TB or more.   
+Operating System: Linux (Ubuntu 16.04 or later, CentOS 6 or later) 
+Dependencies:GCC 6.1 or higher. Python 3.6 or later  
+
+
+**Example of Recommended System Configuration**   
+CPU: 32-core   
+Memory: 128 GB RAM.  
+Storage: 2 TB SSD  
+OS: CentOS 7. 
+Python Version: Python 3.7. 
+
+
+# Docker file
+
+```{bash,Dockerfile, eval=F}
+# Use Ubuntu as the base image
+FROM ubuntu:20.04
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y wget bzip2
+
+# Download and install CellRanger
+RUN wget -qO- https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz | tar xz
+
+# Set the environment variable to include CellRanger in the PATH
+ENV PATH="/cellranger-7.0.0:$PATH"
+
+# Set the working directory
+WORKDIR /data
+
+# Default command
+CMD ["cellranger"]
+```
+
+
+
+```{bash}
+docker build -t cellranger-docker .
+```
+
+<br><br>
+
+Sample run
+```{bash}
+docker run -v /path/to/your/data:/data cellranger-docker count --id=SampleA_GEX \
+--transcriptome=/data/reference/transcriptomes/Mouse_GEX_2020/refdata-gex-mm10-2020-A \
+--fastqs=/data/raw_data/SampleA \
+--sample=SampleA \
+--expect-cells=10000
+```
+<br><br>
+
+## Cellranger Reference  
+Human : refdata-gex-GRCh38-2020-A   
+Mouse : refdata-gex-mm10-2020-A   
+Human+Mouse : refdata-gex-mm10-GRCh38-2020-A   
+(I will update cellranger reference location in rcapps5 later.I have them in the server.)   
+
+
+<br><br>
+
+## For cellranger aggr  
+
+To combine data from multiple samples processed by the cellranger count command. 
+
+csv file: required
+```{bash}
+library_id,molecule_h5
+SampleA,/data/SampleA/outs/molecule_info.h5
+SampleB,/data/SampleB/outs/molecule_info.h5
+```
+<br><br>
+
+
+Sample run 
+```{bash}
+docker run -v /path/to/local_data:/data cellranger:7.0.0 aggr \
+--id=aggregated_output \
+--csv=/data/aggregation.csv 
+```
+

@@ -1,0 +1,17 @@
+# Choose Ubuntu as the base image
+FROM ubuntu:20.04
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y wget bzip2
+
+# Install CellRanger
+RUN wget -qO- https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz | tar xz
+
+# Set environment variable
+ENV PATH="/cellranger-7.0.0:$PATH"
+
+# Set the working directory
+WORKDIR /data
+
+# Set the default command
+CMD ["cellranger"]
