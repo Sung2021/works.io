@@ -1,9 +1,12 @@
 ---
-title: "Work temporay storage"
+title: "Report collection"
 subtitle: ""
 author: ""
 
-output: html_document
+output:
+  rmarkdown::html_vignette:
+    toc: true
+
 ---
 
 ```{r setup, include=FALSE}
@@ -11,26 +14,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 <br>
 
-### Color Palette  
-
-
-* [**ggsci**](https://nanx.me/ggsci/)
-* [**harrypotter**](https://github.com/aljrico/harrypotter)
-* [**wesanderson**](https://github.com/karthik/wesanderson)
-
-
-* [**paletteer**](https://emilhvitfeldt.github.io/paletteer/)
-
-
-* [**dittoSeq**](https://bioconductor.org/packages/release/bioc/vignettes/dittoSeq/inst/doc/dittoSeq.html)
-
-
-<br><hr><br>
-
 
 # DFCI  
-<br><br><br>
 
+*   Belfer laboratory  
+*   MGH laboratory 
+<br><br><br>
 
 ### Belfer laboratory collaboration   
 
@@ -42,7 +31,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Daiichi 2024**  
 
-  * [TCSA/ADC correlation and heatmap](Paweletz/Daiichi/Daiichi2024_30342.24.05.07.html)
+  * [P1 QC](Paweletz/Daiichi/Daiichi2024_init_30342.v2.html)
+  * [P1 Analysis](Paweletz/Daiichi/Daiichi2024_30342.24.05.07.html)
+  * [P1 Featureplot shiny app](Paweletz/Daiichi/Daiichi2024_30342.24.05.09.shiny.html)
+
 
 
 
@@ -67,6 +59,34 @@ knitr::opts_chunk$set(echo = TRUE)
 <br><br>
 
 
+### ETC   
+
+
+  * [2024 10X Genomics User group meeting in NY ](etc/Conf_10xGenomics_2024.May.html)
+  * [Cluster Stability study](etc/clusterStability1.html)
+
+<br><hr><br>
+
 # Link repository   
 
 [Linux software](reference/references.html)
+
+
+<br><hr><br>
+
+# Color Palette  
+
+
+* [**ggsci**](https://nanx.me/ggsci/)
+* [**harrypotter**](https://github.com/aljrico/harrypotter)
+* [**wesanderson**](https://github.com/karthik/wesanderson)
+
+
+* [**paletteer**](https://emilhvitfeldt.github.io/paletteer/)
+
+
+* [**dittoSeq**](https://bioconductor.org/packages/release/bioc/vignettes/dittoSeq/inst/doc/dittoSeq.html)
+
+
+<br><hr><br>
+

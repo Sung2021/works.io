@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Sung" />
+
+
+<title>Cluster Stability Evaluation literature study</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Cluster Stability Evaluation literature
+study</h1>
+<h4 class="author">Sung</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#sc3---consensus-clustering-of-single-cell-rna-seq-data-method" id="toc-sc3---consensus-clustering-of-single-cell-rna-seq-data-method">SC3
+- consensus clustering of single-cell RNA-Seq data (Method)</a>
+<ul>
+<li><a href="#application" id="toc-application">Application</a></li>
+</ul></li>
+<li><a href="#multiple-clustering-algorithms-test-s13059-022-02622-0.pdf" id="toc-multiple-clustering-algorithms-test-s13059-022-02622-0.pdf">Multiple
+clustering algorithms test (s13059-022-02622-0.pdf)</a>
+<ul>
+<li><a href="#intra--and-inter-cluster-similarity" id="toc-intra--and-inter-cluster-similarity">Intra- and Inter-Cluster
+Similarity</a></li>
+<li><a href="#community-detection-based-techniques" id="toc-community-detection-based-techniques">Community Detection-Based
+Techniques</a></li>
+<li><a href="#eigenvector-based-techniques" id="toc-eigenvector-based-techniques">Eigenvector-Based
+Techniques</a></li>
+<li><a href="#stability-metrics" id="toc-stability-metrics">Stability
+Metrics</a></li>
+<li><a href="#fig1" id="toc-fig1">Fig1</a></li>
+<li><a href="#fig2" id="toc-fig2">Fig2</a></li>
+<li><a href="#fig3" id="toc-fig3">Fig3</a></li>
+<li><a href="#fig4" id="toc-fig4">Fig4</a></li>
+<li><a href="#fig5" id="toc-fig5">Fig5</a></li>
+</ul></li>
+<li><a href="#evaluating-single-cell-cluster-stability" id="toc-evaluating-single-cell-cluster-stability">Evaluating single-cell
+cluster stability</a></li>
+</ul>
+</div>
+
+<p><br> Update: “2024-04-29”</p>
+<p><br></p>
+<p><strong>Source:</strong></p>
+<p><a href="ref/emss-71741.pdf">SC3 - consensus clustering of
+single-cell RNA-Seq data</a></p>
+<p>(Vladimir Yu. Kiselev1, Kristina Kirschner2, Michael T. Schaub3,4,
+Tallulah Andrews1, Andrew Yiu1, Tamir Chandra1,5, Kedar N Natarajan1,6,
+Wolf Reik1,5,7, Mauricio Barahona8, Anthony R Green2, and Martin
+Hemberg1)</p>
+<p><a href="ref/s13059-022-02622-0.pdf">Benchmarking clustering
+algorithms on estimating the number of cell types from single-cell
+RNA-sequencing data</a></p>
+<p>(Lijia Yu1,2,3, Yue Cao1,3, Jean Y. H. Yang1,3 and Pengyi
+Yang1,2,3*)</p>
+<p><a href="ref/btaa956.pdf">Evaluating single-cell cluster stability
+using the Jaccard similarity index</a></p>
+<p>(Ming Tang 1,2,3,<em>, Yasin Kaymaz1, Brandon L. Logeman2,3, Stephen
+Eichhorn4, Zhengzheng S. Liang2,3, Catherine Dulac2,3 and Timothy B.
+Sackton1,</em>)</p>
+<p><br></p>
+<div id="sc3---consensus-clustering-of-single-cell-rna-seq-data-method" class="section level2">
+<h2>SC3 - consensus clustering of single-cell RNA-Seq data (Method)</h2>
+<p>Single-cell RNA-seq (scRNA-seq) enables a quantitative cell-type
+characterisation based on global transcriptome profiles. We present
+Single-Cell Consensus Clustering (SC3), a user-friendly tool for
+unsupervised clustering which achieves high accuracy and robustness by
+combining multiple clustering solutions through a consensus approach. We
+demonstrate that SC3 is capable of identifying subclones based on the
+transcriptomes from neoplastic cells collected from patients.</p>
+<p><a href="https://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/SC3.html">tutorial
+link</a></p>
+<div id="application" class="section level3">
+<h3>Application</h3>
+<p>(Note: The installation of SC3 has gfortran issue in my system. M
+working on it)</p>
+<p><strong>The main sc3 method explained above is a wrapper that calls
+several other SC3 methods in the following order:</strong></p>
+<p>sc3_prepare<br />
+(optional) sc3_estimate_k<br />
+sc3_calc_dists<br />
+sc3_calc_transfs<br />
+sc3_kmeans<br />
+sc3_calc_consens<br />
+(optional) sc3_calc_biology</p>
+<p><br><br></p>
+</div>
+</div>
+<div id="multiple-clustering-algorithms-test-s13059-022-02622-0.pdf" class="section level2">
+<h2>Multiple clustering algorithms test (s13059-022-02622-0.pdf)</h2>
+<p>(Note: a simple summary, this section will be updated)</p>
+<div id="intra--and-inter-cluster-similarity" class="section level3">
+<h3>Intra- and Inter-Cluster Similarity</h3>
+<p>To measure the closeness within clusters and the separation between
+clusters:<br />
+- <strong>scLCA</strong>: the Silhouette index.<br />
+- <strong>CIDR</strong>: the Calinski-Harabasz (CH) index.<br />
+- <strong>SHARP</strong>: both the Silhouette and CH indices, plus
+hierarchical clustering.<br />
+- <strong>RaceID</strong>: the Gap statistic.<br />
+- <strong>SINCERA</strong>: a minimum distance approach.</p>
+</div>
+<div id="community-detection-based-techniques" class="section level3">
+<h3>Community Detection-Based Techniques</h3>
+<p>To optimize community structures to identify clusters:<br />
+- <strong>ACTIONet</strong><br />
+- <strong>Monocle3</strong><br />
+- <strong>Seurat</strong></p>
+</div>
+<div id="eigenvector-based-techniques" class="section level3">
+<h3>Eigenvector-Based Techniques</h3>
+<p>Eigenvector-Based Techniques to determine the optimal number of
+clusters:<br />
+- <strong>SIMLR</strong>: Maximizes the eigengap.<br />
+- <strong>Spectrum</strong>: Applies a multimodality gap
+heuristic.<br />
+- <strong>SC3</strong>: Analyzes eigenvalues using the Tracy-Widom
+test.</p>
+</div>
+<div id="stability-metrics" class="section level3">
+<h3>Stability Metrics</h3>
+<p>To assesses the robustness of clustering results by considering
+<strong>the stability of clusters</strong>:<br />
+- <strong>densityCut</strong>: Models density of cell distributions to
+generate a hierarchical cluster tree and selects the most stable
+clusters.</p>
+</div>
+<div id="fig1" class="section level3">
+<h3>Fig1</h3>
+<p>(Note: In this paper, the purpose of clustering might be the cell
+type annotation.)</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>benchmark workflow<br />
+Data -&gt; Subsampling -&gt; Estimate number of cell types -&gt;
+Evaluation</p></li>
+<li><p>clustering stability measure. Input scRNA-seq -&gt; Random
+projection -&gt; Data encoding -&gt; Clustering each encoded data with
+different k -&gt; Pairwise stability -&gt; Selectk with the highest
+stability<br />
+single-cell Consensus Clusters of Encoded Subspaces (scCCESS) ??<br />
+[33. Geddes TA, Kim T, Nan L, Burchfield JG, Yang JYH, Tao D, et
+al. Autoencoder-based cluster ensembles for single-cell RNA-seq data
+analysis. BMC Bioinformatics. 2019;20:660.]</p></li>
+</ol>
+</div>
+<div id="fig2" class="section level3">
+<h3>Fig2</h3>
+</div>
+<div id="fig3" class="section level3">
+<h3>Fig3</h3>
+<p>Impact of number of cells on number of cell type estimation and
+clustering</p>
+<p>Number of cells vs number of cell type estimation</p>
+<ul>
+<li>increasing the number of cells helps most clustering algorithms
+reduce the variability in the number of cell type estimation but have a
+limited impact on their estimation deviation (Fig. 3a).</li>
+</ul>
+<p>Increase cell number -&gt; reduce the variability in cell types (but
+limited impact).</p>
+<p>Exception: SC3, ACTIONet, and Seurat are a few exceptions, showing a
+clear increase in variability in their number of cell type estimation on
+datasets with larger numbers of cells.</p>
+<p>My note: Belfer team cases have large number of cells as well as huge
+complexity.</p>
+</div>
+<div id="fig4" class="section level3">
+<h3>Fig4</h3>
+<p>Bias analysis of clustering algorithms on estimating the number of
+cell types</p>
+<p>The tendency of consistent under- and over-estimation of the number
+of cell types.<br />
+Most clustering algorithms tend to under-estimate the number of cell
+types when the true number of cell types increases in the datasets</p>
+<ul>
+<li><p>Under estimate :<br />
+densityCut.<br />
+SHARP.<br />
+Spectrum.<br />
+CIDR.</p></li>
+<li><p>Over estimate:<br />
+SC3.<br />
+Seurat.<br />
+Increasingly over-estimate cell type number when the number of cells per
+cell type increases (Fig. 4c, d).</p></li>
+<li><p>No bias:<br />
+Monocle3.<br />
+scCCESS-Kmeans.<br />
+scCCESS-SIMLR.<br />
+Not show bias with respect to the changing number of cell types (Fig.
+4b)</p></li>
+</ul>
+<p>The analysis of the coefficients (slopes) of the linear regression
+lines fitted to the num- ber of cell types estimated by each method
+confirms these observations (Fig. 4b)</p>
+</div>
+<div id="fig5" class="section level3">
+<h3>Fig5</h3>
+<p>Impact of imbalance of cell ratios on number of cell type estimation
+and clustering</p>
+<p>Background : most scRNA-seq experiments generate data that capture
+cell types with different number of cells, some- times with highly
+imbalanced ratios</p>
+<p><strong>How to create imbalance</strong> : Tabula Muris data to
+create major and minor cell types (each with 5 or 10 cell types) with
+imbalanced cell ratios of 2:1, 4:1, and 10:1 (see the “Methods” section
+for details)</p>
+<p>Impact on Estimation of Cell Type Numbers</p>
+<ul>
+<li>Decrease with Increasing Ratios: Imbalance in cell ratios tends to
+decrease the estimated number of cell types.<br />
+</li>
+<li>Overestimating Methods: methods like Seurat, SC3, ACTIONet.<br />
+</li>
+<li>Underestimation: methods like scLCA, scCCESS-Kmeans, scCCESS-SIMLR
+negatively.</li>
+</ul>
+<p>Impact on Cell Clustering</p>
+<ul>
+<li>Concordance Variability: Performance <strong>does not consistently
+match</strong> estimation accuracy; Seurat shows lower concordance.</li>
+</ul>
+<p>Influence of Dataset Characteristics</p>
+<ul>
+<li>Key Driver - <strong>Number of Cell Types</strong>: Significantly
+influences algorithm performance, especially in datasets with 10 and 20
+cell types.</li>
+</ul>
+<p><br><br><br></p>
+</div>
+</div>
+<div id="evaluating-single-cell-cluster-stability" class="section level2">
+<h2>Evaluating single-cell cluster stability</h2>
+<p>(Not started yet)</p>
+<p><br><br><br></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
