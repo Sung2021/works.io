@@ -250,10 +250,15 @@ Overview</a></li>
 <li><a href="#flex" id="toc-flex">FLEX</a></li>
 <li><a href="#beam-barcode-enabled-antigen-mapping" id="toc-beam-barcode-enabled-antigen-mapping">BEAM (Barcode Enabled
 Antigen Mapping)</a></li>
+<li><a href="#summary-table" id="toc-summary-table">Summary
+Table</a></li>
+<li><a href="#single-cell-immune-profiling-technologies" id="toc-single-cell-immune-profiling-technologies">Single-cell immune
+profiling technologies</a></li>
+<li><a href="#proteintech" id="toc-proteintech">proteintech</a></li>
 </ul>
 </div>
 
-<p><br> Update: “2024-05-09”</p>
+<p><br> Update: “2024-05-13”</p>
 <p><br></p>
 <p><br></p>
 <div id="meeting-overview" class="section level2">
@@ -262,11 +267,11 @@ Antigen Mapping)</a></li>
 May 2, 2024 NY<br />
 <br></p>
 <ul>
-<li>Visium HD</li>
-<li>Xenium (no update here)</li>
-<li>GEM-X</li>
-<li>FLEX</li>
-<li>BEAM<br />
+<li>Visium HD (Spatial)</li>
+<li>Xenium (no update here) (Spatial)</li>
+<li>GEM-X (Transcriptome profiling)</li>
+<li>FLEX (Probe-Based RNA Profiling)</li>
+<li>BEAM (Barcode Enabled Antigen Mapping)<br />
 </li>
 <li>Applications in various research</li>
 </ul>
@@ -315,8 +320,8 @@ technology</a></p>
 <p><strong>Feature Barcode Technology</strong> uses oligo-tagged
 antibodies to measure protein expression on the cell surface alongside
 transcriptomics data<br />
-<strong>Cell surface proteins</strong> using tens to hundreds of
-antibodies.<br />
+<strong>Combination with Cell surface proteins tagging</strong> using
+tens to hundreds of antibodies.<br />
 <strong>Applications</strong> classify immune cell subtypes and
 states.</p></li>
 </ul>
@@ -348,7 +353,7 @@ and a comprehensive <strong>probe-based approach</strong>, FLEX makes it
 possible to profile gene expression in formaldehyde-fixed, FFPE, and
 frozen samples.</p>
 <p><br> For challenging sample types<br />
-<strong>Fixation based</strong></p>
+<strong>Fixed sample or fixation-based</strong></p>
 <p><strong>Key Features</strong></p>
 <ol style="list-style-type: decimal">
 <li><p>Works with fresh, frozen, and formalin-fixed, paraffin-embedded
@@ -398,6 +403,144 @@ gene expression, and cell surface proteins.</li>
 </ul>
 <p><a href="https://www.10xgenomics.com/products/single-cell-barcode-enabled-antigen-mapping">BEAM
 at 10X Genomics</a></p>
+<br><br>
+<hr>
+</div>
+<div id="summary-table" class="section level2">
+<h2>Summary Table</h2>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="11%" />
+<col width="26%" />
+<col width="27%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Platform</th>
+<th>Purpose</th>
+<th>Primary Application</th>
+<th>Sample Compatibility</th>
+<th>Key Data Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>FLEX</strong></td>
+<td>scRNA-seq from fixed tissues</td>
+<td>Gene expression and protein detection</td>
+<td>Fresh, frozen, fixed</td>
+<td>Gene expression and surface protein data</td>
+</tr>
+<tr class="even">
+<td><strong>Visium HD</strong></td>
+<td>Spatial transcriptomics</td>
+<td>Spatial mapping of gene expression</td>
+<td>Fresh frozen, FFPE</td>
+<td>Spatial maps of gene expression</td>
+</tr>
+<tr class="odd">
+<td><strong>GEM-X</strong></td>
+<td>High-throughput scRNA-seq</td>
+<td>Single-cell profiling, immune profiling</td>
+<td>Fresh tissues</td>
+<td>Gene expression, immune receptor sequencing</td>
+</tr>
+<tr class="even">
+<td><strong>BEAM</strong></td>
+<td>Antigen-specific B- and T-cell discovery</td>
+<td>Antigen screening of immune repertoires</td>
+<td>PBMCs, splenocytes, lymph node aspirates</td>
+<td>Full-length paired V(D)J sequences, gene expression</td>
+</tr>
+</tbody>
+</table>
+<p><br><br></p>
+<hr>
+</div>
+<div id="single-cell-immune-profiling-technologies" class="section level2">
+<h2>Single-cell immune profiling technologies</h2>
+<ul>
+<li><strong>BEAM vs Evercode (Parse Bioscience)</strong></li>
+</ul>
+<p>Evercode release event (Boston, May 2024) <br><br></p>
+<p><a href="https://www.parsebiosciences.com/evercode-bcr-tcr/"><strong>Evercode
+link</strong></a> <br><br></p>
+<p><strong>Single-cell immune profiling technologies by Parse
+Biosciences and the BEAM technology by 10x Genomics:</strong> <br></p>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="54%" />
+<col width="30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Parse Biosciences Single-Cell Immune Profiling</th>
+<th>10x Genomics BEAM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Technology</strong></td>
+<td>Uses split-pool combinatorial barcoding system</td>
+<td>Barcode-enabled antibody mapping</td>
+</tr>
+<tr class="even">
+<td><strong>Points</strong></td>
+<td>- No specialized equipment needed<br>- Capable of profiling up to
+<strong>one million cells</strong><br>- Simultaneous BCR and TCR
+sequencing with gene expression profiling</td>
+<td>- Focus on cell <strong>surface protein profiling</strong><br>-
+Precise analysis of protein expression changes among different immune
+cells</td>
+</tr>
+<tr class="odd">
+<td><strong>Applications</strong></td>
+<td>- <strong>Simultaneous profiling of TCR and BCR</strong><br>-
+Detailed analysis of adaptive immune responses</td>
+<td>- Immune cell phenotyping<br>- Analyzing protein expression
+variations among immune cells</td>
+</tr>
+<tr class="even">
+<td><strong>Advantages</strong></td>
+<td>- Scalable to large numbers of samples and cells<br>- Can be used
+with fixed cells and nuclei</td>
+<td>- High specificity for cell surface antigens<br>- Allows
+simultaneous analysis of multiple cell markers</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="proteintech" class="section level2">
+<h2>proteintech</h2>
+<p><strong>MultiPro Fixed Cell Immune Profiling Antibody
+Cocktail</strong></p>
+<p><a href="https://www.ptglab.com/products/MultiPro-Human-Fixed-Cell-Immune-Profiling-Antibody-cocktail-G900004.htm">product
+link</a><br />
+<a href="https://www.ptglab.com/media/Image-Data-MultiPro-G900004.pdf">PROT/RNA
+comparison</a></p>
+<p><br></p>
+<ul>
+<li><strong>Product Overview</strong>: The MultiPro™ cocktail contains
+53 antibodies that target a mix of intracellular and surface proteins,
+plus 5 isotype controls.</li>
+<li><strong>Cellular Analysis Tool</strong>: Analyzing cellular
+components in single-cell RNAseq experiments.<br />
+</li>
+<li><strong>Compatibility</strong>: Compatible with the 10x Genomics®
+Chromium® Single Cell Gene Expression Flex product.<br />
+</li>
+<li><strong>Dual Detection</strong>: Simultaneous capture of protein and
+gene expression profiles from the same cell, enhancing the depth of cell
+state analysis.<br />
+</li>
+<li><strong>Intracellular Protein Research</strong>: Marks significant
+progress in the field by overcoming previous challenges in accessing
+<strong>intracellular proteins</strong> in single-cell studies.</li>
+</ul>
 <p><br><br></p>
 </div>
 
