@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Sung" />
+
+
+<title>Useful Information</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Useful Information</h1>
+<h4 class="author">Sung</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#public-oncology-db-comparison" id="toc-public-oncology-db-comparison">Public Oncology DB
+comparison</a></li>
+<li><a href="#immune-cell-types" id="toc-immune-cell-types">Immune Cell
+Types</a></li>
+<li><a href="#cd4cd8-t-cell-types" id="toc-cd4cd8-t-cell-types">CD4/CD8+
+T Cell types</a></li>
+<li><a href="#myeloid-lineage-cells" id="toc-myeloid-lineage-cells">Myeloid Lineage Cells</a></li>
+<li><a href="#subtypes-of-monocytes-and-macrophages" id="toc-subtypes-of-monocytes-and-macrophages">Subtypes of monocytes and
+macrophages</a></li>
+</ul>
+</div>
+
+<p><br> Update: “2024-05-14”</p>
+<p><br> <br></p>
+<div id="public-oncology-db-comparison" class="section level2">
+<h2>Public Oncology DB comparison</h2>
+<p><br><br></p>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Database</strong></th>
+<th><strong>Main Data Types</strong></th>
+<th><strong>Features</strong></th>
+<th><strong>Example Usage</strong></th>
+<th><strong>Link</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>TCGA</strong></td>
+<td>Genomic sequencing, RNA sequencing, DNA methylation, protein
+expression, clinical information</td>
+<td>Comprehensive data on various cancer types</td>
+<td>Analysis of mutation patterns, study of gene expression and clinical
+features</td>
+<td><a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga">TCGA</a></td>
+</tr>
+<tr class="even">
+<td><strong>ICGC</strong></td>
+<td>Genomic sequencing, RNA sequencing, epigenomic data, clinical
+information</td>
+<td>Global data, includes diverse countries and ethnicities</td>
+<td>Comparison of cancer genomic mutations by country, global
+collaborative research</td>
+<td><a href="https://icgc.org/">ICGC</a></td>
+</tr>
+<tr class="odd">
+<td><strong>CCLE</strong></td>
+<td>Genomic sequencing, RNA sequencing, drug response, copy number
+variation</td>
+<td>Cancer cell line data, allows drug response studies</td>
+<td>Research on the drug response of cancer cell lines with specific
+mutations, analysis of gene expression patterns in cell lines</td>
+<td><a href="https://portals.broadinstitute.org/ccle">CCLE</a></td>
+</tr>
+<tr class="even">
+<td><strong>cBioPortal</strong></td>
+<td>Genomic, clinical data</td>
+<td>Provides integrated data visualization and analysis tools</td>
+<td>Visualization of the relationship between gene mutations and
+clinical outcomes, integrated data analysis</td>
+<td><a href="https://www.cbioportal.org/">cBioPortal</a></td>
+</tr>
+<tr class="odd">
+<td><strong>dbGaP</strong></td>
+<td>Genotype, phenotype, clinical data</td>
+<td>Supports various disease studies, including oncology</td>
+<td>Research on the relationship between specific genes and cancer risk,
+analysis of genetic variants and clinical phenotypes</td>
+<td><a href="https://www.ncbi.nlm.nih.gov/gap/">dbGaP</a></td>
+</tr>
+</tbody>
+</table>
+<p><br><br></p>
+<ul>
+<li>ICGC Data Portal to be retired in June 2024</li>
+</ul>
+<p><br><br></p>
+<hr>
+<p><br><br></p>
+</div>
+<div id="immune-cell-types" class="section level2">
+<h2>Immune Cell Types</h2>
+<p>(Based on scType DB information)<br />
+<a href="https://github.com/IanevskiAleksandr/sc-type">scType
+link</a><br />
+<br></p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="47%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Cell Name</strong></th>
+<th><strong>Gene Symbols</strong></th>
+<th><strong>Major Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Pro-B cells</strong></td>
+<td>CD27, IgD, CD24, PTPRC, PAX5, CD24, CD38, CD79A, DNTT, C10orf10,
+VPREB1, ARPP21, CD99, IGLL1, CD9, CD79B, TCL1A, IGLL5, HLA-DQA1,
+HLA-DQB1, VPREB3, IGLL5</td>
+<td>Early stage of B cell development, responsible for initial
+immunoglobulin gene rearrangements.</td>
+</tr>
+<tr class="even">
+<td><strong>Pre-B cells</strong></td>
+<td>CD19, CD27, IgD, CD24, PTPRC, PAX5, CD24, CD38, CD79A, NSMCE1,
+PCDH9, ACSM3, CCDC191, TCL1A, CD79B, TCL1A, IGLL5, HLA-DQA1, HLA-DQB1,
+VPREB3, IGLL5</td>
+<td>Intermediate stage of B cell development, involved in further
+rearrangement of the immunoglobulin genes.</td>
+</tr>
+<tr class="odd">
+<td><strong>Naive B cells</strong></td>
+<td>CD19, IgD, CD38, CD24, CD20, MS4A1, PTPRC, PAX5, CD24, CD38, CD79A,
+JCHAIN, SSR4, FKBP11, SEC11C, DERL3, PRDX4, IGLL5, CD79B, TCL1A, IGLL5,
+HLA-DQA1, HLA-DQB1, CD138, CD38, VPREB3, IGLL5</td>
+<td>B cells that have not yet encountered an antigen, ready to respond
+to new pathogens.</td>
+</tr>
+<tr class="even">
+<td><strong>Memory B cells</strong></td>
+<td>CD19, CD27, IgD, CD38, CD24, CD20, MS4A1, PTPRC, PAX5, CD24, CD38,
+CD79A, JCHAIN, SSR4, FKBP11, SEC11C, DERL3, PRDX4, IGLL5, CD79B, TCL1A,
+IGLL5, HLA-DQA1, HLA-DQB1, CD138, CD38, CD27, VPREB3, IGLL5</td>
+<td>B cells that have encountered an antigen and can rapidly respond
+upon re-exposure.</td>
+</tr>
+<tr class="odd">
+<td><strong>Plasma B cells</strong></td>
+<td>CD27, IgD, CD38, CD24, CD20, MS4A1, PTPRC, PAX5, CD24, CD38, CD79A,
+JCHAIN, SSR4, FKBP11, SEC11C, DERL3, PRDX4, IGLL5, CD79B, TCL1A, IGLL5,
+HLA-DQA1, HLA-DQB1, CD138, CD38, VPREB3, IGLL5</td>
+<td>Antibody-producing cells derived from B cells, critical for humoral
+immunity.</td>
+</tr>
+<tr class="even">
+<td><strong>Naive CD8+ T cells</strong></td>
+<td>CD8, CD2, CD3D, CD3E, CD3G, CD3Z, CD45RA, CD62L, CD27, CD127, FOXP3,
+CCR7, CD45, CD8A, CD8B, CCR6, CD11b, CD30, CD6, CTLA4, IL2RA, GZMB,
+PTPRC, SELL, CCR7, GNLY, Trac, Ltb, Cd52, Trbc2, Shisa5, Lck, Thy1,
+Dapl1</td>
+<td>T cells that have not yet encountered an antigen, ready to respond
+to new infections.</td>
+</tr>
+<tr class="odd">
+<td><strong>Naive CD4+ T cells</strong></td>
+<td>CD4, CD2, CD3D, CD3E, CD3G, CD3Z, CD45RA, CD62L, CD27, CD127, FOXP3,
+CCR7, CD45, CCR6, CD11b, CD30, CD6, CTLA4, IL2RA, GZMB, PTPRC, SELL,
+CCR7, Trac, Ltb, Cd52, Trbc2, Shisa5, Lck, Thy1, Dapl1</td>
+<td>T helper cells that have not yet encountered an antigen, critical
+for orchestrating immune responses.</td>
+</tr>
+<tr class="even">
+<td><strong>Memory CD8+ T cells</strong></td>
+<td>CD8, CD2, CD3D, CD3E, CD3G, CD3Z, CD25, CD45RA, CD62L, CD27, CD127,
+FOXP3, CCR7, CD45, CD8A, CD8B, CCR6, CD11b, CD30, CD45RO, CD6, CTLA4,
+IL2RA, GZMB, SELL, CCR7, GNLY, S100A4, Trac, Ltb, Cd52, Trbc2, Shisa5,
+Lck, Thy1, Dapl1</td>
+<td>T cells that have encountered an antigen and can rapidly respond
+upon re-exposure.</td>
+</tr>
+<tr class="odd">
+<td><strong>Memory CD4+ T cells</strong></td>
+<td>CD4, CD2, CD3D, CD3E, CD3G, CD3Z, CD25, CD45RA, CD62L, CD27, CD127,
+FOXP3, CCR7, CD45, CCR6, CD11b, CD30, CD45RO, CD6, CTLA4, IL2RA, GZMB,
+SELL, CCR7, S100A4, Trac, Ltb, Cd52, Trbc2, Shisa5, Lck, Thy1,
+Dapl1</td>
+<td>T helper cells that have encountered an antigen and can rapidly
+respond upon re-exposure.</td>
+</tr>
+<tr class="even">
+<td><strong>Effector CD8+ T cells</strong></td>
+<td>CD8, CD2, CD3D, CD3E, CD3G, CD3Z, CD25, CD45RA, CD62L, CD27, CD127,
+FOXP3, CCR7, CD45, CD8A, CD8B, CCR6, CD11b, CD30, CD6, CTLA4, IL2RA,
+GZMB, PTPRC, GNLY, Trac, Ltb, Cd52, Trbc2, Shisa5, Lck, Thy1, Dapl1</td>
+<td>Active T cells that directly kill infected or cancerous cells.</td>
+</tr>
+<tr class="odd">
+<td><strong>Effector CD4+ T cells</strong></td>
+<td>CD4, CD2, CD3D, CD3E, CD3G, CD3Z, CD25, CD45RA, CD62L, CD27, CD127,
+FOXP3, CCR7, CD45, CCR6, CD11b, CD30, CD6, CTLA4, IL2RA, GZMB, PTPRC,
+Trac, Ltb, Cd52, Trbc2, Shisa5, Lck, Thy1, Dapl1</td>
+<td>Active T helper cells that assist other immune cells in responding
+to infections.</td>
+</tr>
+<tr class="even">
+<td><strong>γδ-T cells</strong></td>
+<td>CD2, CD3D, CD3E, CD3G, CD3Z, CD25, CD45RA, CD62L, CD27, CD127,
+FOXP3, CCR7, CD45, CCR6, CD11b, CD30, CD6, CTLA4, IL2RA, GZMB, PTPRC,
+TRDV2, TRGV9, TRGC1, Trac, Ltb, Cd52, Trbc2, Shisa5, Lck, Thy1,
+Dapl1</td>
+<td>T cells with a distinct T-cell receptor that play a role in immune
+surveillance and response to certain types of infections and
+cancer.</td>
+</tr>
+<tr class="odd">
+<td><strong>Platelets</strong></td>
+<td>CD41, CD42b, CD61, CD31, PPBP, PF4, GNG11, SDPR, CLU, CD41,
+CD110</td>
+<td>Small blood cells involved in clotting and wound repair.</td>
+</tr>
+<tr class="even">
+<td><strong>CD8+ NKT-like cells</strong></td>
+<td>CD8, CD56, CD2, CD16, CD94, CD3D, CD3E, CD3G, CD3Z, NKp46, CD11b,
+CD161, CD314, CD69, NKG7, CD122, NKG2D, GZMB, GZMA, GZMM, GNLY, COX6A2,
+ZMAT4, KIR2DL4</td>
+<td>Hybrid cells with characteristics of both T cells and natural killer
+cells, involved in immune responses against tumors and infections.</td>
+</tr>
+<tr class="odd">
+<td><strong>CD4+ NKT-like cells</strong></td>
+<td>CD4, CD56, CD2, CD16, CD94, CD3D, CD3E, CD3G, CD3Z, NKp46, CD11b,
+CD161, CD314, CD69, NKG7, CD122, NKG2D, GZMB, GZMA, GZMM, COX6A2, ZMAT4,
+KIR2DL4</td>
+<td>Hybrid cells with characteristics of both T helper cells and natural
+killer cells, involved in immune regulation and response.</td>
+</tr>
+<tr class="even">
+<td><strong>Natural killer cells</strong></td>
+<td>CD56, CD2, CD16, CD94, NKp46, CD11b, CD161, CD314, CD69, NKG7,
+CD122, NKG2D, GZMB, GZMA, GZMM, FCGR3A, GNLY, COX6A2, ZMAT4, KIR2DL4,
+NKG7</td>
+<td>Innate immune cells that can kill tumor cells and virally infected
+cells without prior sensitization.</td>
+</tr>
+<tr class="odd">
+<td><strong>Eosinophils</strong></td>
+<td>CD11b, CD193, CD123, CD125, CD15, SIGLEC8, CLC, GATA1, CEBPE, SEMG1,
+ALOX15, CCL23, PRSS41, PRSS33, THBS4, FOXI1</td>
+<td>Granulocytes involved in the defense against parasitic infections
+and in allergic reactions.</td>
+</tr>
+<tr class="even">
+<td><strong>Neutrophils</strong></td>
+<td>CD66b, CD11b, CD15, CD16, CXCL8, FCGR3B, MNDA, CXCR2, MPO, ELANE,
+PRTN3, MPO, AZU1, LYZ, S100A8, S100A9, PI3, CHI3L1, ANXA3, CXCL1, TGM3,
+BTNL3, C4BPA, MMP9, CD24, BPI, LTF, GCA, Camp, Ngp, Chil3, Ltf</td>
+<td>The most abundant type of white blood cells, crucial for the innate
+immune response and phagocytosis of pathogens.</td>
+</tr>
+<tr class="odd">
+<td><strong>Basophils</strong></td>
+<td>CD63, CD203c, CD123, CLC, MS4A3, TCN1, CPA3, HDC, GATA2, MS4A2, IL4,
+GCSAML, GATA2, TPSAB1</td>
+<td>Granulocytes that play a role in allergic reactions and release
+histamine and heparin.</td>
+</tr>
+<tr class="even">
+<td><strong>Mast cells</strong></td>
+<td>CD117, CD203c, CD25, KIT, SLC18A2, CD33, CD32, FCER1A, TPSD1,
+HPGDS</td>
+<td>Cells involved in allergic reactions and defense against pathogens,
+release histamine and other mediators.</td>
+</tr>
+<tr class="odd">
+<td><strong>Classical Monocytes</strong></td>
+<td>CD14, CD11b, CD68, HLA-DR, CD33, CD11c, CD123, CD15, CD3D, CD3E,
+CD3G, CD3Z, CD66b, VCAN, S100A12, CXCL8, S100A8, S100A9, LYZ, CST3,
+Elane1</td>
+<td>Phagocytic cells that can differentiate into macrophages and
+dendritic cells to modulate immune responses.</td>
+</tr>
+<tr class="even">
+<td><strong>Non-classical monocytes</strong></td>
+<td>CD14, CD16, CD11b, CD68, HLA-DR, CD33, CD11c, CD123, CD15, CD3D,
+CD3E, CD3G, CD3Z, CD66b, FCGR3A, CDKN1C, LST1, FCER1G, MS4A7, RHOC,
+S100A8, S100A9, CST3, C1QC, Elane1</td>
+<td>Patrol blood vessels, involved in the resolution of inflammation and
+tissue repair.</td>
+</tr>
+<tr class="odd">
+<td><strong>Intermediate monocytes</strong></td>
+<td>CD14, CD16, CD11b, CD68, HLA-DR, CD33, CD11c, CD123, CD15, CD3D,
+CD3E, CD3G, CD3Z, CD66b, IL1B, S100A8, S100A9, CST3, C1QC, Elane1</td>
+<td>A subset of monocytes involved in both inflammatory and reparative
+processes.</td>
+</tr>
+<tr class="even">
+<td><strong>Macrophages</strong></td>
+<td>CD68, CD163, CD14, CD11b, CD206, CD80, CD86, CD16, CD64, CCL18,
+CD115, CD11c, CD32, HLA-DR, MRC1, MSR1, GCA, Pf4</td>
+<td>Large phagocytic cells that engulf and digest pathogens, dead cells,
+and debris; play a role in immune regulation.</td>
+</tr>
+<tr class="odd">
+<td><strong>Megakaryocyte</strong></td>
+<td>CD61, CD41, CD42b, CD41a, CD42a, CXCR4, CD110</td>
+<td>Large bone marrow cells that give rise to platelets involved in
+blood clotting.</td>
+</tr>
+<tr class="even">
+<td><strong>Endothelial</strong></td>
+<td>PECAM1, CD34, KDR, CDH5, PROM1, PDPN, TEK, FLT1, VCAM1, PTPRC, VWF,
+ENG, MCAM, ICAM1, FLT4, SELE</td>
+<td>Cells that line blood vessels and control the passage of materials
+and the flow of blood.</td>
+</tr>
+<tr class="odd">
+<td><strong>Erythroid-like and erythroid precursor cells</strong></td>
+<td>PTPRC, GYPA, RUVBL1, TFRC, FOLR1, CD36, ITGA4, HBB, CD235a, HBD,
+CA1</td>
+<td>Precursors to red blood cells, involved in the production of
+erythrocytes.</td>
+</tr>
+<tr class="even">
+<td><strong>HSC/MPP cells</strong></td>
+<td>CD105, CD34, CD44, CD73, CD45, CD29, STRO-1, NANOG, SOX2, CD133,
+CD166, CD146, CD31, Nestin, OCT4, CD117, KDR, CXCL8, AVP, CRHBP,
+ALDH1A1, CD49, CD90, CD69, CD24, CD38, CD45RA, Keratin-19, ASPM, CD10,
+CD123, ABCG2, CD135, CD49f, EpCAM, Keratin-7, SCA-1, CD14, CD150, CD271,
+HLA-DR</td>
+<td>Hematopoietic stem cells and multipotent progenitors that give rise
+to all blood cell types.</td>
+</tr>
+<tr class="odd">
+<td><strong>Progenitor cells</strong></td>
+<td>CD105, CD34, CD44, CD73, CD45, CD29, STRO-1, NANOG, SOX2, CD133,
+CD166, CD146, CD31, Nestin, OCT4, CD117, KDR, AVP, CRHBP, ALDH1A1,
+STMN1, CD38, PTPRC, CD135</td>
+<td>Cells that have the capacity to differentiate into specific types of
+cells but are more limited than stem cells.</td>
+</tr>
+<tr class="even">
+<td><strong>Myeloid Dendritic cells</strong></td>
+<td>ITGAX, CD83, CD1C, NRP1, CLEC4C, CD86, IL3RA, CD80, CD1A, ITGAX,
+CD40, HLA-DQA1, CD11c, HLA-DR, HLA-DPB1, HLA-DPA1, CLEC10A, CST3, GPR31,
+ODF3L1, PRB2, CD207, ARSE, CLEC141, MRC, EBLN1, CRIP3</td>
+<td>Antigen-presenting cells that process and present antigens to T
+cells, initiating the immune response.</td>
+</tr>
+<tr class="odd">
+<td><strong>Plasmacytoid Dendritic cells</strong></td>
+<td>ITGAX, CD83, CD1C, NRP1, CLEC4C, CD86, IL3RA, CD80, CD1A, ITGAX,
+CD40, HLA-DQA1, CD11c, HLA-DR, HLA-DPB1, HLA-DPA1, CLEC10A, CST3, TPM2,
+LRRC26, ASIP, GPM6B, KRT5, NTM, SCT, SHD, KCNA5, SCARA5, EPHA2,
+MYMX</td>
+<td>Specialized dendritic cells that produce large amounts of interferon
+in response to viral infections.</td>
+</tr>
+<tr class="even">
+<td><strong>Granulocytes</strong></td>
+<td>CD203c, CD15, CD11b, CD63, CD66b, CD123, CD16, CD33, CD117, CD45,
+Fc-epsilon RI-alpha, CD125, CD13, CD14, CD25, CD44, CD69, CD9, HLA-DR,
+CCR3, CD116, CD11c, CD193, CD24, CD32, CD43, CXCL8, FCGR3B, MNDA,
+SIGLEC8, AZU1, MPO, CTSG, LYZ</td>
+<td>White blood cells with granules that contain enzymes to digest
+microorganisms; include neutrophils, eosinophils, and basophils.</td>
+</tr>
+<tr class="odd">
+<td><strong>ISG expressing immune cells</strong></td>
+<td>IFIT1, IFIT2, IFIT3, IFIT5, ISG15, CCL3, CCL4, CCL3L3, RSAD2, OASL,
+CXCL10, IFI15, ISG20</td>
+<td>Immune cells expressing interferon-stimulated genes, involved in
+antiviral responses.</td>
+</tr>
+<tr class="even">
+<td><strong>Cancer cells</strong></td>
+<td>CD44, EPCAM, ERBB2, FOLH1, KRT18, PROM1</td>
+<td>Malignant cells that have undergone transformation and proliferate
+uncontrollably.</td>
+</tr>
+</tbody>
+</table>
+<p><br><br></p>
+</div>
+<div id="cd4cd8-t-cell-types" class="section level2">
+<h2>CD4/CD8+ T Cell types</h2>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="16%" />
+<col width="36%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Cell Type</strong></th>
+<th><strong>Subtype</strong></th>
+<th><strong>Key Functions</strong></th>
+<th><strong>Markers</strong></th>
+<th><strong>Sources</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CD8+ T</strong></td>
+<td><strong>Cytotoxic T Cells</strong></td>
+<td>Directly kill infected or cancerous cells by releasing perforin and
+granzymes. They play a critical role in immune surveillance and response
+to intracellular pathogens and tumors.</td>
+<td>CD8, Perforin, Granzyme B, IFN-γ, TNF-α, NKG2D</td>
+<td><a href="https://asherbio.com">Asher Bio</a>, <a href="https://my.clevelandclinic.org">Cleveland Clinic</a>, <a href="https://jitc.bmj.com">Journal for ImmunoTherapy of Cancer</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Memory T Cells</strong></td>
+<td>Remember previous pathogens, enabling a faster and more robust
+response upon re-infection. These cells are long-lived and can quickly
+differentiate into effector T cells upon antigen re-exposure.</td>
+<td>CD45RO, CD62L, CD127, CCR7, CD95, CXCR3</td>
+<td><a href="https://www.miltenyibiotec.com">Miltenyi Biotec</a>, <a href="https://www.mdpi.com">IJMS</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Effector T Cells</strong></td>
+<td>Provide immediate response upon activation by producing cytokines
+and directly attacking infected or cancerous cells. These cells are
+typically short-lived and highly active.</td>
+<td>CD8, IFN-γ, TNF-α, CD25, CD69, CD44</td>
+<td><a href="https://www.miltenyibiotec.com">Miltenyi Biotec</a>, <a href="https://www.nature.com">Nature</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Regulatory T Cells</strong></td>
+<td>Modulate immune responses to prevent autoimmunity and maintain
+immune homeostasis. They suppress other immune cells’ activity through
+cytokine secretion and cell-contact dependent mechanisms.</td>
+<td>CD8, FoxP3, TGF-β, IL-10, CD39, CD73</td>
+<td><a href="https://my.clevelandclinic.org">Cleveland Clinic</a>, <a href="https://www.nature.com">Nature</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Exhausted T Cells</strong></td>
+<td>Exhibit reduced function and proliferation due to chronic antigen
+exposure, commonly seen in chronic infections and cancer. Characterized
+by high expression of inhibitory receptors and reduced effector
+function.</td>
+<td>PD-1, LAG-3, TIM-3, CD39, CD69, TIGIT</td>
+<td><a href="https://translational-medicine.biomedcentral.com">Journal
+of Translational Medicine</a>, <a href="https://www.frontiersin.org">Frontiers in Immunology</a></td>
+</tr>
+<tr class="even">
+<td><strong>CD4+ T</strong></td>
+<td><strong>Th1</strong></td>
+<td>Promote inflammation and activate macrophages in response to
+intracellular pathogens like viruses and certain bacteria. They secrete
+cytokines like IFN-γ and TNF-α, crucial for cell-mediated immunity.</td>
+<td>T-bet, IFN-γ, IL-2, TNF-α, CD27, CD28</td>
+<td><a href="https://www.frontiersin.org">Frontiers in Immunology</a>,
+<a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Th2</strong></td>
+<td>Regulate responses to extracellular parasites such as helminths and
+are involved in allergic reactions. They produce cytokines like IL-4,
+IL-5, and IL-13 to promote B cell differentiation and antibody
+production.</td>
+<td>GATA3, IL-4, IL-5, IL-13, CD30, CRTH2</td>
+<td><a href="https://www.frontiersin.org">Frontiers in Immunology</a>,
+<a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Th17</strong></td>
+<td>Defend against bacterial and fungal infections by recruiting
+neutrophils and other immune cells to the site of infection. They are
+characterized by the production of IL-17 and IL-22.</td>
+<td>RORγT, IL-17, IL-22, IL-23R, CCR6, CD161</td>
+<td><a href="https://www.frontiersin.org">Frontiers in Immunology</a>,
+<a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Tfh</strong></td>
+<td>Assist B cells in the formation of germinal centers and the
+production of high-affinity antibodies. These cells are essential for
+long-term humoral immunity.</td>
+<td>BCL6, IL-21, CXCR5, PD-1, ICOS, CD40L</td>
+<td><a href="https://www.mdpi.com">MDPI</a>, <a href="https://www.abcam.com">Abcam</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Th9</strong></td>
+<td>Involved in the immune response to helminths and contribute to
+allergic diseases by producing IL-9. They also play a role in promoting
+mast cell responses.</td>
+<td>PU.1, IL-9, IRF4, BATF, GATA3, CD27</td>
+<td><a href="https://www.frontiersin.org">Frontiers in Immunology</a>,
+<a href="https://www.mdpi.com">IJMS</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Th22</strong></td>
+<td>Regulate skin immunity and are involved in inflammatory skin
+conditions. They produce IL-22, which promotes tissue regeneration and
+antimicrobial responses.</td>
+<td>AHR, IL-22, FICZ, CCR4, CCR10</td>
+<td><a href="https://www.frontiersin.org">Frontiers in
+Immunology</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Regulatory T Cells</strong></td>
+<td>Suppress immune responses to maintain self-tolerance and immune
+homeostasis, preventing autoimmune diseases. They exert their function
+through cytokines such as IL-10 and TGF-β and the expression of
+CTLA-4.</td>
+<td>FoxP3, TGF-β, IL-10, CD25, CTLA-4, CD127</td>
+<td><a href="https://www.mdpi.com">MDPI</a>, <a href="https://www.miltenyibiotec.com">Miltenyi Biotec</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Hybrid Lineages</strong></td>
+<td>Exhibit mixed characteristics of different T cell types, displaying
+unique functional properties that may be involved in various immune
+responses and pathologies.</td>
+<td>T-bet+GATA3+, IFN-γ+IL-4+, RORγT+FoxP3+, others</td>
+<td><a href="https://www.frontiersin.org">Frontiers in Immunology</a>,
+<a href="https://www.biocompare.com">Biocompare</a></td>
+</tr>
+</tbody>
+</table>
+<p><br><br><br></p>
+</div>
+<div id="myeloid-lineage-cells" class="section level2">
+<h2>Myeloid Lineage Cells</h2>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="8%" />
+<col width="45%" />
+<col width="18%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Cell Type</strong></th>
+<th><strong>Subtype</strong></th>
+<th><strong>Key Functions</strong></th>
+<th><strong>Markers</strong></th>
+<th><strong>Sources</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Myeloid Cells</strong></td>
+<td><strong>Monocytes</strong></td>
+<td>Circulate in the blood and differentiate into macrophages or
+dendritic cells upon tissue migration. They phagocytose pathogens and
+produce pro-inflammatory cytokines.</td>
+<td>CD14, CD16, CD64, HLA-DR, CD11b</td>
+<td><a href="https://blog.cellsignal.com">Cell Signaling Technology</a>,
+<a href="https://www.bio-rad-antibodies.com">Bio-Rad</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Macrophages</strong></td>
+<td>Present in most tissues, recognize and destroy pathogens and damaged
+cells through phagocytosis. Subtypes include M1 (pro-inflammatory) and
+M2 (anti-inflammatory).</td>
+<td>CD68, CD11b, CD163, CD206, CD204</td>
+<td><a href="https://blog.cellsignal.com">Cell Signaling Technology</a>,
+<a href="https://www.bio-rad-antibodies.com">Bio-Rad</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Dendritic Cells</strong></td>
+<td>Act as professional antigen-presenting cells, capturing antigens and
+presenting them to T cells to initiate an adaptive immune response.</td>
+<td>CD11c, CD1c, CD123, CD141, HLA-DR</td>
+<td><a href="https://www.bio-rad-antibodies.com">Bio-Rad</a>, <a href="https://www.rndsystems.com">R&amp;D Systems</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Neutrophils</strong></td>
+<td>First responders to infection sites, they engulf and destroy
+pathogens through phagocytosis and release antimicrobial compounds.</td>
+<td>CD15, CD16, CD11b, CD66b, MPO</td>
+<td><a href="https://blog.cellsignal.com">Cell Signaling Technology</a>,
+<a href="https://www.bio-rad-antibodies.com">Bio-Rad</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Eosinophils</strong></td>
+<td>Combat parasitic infections and participate in allergic reactions by
+releasing cytotoxic granules and inflammatory mediators.</td>
+<td>CD9, Siglec-8, IL-5Rα, CCR3, CD11b</td>
+<td><a href="https://blog.cellsignal.com">Cell Signaling Technology</a>,
+<a href="https://www.bio-rad-antibodies.com">Bio-Rad</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Basophils</strong></td>
+<td>Involved in allergic responses and parasitic infections, they
+release histamine and other mediators upon activation.</td>
+<td>CD123, FcεRI, CD203c, CD13, CD45</td>
+<td><a href="https://www.bio-rad-antibodies.com">Bio-Rad</a>, <a href="https://www.rndsystems.com">R&amp;D Systems</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Mast Cells</strong></td>
+<td>Play a key role in allergy and anaphylaxis by releasing histamine,
+proteases, and other inflammatory mediators.</td>
+<td>c-Kit (CD117), FcεRI, CD203c, CD25, CD63</td>
+<td><a href="https://www.bio-rad-antibodies.com">Bio-Rad</a>, <a href="https://blog.cellsignal.com">Cell Signaling Technology</a></td>
+</tr>
+</tbody>
+</table>
+<p><br><br> <strong>Key Functions Detailed</strong></p>
+<p><strong>Monocytes</strong>: These cells are vital for the innate
+immune response. They circulate in the bloodstream and migrate to
+tissues where they differentiate into macrophages or dendritic cells.
+Monocytes are known for their ability to phagocytose pathogens and dead
+cells and for secreting a variety of cytokines that modulate the immune
+response.</p>
+<p><strong>Macrophages</strong>: These are versatile cells present in
+nearly all tissues. They play a crucial role in phagocytosing pathogens
+and debris, presenting antigens to T cells, and orchestrating tissue
+repair. Macrophages can be polarized into M1 (pro-inflammatory) or M2
+(anti-inflammatory) types depending on the cytokine environment.</p>
+<p><strong>Dendritic Cells</strong>: These antigen-presenting cells are
+essential for initiating and regulating the adaptive immune response.
+They capture antigens from pathogens, process them, and present them on
+their surface to T cells in lymphoid tissues, thus bridging the innate
+and adaptive immune systems.</p>
+<p><strong>Neutrophils</strong>: As the most abundant type of white
+blood cell, neutrophils are the first responders to microbial infection.
+They engage in phagocytosis, degranulation, and the release of
+neutrophil extracellular traps (NETs) to capture and kill pathogens.</p>
+<p><strong>Eosinophils</strong>: These cells are primarily involved in
+combating multicellular parasites and certain infections. They also play
+a significant role in the pathophysiology of allergic reactions and
+asthma by releasing granules containing toxic proteins and inflammatory
+mediators.</p>
+<p><strong>Basophils</strong>: These are the least common type of
+granulocyte and are involved in inflammatory responses, especially those
+related to allergies. They release histamine and heparin, contributing
+to the inflammatory process.</p>
+<p><strong>Mast Cells</strong>: Found in tissues such as the skin and
+mucosa, mast cells are key players in the inflammatory process,
+particularly in allergic reactions. They release a variety of mediators,
+including histamine, that cause vasodilation and attract other immune
+cells to the site of infection or injury.</p>
+<p><br><br><br></p>
+</div>
+<div id="subtypes-of-monocytes-and-macrophages" class="section level2">
+<h2>Subtypes of monocytes and macrophages</h2>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="8%" />
+<col width="45%" />
+<col width="18%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Cell Type</strong></th>
+<th><strong>Subtype</strong></th>
+<th><strong>Key Functions</strong></th>
+<th><strong>Markers</strong></th>
+<th><strong>Sources</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Monocytes</strong></td>
+<td><strong>Classical Monocytes</strong></td>
+<td>Highly phagocytic cells that respond to infection and inflammation,
+primarily involved in the early stages of immune response. They patrol
+the blood and can differentiate into macrophages or dendritic cells upon
+tissue entry.</td>
+<td>CD14, CD16-, CCR2, CD62L, HLA-DR</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Intermediate Monocytes</strong></td>
+<td>Act as a bridge between classical and non-classical monocytes. They
+have both pro-inflammatory and tissue repair functions, playing roles in
+antigen presentation and inflammation resolution.</td>
+<td>CD14, CD16, CCR5, CD36, HLA-DR</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Non-Classical Monocytes</strong></td>
+<td>Patrol the blood vessels and are involved in the resolution of
+inflammation. They have a significant role in tissue repair and
+homeostasis by clearing debris and apoptotic cells.</td>
+<td>CD14low, CD16++, CX3CR1, CD11c, HLA-DR</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="even">
+<td><strong>Macrophages</strong></td>
+<td><strong>M1 Macrophages</strong></td>
+<td>Also known as classically activated macrophages, they have
+pro-inflammatory functions and are involved in host defense against
+pathogens. They produce high levels of pro-inflammatory cytokines and
+reactive oxygen species.</td>
+<td>CD68, CD80, CD86, MHC II, iNOS</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.frontiersin.org">Frontiers in Immunology</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>M2 Macrophages</strong></td>
+<td>Alternatively activated macrophages involved in tissue repair and
+resolution of inflammation. They secrete anti-inflammatory cytokines and
+promote wound healing and tissue remodeling.</td>
+<td>CD206, CD163, CD204, Arginase-1, IL-10</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.frontiersin.org">Frontiers in Immunology</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Tumor-Associated Macrophages (TAMs)</strong></td>
+<td>Found within the tumor microenvironment, these macrophages can
+support tumor growth and metastasis. They can exhibit both M1 and M2
+characteristics depending on the tumor context and stage.</td>
+<td>CD68, CD163, CD204, PD-L1, IL-10</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.mdpi.com">MDPI</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Lipid-Associated Macrophages (LAMs)</strong></td>
+<td>Specialized macrophages involved in lipid metabolism and associated
+with metabolic disorders such as obesity. They play roles in lipid
+handling and inflammation in adipose tissues.</td>
+<td>CD36, TREM2, SPP1, CD9, CD11c</td>
+<td><a href="https://www.nature.com">Nature</a>, <a href="https://www.frontiersin.org">Frontiers in Immunology</a></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>Key Functions Detailed</strong> <br></p>
+<p><strong>Classical Monocytes</strong>: These cells are the most
+abundant monocyte subset in the blood. They respond rapidly to infection
+and tissue damage by migrating to affected sites where they
+differentiate into macrophages or dendritic cells, initiating an immune
+response.</p>
+<p><strong>Intermediate Monocytes</strong>: These monocytes exhibit
+characteristics of both classical and non-classical subsets. They are
+involved in immune regulation, antigen presentation, and inflammation,
+playing crucial roles in the transition from inflammation to
+healing.</p>
+<p><strong>Non-Classical Monocytes</strong>: These cells patrol the
+endothelium and are primarily involved in tissue surveillance and
+repair. They have anti-inflammatory properties and help clear cellular
+debris and apoptotic cells, contributing to tissue homeostasis.</p>
+<p><br><br> <strong>M1 Macrophages</strong>: Known for their role in
+host defense, M1 macrophages are activated by microbial products and
+pro-inflammatory cytokines. They are efficient at killing intracellular
+pathogens and initiating strong inflammatory responses.</p>
+<p><strong>M2 Macrophages</strong>: These macrophages are essential for
+wound healing and resolving inflammation. Activated by anti-inflammatory
+signals, M2 macrophages promote tissue repair and regeneration by
+secreting growth factors and anti-inflammatory cytokines.</p>
+<p><strong>Tumor-Associated Macrophages (TAMs)</strong>: TAMs are found
+in the tumor microenvironment and can support tumor growth and
+metastasis by suppressing anti-tumor immune responses and promoting
+angiogenesis. They can exhibit both M1 and M2 phenotypes depending on
+the signals from the tumor.</p>
+<p><strong>Lipid-Associated Macrophages (LAMs)</strong>: LAMs are
+involved in lipid metabolism and are found in adipose tissue. They play
+crucial roles in managing lipid storage and mobilization, and are
+implicated in metabolic diseases such as obesity and diabetes.</p>
+<p><br><br><br><br></p>
+<!-- ## Meeting Overview  -->
+<!-- 10x Genomics Single Cell and Spatial Biology User Group Meeting   -->
+<!-- May 2, 2024 NY    -->
+<!-- <br> -->
+<!-- * Visium HD (Spatial) -->
+<!-- * Xenium (no update here) (Spatial) -->
+<!-- * GEM-X (Transcriptome profiling) -->
+<!-- * FLEX (Probe-Based RNA Profiling) -->
+<!-- * BEAM (Barcode Enabled Antigen Mapping)   -->
+<!-- * Applications in various research   -->
+<!-- * proteintech   -->
+<!-- ## Visium HD  -->
+<!-- Visium HD is the latest spatial gene expression platform.   -->
+<!-- Official Launch: March 26, 2024 (BioSpace)   -->
+<!-- [Visium HD Spatial Gene Expression: 10X Genomics ](https://www.10xgenomics.com/products/visium-hd-spatial-gene-expression) -->
+<!-- <br><br> -->
+<!-- **Key Features**  -->
+<!-- 1. Single-Cell Scale Spatial Resolution:   -->
+<!--     **2 x 2 µm** barcoded squares for whole transcriptome profiling    -->
+<!-- 2. Chemistry :  -->
+<!--     Optimized for FFPE (Formalin-Fixed, Paraffin-Embedded) and **fresh frozen tissues**   -->
+<!-- 3. Integration with Histological Data:   -->
+<!--     Combine H&E or IF images with high-resolution transcriptomic data from the same tissue section.  -->
+<!-- 4. Software :  -->
+<!--     Space Ranger(processing) and Loupe Browser(visualize) -->
+<!-- <br> -->
+<!-- **Comparison between Visum and Visium HD** -->
+<!-- <br><br> -->
+<!-- <img src="./img/Visium_data_and_Visium_HD_data.png" width="80%" height="auto">  -->
+<!-- <br> -->
+<!-- ## GEM-X    -->
+<!-- GEM-X is the next-generation technology architecture from 10x Genomics, improving upon the earlier Next GEM architecture used in previous Chromium assays.   -->
+<!-- **Assays by GEM-X:**   -->
+<!-- 1. Chromium GEM-X Single Cell Gene Expression v4:   -->
+<!-- * 3’ whole-transcriptome profiling   -->
+<!-- * Combines gene expression profiling with cell surface protein detection using feature barcode technology​   -->
+<!-- [GEM-X technology](https://www.10xgenomics.com/blog/the-next-generation-of-single-cell-rna-seq-an-introduction-to-gem-x-technology)   -->
+<!--     **Feature Barcode Technology** uses oligo-tagged antibodies to measure protein expression on the cell surface alongside transcriptomics data    -->
+<!--     **Combination with Cell surface proteins tagging** using tens to hundreds of antibodies.   -->
+<!--     **Applications** classify immune cell subtypes and states. -->
+<!-- 2. GEM-X Single Cell Immune Profiling v3: -->
+<!--     Multiomic profiling to map adaptive immune responses. -->
+<!-- Delivers up to 80% cell capture efficiency and improved pairing of full-length **T- and B-cell** receptor sequences.   -->
+<!-- * Enhanced Sensitivity and Capture Efficiency:   -->
+<!-- * Rare cell types and low-RNA content cells like neutrophils​   -->
+<!-- * Mapping T-cell and B-cell receptor sequences.   -->
+<!-- * Lower Multiplet Rate: Reduces multiplet rates with improved GEM-X microfluidic chips. -->
+<!-- <br> -->
+<!-- **GEM-X SC3'v3 vs v4** -->
+<!-- <br><br> -->
+<!-- <img src="./img/GEM_X_comparison.png" width="80%" height="70%">  -->
+<!-- <br> -->
+<!-- ## FLEX    -->
+<!-- A cutting-edge platform designed to enable single-cell RNA sequencing on previously inaccessible samples. By leveraging fixation technology and a comprehensive **probe-based approach**, FLEX makes it possible to profile gene expression in formaldehyde-fixed, FFPE, and frozen samples.   -->
+<!-- <br> -->
+<!-- For challenging sample types   -->
+<!-- **Fixed sample or fixation-based**  -->
+<!-- **Key Features**   -->
+<!-- 1. Works with fresh, frozen, and formalin-fixed, paraffin-embedded (FFPE) samples. -->
+<!-- Suitable for whole tissues, cell suspensions, and nuclei. -->
+<!-- 2. Probe-Based RNA Profiling:   -->
+<!--   * Probe sets targeting predetermined transcript regions.   -->
+<!--   * Currently available for human (18,082 genes) and mouse (19,059 genes) transcriptomes.   -->
+<!--     * [Human probe set](https://www.10xgenomics.com/support/single-cell-gene-expression-flex/documentation/steps/probe-sets/chromium-frp-human-transcriptome-probe-set)   -->
+<!--     * [Mouse probe set](https://www.10xgenomics.com/support/single-cell-gene-expression-flex/documentation/steps/probe-sets/chromium-frp-mouse-transcriptome-probe-set)   -->
+<!--   * Simultaneous Surface Protein Detection: Integrates feature barcode technology for surface protein profiling.   -->
+<!--   * Sample Fixation and Storage:  Samples can be safely stored or transported without compromising data quality. -->
+<!-- Fixation at the point of collection preserves the biological state. -->
+<!-- <br> -->
+<!-- Compatible with Illumina NextSeq and NovaSeq platforms    -->
+<!-- [More info at FLEX 10X Genomics](https://www.10xgenomics.com/products/single-cell-gene-expression-flex) -->
+<!-- <br><br> -->
+<!-- ## BEAM (Barcode Enabled Antigen Mapping)   -->
+<!-- * antigen-specific B- and T-cell clonotypes. Built on the Chromium Single Cell Immune Profiling platform   -->
+<!-- * **Antigen-Specific Discovery:**   -->
+<!--     * BEAM-Ab: Identifies antigen-specific B-cell clonotypes.    -->
+<!--         (BEAM-Ab provides full-length paired B-cell receptor sequences) -->
+<!--     * BEAM-T: Identifies antigen-specific T-cell clonotypes. -->
+<!--     * Comprehensive profiles including full-length paired V(D)J sequences, gene expression, and cell surface proteins. -->
+<!-- [BEAM at 10X Genomics](https://www.10xgenomics.com/products/single-cell-barcode-enabled-antigen-mapping) -->
+<!-- <br><br> -->
+<!-- <hr> -->
+<!-- ## Summary Table    -->
+<!-- | Platform | Purpose | Primary Application | Sample Compatibility | Key Data Output | -->
+<!-- |----------|---------|---------------------|----------------------|-----------------| -->
+<!-- | **FLEX** | scRNA-seq from fixed tissues | Gene expression and protein detection | Fresh, frozen, fixed | Gene expression and surface protein data | -->
+<!-- | **Visium HD** | Spatial transcriptomics | Spatial mapping of gene expression | Fresh frozen, FFPE | Spatial maps of gene expression | -->
+<!-- | **GEM-X** | High-throughput scRNA-seq | Single-cell profiling, immune profiling | Fresh tissues | Gene expression, immune receptor sequencing | -->
+<!-- | **BEAM** | Antigen-specific B- and T-cell discovery | Antigen screening of immune repertoires | PBMCs, splenocytes, lymph node aspirates | Full-length paired V(D)J sequences, gene expression | -->
+<!-- <br><br> -->
+<!-- <hr> -->
+<!-- ## Single-cell immune profiling technologies  -->
+<!-- * **BEAM vs Evercode (Parse Bioscience)**   -->
+<!-- Evercode release event (Boston, May 2024) -->
+<!-- <br><br> -->
+<!-- [**Evercode link**](https://www.parsebiosciences.com/evercode-bcr-tcr/)  -->
+<!-- <br><br> -->
+<!-- **Single-cell immune profiling technologies by Parse Biosciences and the BEAM technology by 10x Genomics:**  -->
+<!-- <br> -->
+<!-- | Feature            | Parse Biosciences Single-Cell Immune Profiling                        | 10x Genomics BEAM                     | -->
+<!-- |--------------------|-----------------------------------------------------------------------|---------------------------------------| -->
+<!-- | **Technology**        | Uses split-pool combinatorial barcoding system                        | Barcode-enabled antibody mapping      | -->
+<!-- | **Points**  | - No specialized equipment needed<br>- Capable of profiling up to **one million cells**<br>- Simultaneous BCR and TCR sequencing with gene expression profiling | - Focus on cell **surface protein profiling**<br>- Precise analysis of protein expression changes among different immune cells | -->
+<!-- | **Applications**     | - **Simultaneous profiling of TCR and BCR**<br>- Detailed analysis of adaptive immune responses                    | - Immune cell phenotyping<br>- Analyzing protein expression variations among immune cells | -->
+<!-- | **Advantages**       | - Scalable to large numbers of samples and cells<br>- Can be used with fixed cells and nuclei                                    | - High specificity for cell surface antigens<br>- Allows simultaneous analysis of multiple cell markers | -->
+<!-- ## proteintech  -->
+<!-- **MultiPro Fixed Cell Immune Profiling Antibody Cocktail**   -->
+<!-- [product link](https://www.ptglab.com/products/MultiPro-Human-Fixed-Cell-Immune-Profiling-Antibody-cocktail-G900004.htm)   -->
+<!-- [PROT/RNA comparison](https://www.ptglab.com/media/Image-Data-MultiPro-G900004.pdf) -->
+<!-- <br> -->
+<!-- - **Product Overview**: The MultiPro™ cocktail contains 53 antibodies that target a mix of intracellular and surface proteins, plus 5 isotype controls.  -->
+<!-- - **Cellular Analysis Tool**: Analyzing cellular components in single-cell RNAseq experiments.   -->
+<!-- - **Compatibility**: Compatible with the 10x Genomics® Chromium® Single Cell Gene Expression Flex product.   -->
+<!-- - **Dual Detection**: Simultaneous capture of protein and gene expression profiles from the same cell, enhancing the depth of cell state analysis.   -->
+<!-- - **Intracellular Protein Research**: Marks significant progress in the field by overcoming previous challenges in accessing **intracellular proteins** in single-cell studies. -->
+<!-- <br><br> -->
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
