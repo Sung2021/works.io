@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Sung" />
+
+
+<title>Drug Information</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Drug Information</h1>
+<h4 class="author">Sung</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#drug-information" id="toc-drug-information">Drug
+Information</a></li>
+<li><a href="#detailed-functions" id="toc-detailed-functions">Detailed
+Functions</a></li>
+</ul>
+</div>
+
+<p><br> Update: “2024-05-14”</p>
+<p><br><br></p>
+<div id="drug-information" class="section level2">
+<h2>Drug Information</h2>
+<p>This is the list of drugs that I have analyzed testing data of in
+DFCI.</p>
+<ul>
+<li>DGKi<br />
+</li>
+<li>DS-1062a<br />
+</li>
+<li>TAK-676<br />
+</li>
+<li>ADU-S100</li>
+</ul>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="25%" />
+<col width="30%" />
+<col width="6%" />
+<col width="6%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Drug</strong></th>
+<th><strong>Target/Mechanism</strong></th>
+<th><strong>Clinical Applications</strong></th>
+<th><strong>Development Stage</strong></th>
+<th><strong>Company</strong></th>
+<th><strong>Sources</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>DGKi</strong></td>
+<td>Inhibits diacylglycerol kinase, enhancing T-cell activation and
+immune responses by modulating DAG and PA signaling pathways.</td>
+<td>Explored for potential application in enhancing the efficacy of
+cancer immunotherapies by boosting T-cell functionality.</td>
+<td>Preclinical/early clinical trials</td>
+<td>Bristol Myers Squibb</td>
+<td><a href="https://www.nature.com/articles/s41573-022-0048-9">Nature
+Review on DGK inhibitors</a></td>
+</tr>
+<tr class="even">
+<td><strong>DS-1062a</strong></td>
+<td>TROP2-targeting antibody-drug conjugate with a cytotoxic
+topoisomerase I inhibitor payload (deruxtecan).</td>
+<td>Targeted therapy for TROP2-expressing tumors, including non-small
+cell lung cancer and triple-negative breast cancer.</td>
+<td>Phase II/III clinical trials</td>
+<td>Daiichi Sankyo</td>
+<td><a href="https://www.daiichisankyo.com/rd/pipeline/oncology/index.html">Daiichi
+Sankyo’s Pipeline</a></td>
+</tr>
+<tr class="odd">
+<td><strong>TAK-676</strong></td>
+<td>Synthetic cyclic dinucleotide that acts as a STING agonist to
+activate the innate immune system.</td>
+<td>Enhancing the effectiveness of existing cancer therapies by
+promoting immune cell infiltration and activation in tumors.</td>
+<td>Phase I/II clinical trials</td>
+<td>Takeda Pharmaceuticals</td>
+<td><a href="https://clinicaltrials.gov/ct2/show/NCT04144140">ClinicalTrials.gov
+Entry for TAK-676</a></td>
+</tr>
+<tr class="even">
+<td><strong>ADU-S100</strong></td>
+<td>Synthetic cyclic dinucleotide STING agonist that stimulates type I
+interferon and pro-inflammatory cytokine production.</td>
+<td>Used in combination with immune checkpoint inhibitors to treat
+advanced solid tumors and cutaneous malignancies.</td>
+<td>Phase I/II clinical trials</td>
+<td>Aduro Biotech, Novartis</td>
+<td><a href="https://www.aduro.com/science/cdn-approach/sting-pathway/">Aduro’s
+ADU-S100 Information</a></td>
+</tr>
+</tbody>
+</table>
+<p><br><br></p>
+</div>
+<div id="detailed-functions" class="section level2">
+<h2>Detailed Functions</h2>
+<p><strong>DGKi</strong>:<br />
+- DGKi targets diacylglycerol kinase, an enzyme that regulates T-cell
+activation by modulating the levels of diacylglycerol (DAG) and
+phosphatidic acid (PA) within cells. Inhibition of this enzyme prevents
+the conversion of DAG to PA, thereby maintaining DAG levels that are
+crucial for downstream signaling events following T-cell receptor
+engagement. This mechanism is believed to potentiate the immune response
+by enhancing T-cell activation, proliferation, and survival, making it a
+valuable target for boosting the effectiveness of T-cell-based cancer
+immunotherapies. <br><br> <strong>DS-1062a</strong>:<br />
+- DS-1062a is designed to selectively target and kill TROP2-expressing
+tumor cells. Its mechanism involves the targeted delivery of a potent
+cytotoxic drug directly to the tumor cells, minimizing the impact on
+non-targeted cells. This targeted approach allows for higher drug
+concentrations at the tumor site, increasing tumor cell death while
+reducing systemic toxicity. The ADC mechanism of DS-1062a utilizes the
+internalization of the TROP2 antibody bound to its antigen on cancer
+cells, followed by the intracellular release of the cytotoxic payload
+that induces DNA damage and cell death. <br><br>
+<strong>TAK-676</strong>:<br />
+- TAK-676 utilizes the STING (Stimulator of Interferon Genes) pathway to
+initiate and amplify the immune response against cancer cells. By
+activating STING, TAK-676 triggers a cascade of signaling events that
+lead to the production of type I interferons and other cytokines, which
+enhance the body’s ability to detect and destroy cancer cells. This
+activation is crucial for recruiting and activating immune cells,
+including T cells and NK cells, into the tumor microenvironment, thereby
+improving the overall effectiveness of cancer immunotherapies. <br><br>
+<strong>ADU-S100</strong>:<br />
+- ADU-S100 works by targeting the STING pathway, which plays a pivotal
+role in the innate immune system’s ability to detect and respond to the
+presence of tumor-derived or pathogen-derived cytosolic DNA. Activation
+of this pathway by ADU-S100 leads to the induction of a strong
+inflammatory response that promotes the activation and recruitment of
+dendritic cells and T cells, key players in the adaptive immune
+response. This mechanism enhances the visibility of tumors to the immune
+system and facilitates the establishment of an effective anti-tumor
+immune response, especially when used in combination with other
+therapies that modulate the immune environment.</p>
+<p><br><br><br><br></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
