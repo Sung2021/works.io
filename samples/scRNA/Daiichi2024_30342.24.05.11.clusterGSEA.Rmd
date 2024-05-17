@@ -1,0 +1,381 @@
+---
+title: "scRNA"
+subtitle: "Cluster GSEA example"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output:  
+  rmdformats::robobook: 
+    code_folding: hide 
+    number_sections: FALSE
+    toc_depth: 6
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=F, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+```{r}
+## load required packages
+library(Seurat)
+library(cowplot)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(paletteer)
+library(forcats)
+```
+
+<br>
+
+Patient data 
+
+* Cluster marker genes GSEA using Gene Ontology    
+* Use gene counts only (w/o expression)   
+
+
+```{r}
+dir= "~/Desktop/DF/DFCI_Paweletz/2024_Daiichi_DXD/"
+obj.srt = readRDS(paste0(dir,"rds/P30342.24.05.07.rds"))
+```
+
+
+# GSEA by cluster marker genes (0.2) {.tabset}  
+
+* Total clusters : 14 (cluster 0 ~ cluster 13)  
+
+
+**Each tab includes the followings:**  
+
+
+* GSEA (BP)  
+* GSEA (MF)  
+* GSEA (CC)  
+* GSEA (data table)   
+
+
+
+```{r}
+dir= "~/Desktop/DF/DFCI_Paweletz/2024_Daiichi_DXD/"
+
+resolution_number = 0.2
+res= paste0("RNA_snn_res.", resolution_number)
+mks = read.csv(paste0(dir,"data/mks/30342/Daiichi_30342_", res, ".markers.csv"), row.names = 1)
+
+```
+
+
+```{r}
+library(clusterProfiler)
+library(org.Hs.eg.db)
+
+gene.ego = function(cluster_number) {
+  geneset = mks %>%
+    filter(cluster == !!cluster_number) %>%
+    dplyr::select(gene) %>% 
+    pull()
+
+  genes_to_convert <- tryCatch({
+    bitr(geneset, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = "org.Hs.eg.db")
+  }, error = function(e) {
+    message("Error converting gene symbols: ", e)
+    return(NULL)
+  })
+
+  if (is.null(genes_to_convert) || nrow(genes_to_convert) == 0) {
+    message("No valid gene IDs were found.")
+    return(NULL)
+  }
+
+  gene.ego <- enrichGO(gene     = genes_to_convert$ENTREZID, 
+                       ont = 'ALL',
+                       OrgDb = "org.Hs.eg.db",
+                       pvalueCutoff = 0.01, qvalueCutoff = 0.01, readable = TRUE)
+  return(gene.ego)
+}
+
+
+custom_barplot = function(df, ont, n){
+  df = df@result 
+  p= df %>%
+    filter(ONTOLOGY == ont) %>%
+    slice_max(order_by = Count, n = n) %>%
+    mutate(Description = forcats::fct_reorder(Description, -Count, .desc = TRUE)) %>%
+    ggplot(aes(x = Count, y = Description, fill = -qvalue, size=Count)) +
+    geom_point(shape = 21) +
+    scale_size_area(max_size = 5) +
+    scale_fill_gradient(low = "ivory", high = "salmon") +
+    labs(fill = "q-value(-)") +
+    theme_minimal() +
+    theme(plot.background = element_rect(color = "black", fill = NA, size = 0.2),
+          panel.border = element_rect(color = "black", fill = NA, size = 0.2)) +
+    ylab("") +
+    ggtitle(ont)
+  return(p)
+}
+
+```
+
+
+## Cluster 0  
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 0)
+gene.ego.out0 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 1 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 1)
+gene.ego.out1= gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 2 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 2)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+## Cluster 3 
+
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 3)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+df = gene.ego.out
+df = df@result 
+n=20
+ont="BP"
+p= df %>%
+  filter(ONTOLOGY == ont) %>%
+  slice_max(order_by = Count, n = n) %>%
+    mutate(Description = fct_reorder(Description, -Count, .desc = TRUE),
+         Description = stringr::str_wrap(Description, width = 80)) %>% 
+  mutate(Description = forcats::fct_reorder(Description, -Count, .desc = TRUE)) %>%
+  ggplot(aes(x = Count, y = Description, fill = -qvalue, size=Count)) +
+  geom_point(shape = 21) +
+  scale_size_area(max_size = 5) +
+  scale_fill_gradient(low = "ivory", high = "salmon") +
+  labs(fill = "q-value(-)") +
+  theme_minimal() +
+  theme(plot.background = element_rect(color = "black", fill = NA, size = 0.2),
+          panel.border = element_rect(color = "black", fill = NA, size = 0.2)) +
+  ylab("") +
+  ggtitle(ont)
+print(p)
+```
+
+
+```{r}
+# custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+## Cluster 4 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 4)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+## Cluster 5 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 5)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+## Cluster 6 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 6)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 7 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 7)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 8 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 8)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 9 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 9)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 10 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 10)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 11 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 11)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+## Cluster 12 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 12)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
+
+
+## Cluster 13 
+
+
+```{r}
+gene.ego.out = gene.ego(cluster_number = 13)
+gene.ego.out2 = gene.ego.out
+```
+
+```{r}
+custom_barplot(df=gene.ego.out, ont="BP", n=20)
+custom_barplot(df=gene.ego.out, ont="MF", n=20)
+custom_barplot(df=gene.ego.out, ont="CC", n=20)
+
+gene.ego.out@result %>% DT::datatable()
+```
