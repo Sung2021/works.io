@@ -35,4 +35,11 @@ knitr::opts_chunk$set(echo = TRUE, eval = F)
 ### Cell type annotation (Immune cell type)  
 
   * [**Annotation by scType Example**](scRNA/scRNA_scType.html)
-  * [**Manual Annotation Example**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)
+  * [**Manual Annotation Example**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)   
+  
+  
+<br>  
+
+### Analysis  
+
+  * [**Population Analysis**](scRNA/Daiichi2024_30342.24.05.12.analysis_population.html)

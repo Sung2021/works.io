@@ -1,0 +1,433 @@
+---
+title: "scRNA-seq"
+subtitle: "Population analysis"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output:  
+  rmdformats::robobook: 
+    code_folding: hide 
+    number_sections: FALSE
+    toc_depth: 6
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=F, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+```{r}
+## load required packages
+library(Seurat)
+library(cowplot)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(paletteer)
+library(viridis)
+```
+
+<br>
+
+Patient: 30342  
+
+
+```{r}
+dir= "~/Desktop/DF/DFCI_Paweletz/2024_Daiichi_DXD/"
+obj.srt = readRDS(paste0(dir,"rds/P30342.24.05.07.rds"))
+```
+
+**Cell Type population shift by treatment**  
+
+```{r}
+
+inferred_cell_types <- c(
+  "T cells",                       # Cluster 0
+  "Macrophages1",                   # Cluster 1
+  "NK cells",                      # Cluster 2
+  "B cells",                       # Cluster 3
+  "Regulatory T cells (Tregs)",    # Cluster 4
+  "Epithelial cells (Cancer) 1",              # Cluster 5
+  "Epithelial cells (Cancer) 2",              # Cluster 6
+  "Dendritic cells",               # Cluster 7
+  "Mast cells",                    # Cluster 8
+  "Macrophages2",                   # Cluster 9
+  "Fibroblasts",                   # Cluster 10
+  "Red blood cells",               # Cluster 11
+  "Alveolar epithelial cells",     # Cluster 12
+  "Neutrophils"                    # Cluster 13
+)
+
+meta_data <- obj.srt@meta.data
+
+meta_data <- meta_data %>%
+  mutate(
+    SuggestedCellType = ifelse(RNA_snn_res.0.2 == 0, inferred_cell_types[1],
+                                ifelse(RNA_snn_res.0.2 == 1, inferred_cell_types[2],
+                                       ifelse(RNA_snn_res.0.2 == 2, inferred_cell_types[3],
+                                              ifelse(RNA_snn_res.0.2 == 3, inferred_cell_types[4],
+                                                     ifelse(RNA_snn_res.0.2 == 4, inferred_cell_types[5],
+                                                            ifelse(RNA_snn_res.0.2 == 5, inferred_cell_types[6],
+                                                                   ifelse(RNA_snn_res.0.2 == 6, inferred_cell_types[7],
+                                                                          ifelse(RNA_snn_res.0.2 == 7, inferred_cell_types[8],
+                                                                                 ifelse(RNA_snn_res.0.2 == 8, inferred_cell_types[9],
+                                                                                        ifelse(RNA_snn_res.0.2 == 9, inferred_cell_types[10],
+                                                                                               ifelse(RNA_snn_res.0.2 == 10, inferred_cell_types[11],
+                                                                                                      ifelse(RNA_snn_res.0.2 == 11, inferred_cell_types[12],
+                                                                                                             ifelse(RNA_snn_res.0.2 == 12, inferred_cell_types[13],
+                                                                                                                    ifelse(RNA_snn_res.0.2 == 13, inferred_cell_types[14], NA)))))))))))))))
+
+
+meta_data$SuggestedCellType = factor(meta_data$SuggestedCellType, 
+                                      levels = inferred_cell_types)
+obj.srt@meta.data <- meta_data 
+
+# # Suggested Cell Type
+# df = obj.srt@meta.data
+# 
+# df = df %>% mutate(SuggestedCellType = case_when(RNA_snn_res.0.2 == 0 ~"Tcell_naive",
+#                                                  RNA_snn_res.0.2 == 1 ~"Macrophage1",
+#                                                  RNA_snn_res.0.2 == 2 ~"NK_NKT",
+#                                                  RNA_snn_res.0.2 == 3 ~"Bcell",
+#                                                  RNA_snn_res.0.2 == 4 ~"Tcell_memory_effector",
+#                                                  RNA_snn_res.0.2 == 5 ~"CancerCell1",
+#                                                  RNA_snn_res.0.2 == 6 ~"EndothelialCell",
+#                                                  RNA_snn_res.0.2 == 7 ~"DC",
+#                                                  RNA_snn_res.0.2 == 8 ~"Basophil",
+#                                                  RNA_snn_res.0.2 == 9 ~"Macrophage2",
+#                                                  RNA_snn_res.0.2 == 10 ~"Platelet",
+#                                                  RNA_snn_res.0.2 == 11 ~"ErythroidCell",
+#                                                  RNA_snn_res.0.2 == 12 ~"CancerCell2",
+#                                                  RNA_snn_res.0.2 == 13 ~"Neutrophil"))
+# 
+# obj.srt[["SuggestedCellType"]] = df$SuggestedCellType
+# level_order = c("Tcell_naive","Macrophage1","NK_NKT","Bcell","Tcell_memory_effector",
+#                 "CancerCell1","EndothelialCell","DC","Basophil","Macrophage2",
+#                 "Platelet","ErythroidCell","CancerCell2","Neutrophil")
+# obj.srt@meta.data$SuggestedCellType = factor(obj.srt@meta.data$SuggestedCellType,
+#                                              levels = level_order)
+```
+
+
+```{r}
+df = obj.srt@meta.data
+
+df = df %>% mutate(Sample = case_when(orig.ident == "P30342_M" ~"CTRL",
+                                      orig.ident == "P30342_D" ~"CND1",
+                                      orig.ident == "P30342_I" ~"CND2",
+                                      orig.ident == "P30342_A" ~"CND3"))
+
+obj.srt[["Sample"]] = df$Sample
+level_order = c("CTRL","CND1","CND2","CND3")
+obj.srt@meta.data$Sample = factor(obj.srt@meta.data$Sample,
+                                             levels = level_order)
+```
+
+```{r}
+res = "SuggestedCellType"
+palette <- wesanderson::wes_palette("FantasticFox1", length(levels(obj.srt@meta.data[,res])), type = "continuous")
+```
+
+# Immune Cell population by sample 
+
+```{r, fig.width=10, fig.height=4}
+# 데이터 요약 및 비율 계산
+# 샘플별 총합에 대한 비율 계산
+df = obj.srt@meta.data
+data_summary <- df %>% group_by(Sample, SuggestedCellType) %>% 
+  dplyr::summarise(count = n()) %>% group_by(Sample) %>% 
+  dplyr::summarise(total = sum(count)) %>% 
+  left_join(df %>% group_by(Sample, SuggestedCellType) %>% 
+              dplyr::summarise(count = n()) %>% group_by(Sample),
+            by="Sample") %>% 
+  mutate(percentage = count / total * 100) 
+
+# ggplot으로 바 차트 및 퍼센트 텍스트 표시
+ggplot(data_summary, aes(x = Sample, y = percentage, fill = SuggestedCellType)) +
+  geom_bar(stat = "identity", position = "fill", color="grey3", size=0.1) +
+  coord_flip() +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)), 
+            position = position_fill(vjust = 0.5), size = 2.5) +
+  scale_fill_manual(values = palette)+
+  labs(y = "Percentage", title = "Percentage of Suggested Cell Type by Sample") +
+  theme_bw() 
+```
+
+# Table 1
+```{r}
+data_summary %>% dplyr::select(SuggestedCellType,Sample, percentage) %>% 
+  tidyr::spread(Sample, percentage) %>% DT::datatable(options = list(pageLength=length(unique(data_summary$SuggestedCellType))), 
+                                                      colnames = c("Cell Type", 
+                                                                   "CTRL %",
+                                                                   "CND1 %",
+                                                                   "CND2 %",
+                                                                   "CND3 %"))
+```
+
+# Selected Immune Cell population by sample (line graph)  
+
+```{r, fig.width=5.5,fig.height=4}
+# 이미 계산된 data_summary 데이터 프레임을 사용하여 라인 그래프 생성
+data_summary %>%
+   dplyr::select(SuggestedCellType, Sample, percentage) %>% 
+  filter(SuggestedCellType == "T cells") %>% 
+  ggplot(aes(x = Sample, y = percentage, group = SuggestedCellType, color = SuggestedCellType)) +
+  geom_line() +
+  geom_point(size=2, alpha=0.5) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)), vjust = -0.5, hjust = 0.5, size = 3, color="grey3") +  # 텍스트 라벨 추가
+  labs(y = "Percentage", title = "Population change across samples") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  # x 축 라벨 회전
+  facet_wrap(.~SuggestedCellType, ncol = 4)
+```
+
+# All Immune Cell population by sample (line graph)  
+
+
+```{r, fig.width=10,fig.height=8}
+# 이미 계산된 data_summary 데이터 프레임을 사용하여 라인 그래프 생성
+data_summary %>%
+   dplyr::select(SuggestedCellType, Sample, percentage) %>% 
+  filter(SuggestedCellType != "Tcell_naive") %>% 
+  ggplot(aes(x = Sample, y = percentage, group = SuggestedCellType, color = SuggestedCellType)) +
+  geom_line() +
+  geom_point(size=2, alpha=0.5) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)), vjust = -0.5, hjust = 0.5, size = 3, color="grey3") +  # 텍스트 라벨 추가
+  labs(y = "Percentage", title = "Population change across samples") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  # x 축 라벨 회전
+  facet_wrap(.~SuggestedCellType, ncol = 4) +
+  ylim(c(0,12))
+```
+
+# Interpretation   
+
+**Observations**  
+
+* The T cell population shows a decrease across all treated samples when compared to the control, with the most significant reduction observed in CND3   
+* Macrophages (1), NK Cells, and Tregs all exhibit an increase in population across the treatments, with the largest increase occurring in CND3, except for NK Cells.   
+* Cancer cell populations remain relatively stable across treatments, though a slight increase is observed in CND3.   
+
+
+**Interpretations**   
+
+  1. Suppressing T cell-mediated immune responses by this drug treatment.  
+  2. A shift from a T cell-dominated response to a more varied immune response involving other cells that can engage in phagocytosis, immune regulation, and innate immunity.   
+  3. CND3 exhibits a more synergistic effect compared to CND1.  
+  4. This drug does not decrease the number of cancer cells; however, in CND3, the cancer cells might be weakened by the increased presence of macrophages and NK cells.   
+
+<br>  
+
+**Possible follow-ups Questions**  
+
+  1. Identify factors that contribute to T cell suppression.  
+  2. Identify factors that promote the increase of innate immune cells such as macrophages and NK cells.  
+  3. Analyze changes in cancer cell characteristics between CTRL and CND3.  
+
+
+
+<br><br>
+
+
+<!-- # Fig5 (Heatmap) -->
+<!-- ```{r} -->
+<!-- resolution_number = 0.2 -->
+<!-- res= paste0("RNA_snn_res.", resolution_number) -->
+<!-- mks = read.csv(paste0(dir,"data/mks/30342/Daiichi_30342_", res, ".markers.csv"), row.names = 1) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- cl=0 -->
+<!-- cl.cells = obj.srt@meta.data %>% filter(RNA_snn_res.0.2 == cl) %>% rownames() -->
+<!-- mks.genes = mks %>% filter(cluster==cl) %>% dplyr::select(gene) %>% pull() -->
+<!-- # mks.genes.exp = obj.srt@assays$RNA@data[mks.genes,cl.cells] -->
+<!-- # mks.genes.exp = data.frame(t(data.frame(mks.genes.exp, check.names = F))) -->
+<!-- # mks.genes.exp$SuggestedCellType = obj.srt@meta.data[cl.cells,]$SuggestedCellType -->
+<!-- # mks.genes.exp$Sample = obj.srt@meta.data[cl.cells,]$Sample -->
+<!-- # mks.genes.exp %>% write.csv(paste0(dir,"data/test.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- obj.sub = subset(obj.srt, RNA_snn_res.0.2 == 0) -->
+<!-- Idents(obj.sub) = "Sample" -->
+<!-- Avg.exp = AverageExpression(obj.sub, features = mks.genes) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- df = data.frame(Avg.exp$RNA) -->
+
+<!-- ctl = df$CTL -->
+<!-- df$CTL = df$CTL/ctl -->
+<!-- df$DXD = df$DXD/ctl -->
+<!-- df$IGG = df$IGG/ctl -->
+<!-- df$COM = df$COM/ctl -->
+<!-- ``` -->
+
+<!-- ```{r, fig.width=5, fig.height=8} -->
+<!-- my.color=c(colorRampPalette(colors = c("navy","white"))(70), -->
+<!--            colorRampPalette(colors = c("white","red4"))(150)) -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
+
+
+
+
+<!-- # Fig5 (Heatmap) -->
+<!-- ```{r} -->
+<!-- resolution_number = 0.2 -->
+<!-- res= paste0("RNA_snn_res.", resolution_number) -->
+<!-- mks = read.csv(paste0(dir,"data/mks/30342/Daiichi_30342_", res, ".markers.csv"), row.names = 1) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- cl=1 -->
+<!-- cl.cells = obj.srt@meta.data %>% filter(RNA_snn_res.0.2 == cl) %>% rownames() -->
+<!-- mks.genes = mks %>% filter(cluster==cl) %>% dplyr::select(gene) %>% pull() -->
+<!-- # mks.genes.exp = obj.srt@assays$RNA@data[mks.genes,cl.cells] -->
+<!-- # mks.genes.exp = data.frame(t(data.frame(mks.genes.exp, check.names = F))) -->
+<!-- # mks.genes.exp$SuggestedCellType = obj.srt@meta.data[cl.cells,]$SuggestedCellType -->
+<!-- # mks.genes.exp$Sample = obj.srt@meta.data[cl.cells,]$Sample -->
+<!-- # mks.genes.exp %>% write.csv(paste0(dir,"data/test.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- obj.sub = subset(obj.srt, RNA_snn_res.0.2 == cl) -->
+<!-- Idents(obj.sub) = "Sample" -->
+<!-- Avg.exp = AverageExpression(obj.sub, features = mks.genes) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- df = data.frame(Avg.exp$RNA) -->
+
+<!-- ctl = df$CTL -->
+<!-- df$CTL = df$CTL/ctl -->
+<!-- df$DXD = df$DXD/ctl -->
+<!-- df$IGG = df$IGG/ctl -->
+<!-- df$COM = df$COM/ctl -->
+<!-- ``` -->
+
+<!-- ```{r, fig.width=5, fig.height=8} -->
+<!-- my.color=c(colorRampPalette(colors = c("navy","white"))(10), -->
+<!--            colorRampPalette(colors = c("white","red4"))(90)) -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
+
+
+<!-- ```{r, fig.width=8, fig.height=60} -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
+
+
+
+<!-- # Fig5 (Heatmap) -->
+<!-- ```{r} -->
+<!-- resolution_number = 0.2 -->
+<!-- res= paste0("RNA_snn_res.", resolution_number) -->
+<!-- mks = read.csv(paste0(dir,"data/mks/30342/Daiichi_30342_", res, ".markers.csv"), row.names = 1) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- cl=3 -->
+<!-- cl.cells = obj.srt@meta.data %>% filter(RNA_snn_res.0.2 == cl) %>% rownames() -->
+<!-- mks.genes = mks %>% filter(cluster==cl) %>% dplyr::select(gene) %>% pull() -->
+<!-- # mks.genes.exp = obj.srt@assays$RNA@data[mks.genes,cl.cells] -->
+<!-- # mks.genes.exp = data.frame(t(data.frame(mks.genes.exp, check.names = F))) -->
+<!-- # mks.genes.exp$SuggestedCellType = obj.srt@meta.data[cl.cells,]$SuggestedCellType -->
+<!-- # mks.genes.exp$Sample = obj.srt@meta.data[cl.cells,]$Sample -->
+<!-- # mks.genes.exp %>% write.csv(paste0(dir,"data/test.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- obj.sub = subset(obj.srt, RNA_snn_res.0.2 == cl) -->
+<!-- Idents(obj.sub) = "Sample" -->
+<!-- Avg.exp = AverageExpression(obj.sub, features = mks.genes) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- df = data.frame(Avg.exp$RNA) -->
+
+<!-- ctl = df$CTL -->
+<!-- df$CTL = df$CTL/ctl -->
+<!-- df$DXD = df$DXD/ctl -->
+<!-- df$IGG = df$IGG/ctl -->
+<!-- df$COM = df$COM/ctl -->
+<!-- ``` -->
+
+<!-- ```{r, fig.width=5, fig.height=8} -->
+<!-- my.color=c(colorRampPalette(colors = c("navy","white"))(11), -->
+<!--            colorRampPalette(colors = c("white","red4"))(80)) -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
+
+
+<!-- ```{r, fig.width=6, fig.height=30} -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
+
+
+
+
+<!-- # Fig5 (Heatmap) -->
+<!-- ```{r} -->
+<!-- resolution_number = 0.2 -->
+<!-- res= paste0("RNA_snn_res.", resolution_number) -->
+<!-- mks = read.csv(paste0(dir,"data/mks/30342/Daiichi_30342_", res, ".markers.csv"), row.names = 1) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- cl=4 -->
+<!-- cl.cells = obj.srt@meta.data %>% filter(RNA_snn_res.0.2 == cl) %>% rownames() -->
+<!-- mks.genes = mks %>% filter(cluster==cl) %>% dplyr::select(gene) %>% pull() -->
+<!-- # mks.genes.exp = obj.srt@assays$RNA@data[mks.genes,cl.cells] -->
+<!-- # mks.genes.exp = data.frame(t(data.frame(mks.genes.exp, check.names = F))) -->
+<!-- # mks.genes.exp$SuggestedCellType = obj.srt@meta.data[cl.cells,]$SuggestedCellType -->
+<!-- # mks.genes.exp$Sample = obj.srt@meta.data[cl.cells,]$Sample -->
+<!-- # mks.genes.exp %>% write.csv(paste0(dir,"data/test.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- obj.sub = subset(obj.srt, RNA_snn_res.0.2 == cl) -->
+<!-- Idents(obj.sub) = "Sample" -->
+<!-- Avg.exp = AverageExpression(obj.sub, features = mks.genes) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- df = data.frame(Avg.exp$RNA) -->
+
+<!-- ctl = df$CTL -->
+<!-- df$CTL = df$CTL/ctl -->
+<!-- df$DXD = df$DXD/ctl -->
+<!-- df$IGG = df$IGG/ctl -->
+<!-- df$COM = df$COM/ctl -->
+<!-- ``` -->
+
+<!-- ```{r, fig.width=5, fig.height=8} -->
+<!-- my.color=c(colorRampPalette(colors = c("navy","white"))(15), -->
+<!--            colorRampPalette(colors = c("white","red4"))(25)) -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
+
+
+<!-- ```{r, fig.width=6, fig.height=40} -->
+<!-- df %>% pheatmap::pheatmap(cluster_cols = F, color = my.color,  -->
+<!--                           fontsize_row = 3, border_color = "black") -->
+<!-- ``` -->
