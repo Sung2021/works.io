@@ -34,7 +34,7 @@ library(viridis)
 
 <br>
 
-Patient: 30342  
+Patient data    
 
 
 ```{r}
