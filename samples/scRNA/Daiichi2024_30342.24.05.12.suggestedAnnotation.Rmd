@@ -1,0 +1,392 @@
+---
+title: "2024 Daiichi Dxd"
+subtitle: "Report: 30342"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output:  
+  rmdformats::robobook: 
+    code_folding: hide 
+    number_sections: FALSE
+    toc_depth: 6
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=F, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+```{r}
+## load required packages
+library(Seurat)
+library(cowplot)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(paletteer)
+library(forcats)
+```
+
+<br>
+
+Patient: 30342  
+
+* Suggested Cell Types     
+
+
+
+```{r}
+dir= "~/Desktop/DF/DFCI_Paweletz/2024_Daiichi_DXD/"
+obj.srt = readRDS(paste0(dir,"rds/P30342.24.05.07.rds"))
+```
+
+
+# Annotation in UMAP {.tabset}
+
+Annotation by known cell type markers  
+
+```{r}
+orig.ident_cols = scale_color_paletteer_d("ggsci::nrc_npg") 
+orig.ident_fils = scale_fill_paletteer_d("ggsci::nrc_npg") 
+```
+
+## Resolution 0.2 UMAP
+
+```{r}
+# Resolution and color palette
+i=0.2
+res= paste0("RNA_snn_res.", i)
+palette <- wesanderson::wes_palette("FantasticFox1", length(levels(obj.srt@meta.data[,res])), type = "continuous")
+```
+
+```{r,fig.width=7, fig.height=6, out.width='80%'}
+DimPlot(obj.srt, group.by = res, cols = palette, alpha = 0.8) + 
+  theme(plot.title = element_blank()) + xlab("UMAP1") + ylab("UMAP2")
+```
+
+## Resolution 0.2 UMAP (label)
+```{r,fig.width=7, fig.height=6, out.width='80%'}
+DimPlot(obj.srt, group.by = res, alpha = 0.8,
+        label = T, label.box = T, label.size = 3, 
+        cols = palette) + theme(plot.title = element_blank())
+```
+
+
+## Suggested cell types  
+
+```{r}
+df = obj.srt@meta.data
+
+df = df %>% mutate(SuggestedCellType = case_when(RNA_snn_res.0.2 == 0 ~"Tcell_naive",
+                                                 RNA_snn_res.0.2 == 1 ~"Macrophage1",
+                                                 RNA_snn_res.0.2 == 2 ~"NK_NKT",
+                                                 RNA_snn_res.0.2 == 3 ~"Bcell",
+                                                 RNA_snn_res.0.2 == 4 ~"Tcell_memory_effector",
+                                                 RNA_snn_res.0.2 == 5 ~"CancerCell1",
+                                                 RNA_snn_res.0.2 == 6 ~"EndothelialCell",
+                                                 RNA_snn_res.0.2 == 7 ~"DC",
+                                                 RNA_snn_res.0.2 == 8 ~"Basophil",
+                                                 RNA_snn_res.0.2 == 9 ~"Macrophage2",
+                                                 RNA_snn_res.0.2 == 10 ~"Platelet",
+                                                 RNA_snn_res.0.2 == 11 ~"ErythroidCell",
+                                                 RNA_snn_res.0.2 == 12 ~"CancerCell2",
+                                                 RNA_snn_res.0.2 == 13 ~"Neutrophil"))
+```
+
+
+```{r,fig.width=8.5, fig.height=6, out.width='100%'}
+obj.srt[["SuggestedCellType"]] = df$SuggestedCellType
+level_order = c("Tcell_naive","Macrophage1","NK_NKT","Bcell","Tcell_memory_effector",
+                "CancerCell1","EndothelialCell","DC","Basophil","Macrophage2",
+                "Platelet","ErythroidCell","CancerCell2","Neutrophil")
+obj.srt@meta.data$SuggestedCellType = factor(obj.srt@meta.data$SuggestedCellType,
+                                             levels = level_order)
+DimPlot(obj.srt, group.by = "SuggestedCellType", alpha = 0.8,
+        label = T, label.box = F, label.size = 4, 
+        cols = palette) + theme(plot.title = element_blank())
+```
+<br><br>
+
+```{r}
+df %>% dplyr::select(RNA_snn_res.0.2, SuggestedCellType) %>% table() %>% data.frame() %>% filter(Freq !=0) %>% arrange(RNA_snn_res.0.2) %>% dplyr::select(RNA_snn_res.0.2, SuggestedCellType) %>% 
+  DT::datatable(rownames = F, options = list(pageLength=length(levels(obj.srt@meta.data$SuggestedCellType))))
+```
+
+
+## Cell numbers 
+```{r,fig.width=8, fig.height=5}
+res = "SuggestedCellType"
+obj.srt@meta.data %>% ggplot(aes(!!sym(res), fill=!!sym(res))) + 
+  geom_bar(alpha=0.7, color="grey5", size=0.1) +
+  geom_text(stat="count", aes(label= ..count..), vjust=-0.5, size=3) +
+  scale_fill_manual(values=palette) + 
+  xlab("") + 
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust=1)) +
+  ggtitle("SuggestedCellType")
+```
+
+
+```{r}
+obj.srt@meta.data %>% dplyr::select(SuggestedCellType, orig.ident) %>% 
+  table() %>% data.frame() %>% 
+  tidyr::spread(orig.ident, Freq) %>% 
+  DT::datatable(options = list(pageLength= length(unique(obj.srt@meta.data$SuggestedCellType))))
+```
+
+
+## Known Marker gene expression (Vertical Dotplot)  
+```{r, fig.width=7, fig.height=12}
+genes <- c("CD79A", "PTPRC", "CD38", "VPREB3", "TCL1A", "CD4", "CD8A", "CD8B","CD3D", "CD3E", "CD3G", "SELL", 
+           "CD27", "IL7RA", "CCR7", "CTLA4", "IL2RA", "GZMB", "CD56", "NKp46", "CD161", "NKG7", "GZMB", "GZMA", 
+           "GNLY", "LYZ","MPO","CXCR2","CD14", "FCGR3A", "CD11b", "C1QC", "S100A8", "S100A9", "CD68", "CD163", "CD80", "CD86", 
+           "MRC1", "PECAM1", "CDH5", "VCAM1", "VWF", "ICAM1", "ITGAX", "CD83", "NRP1", "CLEC4C", "CD86", 
+           "CD86", "ITGAX", "CD40", "CD44", "EPCAM", "KRT18")
+genes <- unique(genes)
+
+genes = genes[genes %in% rownames(obj.srt)]
+
+my_palette <- c(colorRampPalette(colors = c("#2874A6","white"))(25), colorRampPalette(colors = c("white","red"))(30))
+
+DotPlot(obj.srt, features = rev(genes), 
+        group.by = "SuggestedCellType") +coord_flip() +
+  scale_color_gradientn(colors = my_palette) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("") +ylab("") 
+```
+
+## Known Marker gene expression (Horizontal Dotplot)   
+
+```{r, fig.width=12, fig.height=5, out.width="150%"}
+obj.srt@meta.data$rev_suggestedCT = obj.srt@meta.data$SuggestedCellType
+obj.srt@meta.data$rev_suggestedCT = factor(obj.srt@meta.data$rev_suggestedCT,
+                                           levels = rev(levels(obj.srt@meta.data$SuggestedCellType)))
+DotPlot(obj.srt, features = genes, 
+        group.by = "rev_suggestedCT") +
+  scale_color_gradientn(colors = my_palette) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("") +ylab("") 
+```
+
+
+## Reference    
+
+| Gene    | Cell Type                             |
+|---------|---------------------------------------|
+| CD79A   | B cells                               |
+| PTPRC   | All leukocytes (B cells, T cells, etc.) |
+| CD38    | Activated B cells, plasma cells       |
+| VPREB3  | B cell development                    |
+| TCL1A   | B cells (associated with B cell lymphoma) |
+| CD4     | Helper T cells                        |
+| CD8A    | Cytotoxic T cells                     |
+| CD8B    | Cytotoxic T cells                     |
+| CD3D    | All T cells                           |
+| CD3E    | All T cells                           |
+| CD3G    | All T cells                           |
+| SELL    | Naive T cells                         |
+| CD27    | Memory B cells, plasma cells, T cells |
+| CCR7    | Naive and central memory T cells      |
+| CTLA4   | Activated T cells                     |
+| IL2RA   | Activated T cells, regulatory T cells |
+| GZMB    | Cytotoxic T cells, NK cells           |
+| NKG7    | Cytotoxic T cells, NK cells           |
+| GZMA    | Cytotoxic T cells, NK cells           |
+| GNLY    | NK cells, cytotoxic T cells           |
+| LYZ     | Macrophages, monocytes, other leukocytes |
+| MPO     | Neutrophils                           |
+| CXCR2   | Neutrophils, some monocytes           |
+| CD14    | Monocytes, macrophages                |
+| FCGR3A  | NK cells, monocytes, macrophages      |
+| C1QC    | Monocytes, macrophages                |
+| S100A8  | Inflammatory monocytes, macrophages   |
+| S100A9  | Inflammatory monocytes, macrophages   |
+| CD68    | Macrophages, monocytes                |
+| CD163   | Macrophages, monocytes                |
+| CD80    | Dendritic cells, B cells              |
+| CD86    | Dendritic cells, B cells              |
+| MRC1    | Macrophages, dendritic cells          |
+| PECAM1  | Endothelial cells, vascular cells     |
+| CDH5    | Vascular endothelial cells            |
+| VCAM1   | Vascular endothelial cells            |
+| VWF     | Vascular endothelial cells, platelets |
+| ICAM1   | Various cell types (involved in inflammation) |
+| ITGAX   | Dendritic cells, macrophages          |
+| CD83    | Mature dendritic cells                |
+| NRP1    | Dendritic cells, some immune cells    |
+| CLEC4C  | Dendritic cells                       |
+| CD40    | B cells, macrophages, dendritic cells |
+| CD44    | Cancer cells                          |
+| EPCAM   | Cancer cells                          |
+| KRT18   | Cancer cells                          |
+
+<br><br><br>
+
+# Manual annotation by Cluster Markers {.tabset} 
+
+
+## Table  
+
+**Cell Types and MK Genes by Cluster**   
+
+| Cluster | Inferred Cell Type               | Key Genes                                                      |
+|---------|----------------------------------|---------------------------------------------------------------|
+| 0       | T cells                          | CD3D, CD2, GIMAP7, CD3G, CD3E, TRAC, BCL11B, ...               |
+| 1       | Macrophages 1                    | MS4A7, C5AR1, PLA2G7, SPI1, PILRA, KYNU, DMXL2, ...            |
+| 2       | NK cells                         | NKG7, GNLY, KLRD1, GZMB, CST7, TYROBP, APOBEC3G, ...           |
+| 3       | B cells                          | MS4A1, CD79A, BANK1, TNFRSF13C, HLA-DQB1, CD74, ...            |
+| 4       | Regulatory T cells (Tregs)       | TIGIT, IL2RA, LINC01943, TNFRSF4, FOXP3, CTLA4, ...            |
+| 5       | Epithelial cells (Cancer) 1      | ELF3, EPCAM, MAL2, PAWR, WFDC2, MYO1B, KRT18, ...              |
+| 6       | Epithelial cells (Cancer) 2      | TM4SF1, KRT18, S100A13, CCND1, IGFBP7, S100A10, ...            |
+| 7       | Dendritic cells                  | LAMP3, GPR157, IDO1, CSF2RA, RAMP1, CD86, DAP12, ...           |
+| 8       | Mast cells                       | TPSAB1, TPSB2, GATA2, HPGDS, CPA3, PRG2, KIT, ...              |
+| 9       | Macrophages 2                    | MARCO, VSIG4, FABP4, C1QC, PLBD1, TREM1, MSR1, ...             |
+| 10      | Fibroblasts                      | COL6A2, IGFBP7, FGF2, C11orf96, FERMT2, CALD1, ...             |
+| 11      | Red blood cells                  | HBA2, HBA1, HBB, SLC25A37                                       |
+| 12      | Alveolar epithelial cells        | SFTPB, DDAH1, SFTPD, SFTPA1, SDR16C5, SFTPA2, ...              |
+| 13      | Neutrophils                      | PI3, FCGR3B, AL021978.1, HCAR3, KCNJ15, S100P, ...             |
+
+
+## Cell number   
+
+
+```{r}
+inferred_cell_types <- c(
+  "T cells",                       # Cluster 0
+  "Macrophages1",                   # Cluster 1
+  "NK cells",                      # Cluster 2
+  "B cells",                       # Cluster 3
+  "Regulatory T cells (Tregs)",    # Cluster 4
+  "Epithelial cells (Cancer) 1",              # Cluster 5
+  "Epithelial cells (Cancer) 2",              # Cluster 6
+  "Dendritic cells",               # Cluster 7
+  "Mast cells",                    # Cluster 8
+  "Macrophages2",                   # Cluster 9
+  "Fibroblasts",                   # Cluster 10
+  "Red blood cells",               # Cluster 11
+  "Alveolar epithelial cells",     # Cluster 12
+  "Neutrophils"                    # Cluster 13
+)
+
+meta_data <- obj.srt@meta.data
+
+meta_data <- meta_data %>%
+  mutate(
+    Manual_cell_type = ifelse(RNA_snn_res.0.2 == 0, inferred_cell_types[1],
+                                ifelse(RNA_snn_res.0.2 == 1, inferred_cell_types[2],
+                                       ifelse(RNA_snn_res.0.2 == 2, inferred_cell_types[3],
+                                              ifelse(RNA_snn_res.0.2 == 3, inferred_cell_types[4],
+                                                     ifelse(RNA_snn_res.0.2 == 4, inferred_cell_types[5],
+                                                            ifelse(RNA_snn_res.0.2 == 5, inferred_cell_types[6],
+                                                                   ifelse(RNA_snn_res.0.2 == 6, inferred_cell_types[7],
+                                                                          ifelse(RNA_snn_res.0.2 == 7, inferred_cell_types[8],
+                                                                                 ifelse(RNA_snn_res.0.2 == 8, inferred_cell_types[9],
+                                                                                        ifelse(RNA_snn_res.0.2 == 9, inferred_cell_types[10],
+                                                                                               ifelse(RNA_snn_res.0.2 == 10, inferred_cell_types[11],
+                                                                                                      ifelse(RNA_snn_res.0.2 == 11, inferred_cell_types[12],
+                                                                                                             ifelse(RNA_snn_res.0.2 == 12, inferred_cell_types[13],
+                                                                                                                    ifelse(RNA_snn_res.0.2 == 13, inferred_cell_types[14], NA)))))))))))))))
+
+
+meta_data$Manual_cell_type = factor(meta_data$Manual_cell_type, 
+                                      levels = inferred_cell_types)
+obj.srt@meta.data <- meta_data 
+```
+
+```{r}
+obj.srt@meta.data %>% dplyr::select(Manual_cell_type, orig.ident) %>% 
+  table() %>% data.frame() %>% 
+  tidyr::spread(orig.ident, Freq) %>% 
+  DT::datatable(options = list(pageLength= length(unique(obj.srt@meta.data$Manual_cell_type))))
+```
+
+
+```{r}
+# List of top genes for each cluster
+top_genes <- c('CD3D', 'CD2', 'GIMAP7', 'CD3G', 'CD3E', 
+               'MS4A7', 'C5AR1', 'PLA2G7', 'SPI1', 'PILRA', 
+               'NKG7', 'GNLY', 'KLRD1', 'GZMB', 'CST7', 
+               'MS4A1', 'CD79A', 'BANK1', 'TNFRSF13C', 'HLA-DQB1', 
+               'TIGIT', 'IL2RA', 'LINC01943', 'TNFRSF4', 'FOXP3', 
+               'ELF3', 'EPCAM', 'MAL2', 'PAWR', 'WFDC2', 
+               'TM4SF1', 'KRT18', 'S100A13', 'CCND1', 'IGFBP7', 
+               'LAMP3', 'GPR157', 'IDO1', 'CSF2RA', 'RAMP1', 
+               'TPSAB1', 'TPSB2', 'GATA2', 'HPGDS', 'CPA3', 
+               'MARCO', 'VSIG4', 'FABP4', 'C1QC', 'PLBD1', 
+               'COL6A2', 'IGFBP7', 'FGF2', 'C11orf96', 'FERMT2', 
+               'HBA2', 'HBA1', 'HBB', 'SLC25A37', 
+               'SFTPB', 'DDAH1', 'SFTPD', 'SFTPA1', 'SDR16C5', 
+               'PI3', 'FCGR3B', 'AL021978.1', 'HCAR3', 'KCNJ15')
+
+top_genes <- top_genes[!duplicated(top_genes)]
+# Plot DotPlot
+# DotPlot(obj.srt, features = top_genes, group.by = "RNA_snn_res.0.2") + coord_flip()
+```
+
+## Dotplot (Vertical)     
+
+```{r, fig.width=8, fig.height=16, eval=FALSE}
+my_palette <- c(colorRampPalette(colors = c("#2874A6","white"))(12), colorRampPalette(colors = c("white","red"))(30))
+
+DotPlot(obj.srt, features = rev(top_genes), 
+        group.by = "RNA_snn_res.0.2") +coord_flip() +
+  scale_color_gradientn(colors = my_palette) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 0, hjust = 1)) +
+  xlab("") +ylab("") 
+```
+
+
+
+```{r, fig.width=8, fig.height=16}
+my_palette <- c(colorRampPalette(colors = c("#2874A6","white"))(12), colorRampPalette(colors = c("white","red"))(30))
+
+DotPlot(obj.srt, features = rev(top_genes), 
+        group.by = "Manual_cell_type") +coord_flip() +
+  scale_color_gradientn(colors = my_palette) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("") +ylab("") 
+```
+
+
+## Dotplot (Horizontal)     
+
+```{r, fig.width=16, fig.height=8}
+
+obj.srt$inferred_cell_type = factor(obj.srt$Manual_cell_type, 
+                                      levels = rev(inferred_cell_types))
+my_palette <- c(colorRampPalette(colors = c("#2874A6","white"))(12), colorRampPalette(colors = c("white","red"))(30))
+
+DotPlot(obj.srt, features = top_genes, 
+        group.by = "Manual_cell_type") +
+  scale_color_gradientn(colors = my_palette) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("") +ylab("") 
+```
+
+
+
+<!-- **Macrophage Marker Genes and Their Roles**   -->
+
+<!-- | Gene    | Role                                                                                      | Macrophage Annotation                                      | -->
+<!-- |---------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------| -->
+<!-- | MS4A7   | Membrane protein involved in macrophage differentiation and function.                     | High expression in mature macrophages.                    | -->
+<!-- | C5AR1   | Receptor in the complement system that regulates inflammatory responses and chemotaxis.   | Indicates involvement in inflammatory responses.          | -->
+<!-- | PLA2G7  | Enzyme that produces pro-inflammatory mediators, involved in lipid metabolism.            | Reflects activity in inflammation and lipid metabolism.   | -->
+<!-- | SPI1    | Transcription factor essential for macrophage differentiation and maturation.             | Critical role in macrophage development and function.     | -->
+<!-- | PILRA   | Immune receptor involved in cell signaling and regulation of immune responses.            | Regulates macrophage immune responses.                    | -->
+<!-- | KYNU    | Enzyme in the tryptophan metabolism pathway, involved in immune regulation and inflammation. | Reflects metabolic activity and role in inflammatory responses. | -->
+<!-- | DMXL2   | Protein associated with various cellular functions, including signaling and metabolism.   | Involved in diverse metabolic processes and cell functions. | -->
+
+
+<br><br><br>
