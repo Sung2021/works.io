@@ -1,6 +1,6 @@
 ---
-title: "2024 Daiichi Dxd"
-subtitle: "Report: 30342"
+title: "scRNA"
+subtitle: "Manual Annotation example"
 author: "Sung Rye Park"
 date: "`r format(Sys.Date())`"
 output:  
@@ -34,7 +34,7 @@ library(forcats)
 
 <br>
 
-Patient: 30342  
+Patient data  
 
 * Suggested Cell Types     
 
@@ -46,14 +46,67 @@ obj.srt = readRDS(paste0(dir,"rds/P30342.24.05.07.rds"))
 ```
 
 
-# Annotation in UMAP {.tabset}
+# Annotation version 1 {.tabset}
 
-Annotation by known cell type markers  
+Annotation by reference cell type markers  
 
 ```{r}
 orig.ident_cols = scale_color_paletteer_d("ggsci::nrc_npg") 
 orig.ident_fils = scale_fill_paletteer_d("ggsci::nrc_npg") 
 ```
+
+## Reference    
+
+| Gene    | Cell Type                             |
+|---------|---------------------------------------|
+| CD79A   | B cells                               |
+| PTPRC   | All leukocytes (B cells, T cells, etc.) |
+| CD38    | Activated B cells, plasma cells       |
+| VPREB3  | B cell development                    |
+| TCL1A   | B cells (associated with B cell lymphoma) |
+| CD4     | Helper T cells                        |
+| CD8A    | Cytotoxic T cells                     |
+| CD8B    | Cytotoxic T cells                     |
+| CD3D    | All T cells                           |
+| CD3E    | All T cells                           |
+| CD3G    | All T cells                           |
+| SELL    | Naive T cells                         |
+| CD27    | Memory B cells, plasma cells, T cells |
+| CCR7    | Naive and central memory T cells      |
+| CTLA4   | Activated T cells                     |
+| IL2RA   | Activated T cells, regulatory T cells |
+| GZMB    | Cytotoxic T cells, NK cells           |
+| NKG7    | Cytotoxic T cells, NK cells           |
+| GZMA    | Cytotoxic T cells, NK cells           |
+| GNLY    | NK cells, cytotoxic T cells           |
+| LYZ     | Macrophages, monocytes, other leukocytes |
+| MPO     | Neutrophils                           |
+| CXCR2   | Neutrophils, some monocytes           |
+| CD14    | Monocytes, macrophages                |
+| FCGR3A  | NK cells, monocytes, macrophages      |
+| C1QC    | Monocytes, macrophages                |
+| S100A8  | Inflammatory monocytes, macrophages   |
+| S100A9  | Inflammatory monocytes, macrophages   |
+| CD68    | Macrophages, monocytes                |
+| CD163   | Macrophages, monocytes                |
+| CD80    | Dendritic cells, B cells              |
+| CD86    | Dendritic cells, B cells              |
+| MRC1    | Macrophages, dendritic cells          |
+| PECAM1  | Endothelial cells, vascular cells     |
+| CDH5    | Vascular endothelial cells            |
+| VCAM1   | Vascular endothelial cells            |
+| VWF     | Vascular endothelial cells, platelets |
+| ICAM1   | Various cell types (involved in inflammation) |
+| ITGAX   | Dendritic cells, macrophages          |
+| CD83    | Mature dendritic cells                |
+| NRP1    | Dendritic cells, some immune cells    |
+| CLEC4C  | Dendritic cells                       |
+| CD40    | B cells, macrophages, dendritic cells |
+| CD44    | Cancer cells                          |
+| EPCAM   | Cancer cells                          |
+| KRT18   | Cancer cells                          |
+
+
 
 ## Resolution 0.2 UMAP
 
@@ -68,6 +121,9 @@ palette <- wesanderson::wes_palette("FantasticFox1", length(levels(obj.srt@meta.
 DimPlot(obj.srt, group.by = res, cols = palette, alpha = 0.8) + 
   theme(plot.title = element_blank()) + xlab("UMAP1") + ylab("UMAP2")
 ```
+
+
+
 
 ## Resolution 0.2 UMAP (label)
 ```{r,fig.width=7, fig.height=6, out.width='80%'}
@@ -177,63 +233,12 @@ DotPlot(obj.srt, features = genes,
 ```
 
 
-## Reference    
-
-| Gene    | Cell Type                             |
-|---------|---------------------------------------|
-| CD79A   | B cells                               |
-| PTPRC   | All leukocytes (B cells, T cells, etc.) |
-| CD38    | Activated B cells, plasma cells       |
-| VPREB3  | B cell development                    |
-| TCL1A   | B cells (associated with B cell lymphoma) |
-| CD4     | Helper T cells                        |
-| CD8A    | Cytotoxic T cells                     |
-| CD8B    | Cytotoxic T cells                     |
-| CD3D    | All T cells                           |
-| CD3E    | All T cells                           |
-| CD3G    | All T cells                           |
-| SELL    | Naive T cells                         |
-| CD27    | Memory B cells, plasma cells, T cells |
-| CCR7    | Naive and central memory T cells      |
-| CTLA4   | Activated T cells                     |
-| IL2RA   | Activated T cells, regulatory T cells |
-| GZMB    | Cytotoxic T cells, NK cells           |
-| NKG7    | Cytotoxic T cells, NK cells           |
-| GZMA    | Cytotoxic T cells, NK cells           |
-| GNLY    | NK cells, cytotoxic T cells           |
-| LYZ     | Macrophages, monocytes, other leukocytes |
-| MPO     | Neutrophils                           |
-| CXCR2   | Neutrophils, some monocytes           |
-| CD14    | Monocytes, macrophages                |
-| FCGR3A  | NK cells, monocytes, macrophages      |
-| C1QC    | Monocytes, macrophages                |
-| S100A8  | Inflammatory monocytes, macrophages   |
-| S100A9  | Inflammatory monocytes, macrophages   |
-| CD68    | Macrophages, monocytes                |
-| CD163   | Macrophages, monocytes                |
-| CD80    | Dendritic cells, B cells              |
-| CD86    | Dendritic cells, B cells              |
-| MRC1    | Macrophages, dendritic cells          |
-| PECAM1  | Endothelial cells, vascular cells     |
-| CDH5    | Vascular endothelial cells            |
-| VCAM1   | Vascular endothelial cells            |
-| VWF     | Vascular endothelial cells, platelets |
-| ICAM1   | Various cell types (involved in inflammation) |
-| ITGAX   | Dendritic cells, macrophages          |
-| CD83    | Mature dendritic cells                |
-| NRP1    | Dendritic cells, some immune cells    |
-| CLEC4C  | Dendritic cells                       |
-| CD40    | B cells, macrophages, dendritic cells |
-| CD44    | Cancer cells                          |
-| EPCAM   | Cancer cells                          |
-| KRT18   | Cancer cells                          |
-
 <br><br><br>
 
-# Manual annotation by Cluster Markers {.tabset} 
+# Annotation version 2 {.tabset} 
 
 
-## Table  
+## Cluster marker and Cell type Table  
 
 **Cell Types and MK Genes by Cluster**   
 

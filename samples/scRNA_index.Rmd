@@ -18,12 +18,15 @@ knitr::opts_chunk$set(echo = TRUE, eval = F)
 
 * [**Raw data processing and initial filitering**](https://sung2021.github.io/works.io/samples/processing/scRNA_preprocessing.html)
   
+<br>  
   
 ### UMAP/Clustering  
 
-  * [**UMAP/Clustering Example**](scRNA_UMAP.html)
-
+  * [**UMAP/Clustering Example**](scRNAs/cRNA_UMAP.html)
+  
+<br>  
 
 #### Cell type annotation (Immune cell type)  
 
-  * [**Annotation Example**](scRNA_scType.html)
+  * [**Annotation Example**](scRNAs/cRNA_scType.html)
+  * [**Manual Annotation Example**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)
