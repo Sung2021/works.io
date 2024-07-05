@@ -32,49 +32,183 @@ knitr::opts_chunk$set(echo = TRUE)
 <hr>
 ### MSLN/TROP2 project using TCGA-BRCA (Barbie:Zehua)    
 
-* [Introduction]  <!-- (Barbie/MSLN/TCGA_BRCA_MSLN_index.html) -->
-* [Data Preparation from TCGA]
-* [MSLN/TACSTD2/STING expression](Barbie/MSLN/TCGA_BRCA_MSLN_geneExpression.html)
+* [Project Introduction]
+* [Data Preparation from TCGA DB]
+* [MSLN/TACSTD2/STING expression to choose the populations to investigate](Barbie/MSLN/TCGA_BRCA_MSLN_geneExpression.html)
+* [TROP2 positive/negative population]
+* [Feature Selection]
 
 <hr>
 
 ### PDX model RNA-seq analysis (Paweletz:Lauren)  
 
-* [Initial report](Paweletz/PDX_RNASeq/PDX_RNA_seq_Cloud_index.html)
-* [TCSA/ADC correlation and heatmap](Paweletz/PDX_RNASeq/PDX_RNA_seq_Cloud_correlation.24.05.05.moreHeatmaps.html)
+* [Project Introduction](Paweletz/PDX_RNASeq/PDX_RNA_seq_Cloud_index.html)
+* [Shiny App for gene expression]
+* [WGCNA]
+* [TCSA/ADC geneset correlation and heatmap](Paweletz/PDX_RNASeq/PDX_RNA_seq_Cloud_correlation.24.05.05.moreHeatmaps.html)
+* [Immune Cell population (TIMER)]
+* [RNA-seq pipeline comparison]
+  * BXMD DNANexus platform pipeline (Applet)
+  * Manual pipeline (by Sung)
+* Hold as of 2024 June
 
 <hr>
 
 ### Daiichi DS-1062a scRNA-seq analysis (Paweletz:Patrick)
 
-(I blocked some link here for the data security temporarily.)
+[**Project Introduction**](Daiichi_2024_introduction.html)
 
-* [Project Index](Paweletz/Daiichi/Daiichi_2024_index.html)
 
-  **30342**
-  * [P1 QC](Paweletz/Daiichi/ Daiichi2024_init_30342.v2.html)
-  * [P1 UMAP/Cluster/Marker](Paweletz/Daiichi/ Daiichi2024_30342.24.05.07.html)
-  * [P1 Featureplot shiny app](Paweletz/Daiichi/ Daiichi2024_30342.24.05.09.shiny.html)
-  * [P1 Cell Type annotation](Paweletz/Daiichi/ annotation/Daiichi2024_30342.24.05.10.annotation.html) 
-  * [P1 Marker gene plots](Paweletz/Daiichi/annotation/ Daiichi2024_30342.24.05.10.annotation_manual.html) 
-  * [P1 Subset population DEGs](Paweletz/Daiichi/DC/ Daiichi2024_30342.24.05.23.DC.html) 
-  * [P1 Subset population DEGs further analysis](Paweletz/Daiichi/DC/ Daiichi2024_30342.24.05.23.DC.DEGs.html)
+#### Introduction and QC
+
+- [**30342**](init/Daiichi2024_init_30342.v2.html)<br>
+UMI \>= 1000 & mt% \<= 10% (24.05.07)
+- [**30348**](init/Daiichi2024_init_30348.html)<br>
+UMI \>= 1000 & mt% \<= 10% (24.05.07)
+- [**(Merged)30342+30348**](init/Daiichi2024_init_30342_30348.html)<br>
+
+<hr>
+
+#### P30342
+
+-   [**UMAP,Clustering,markers**](30342/Daiichi2024_30342.24.05.07.html)
+-   [**UMAP,Clustering,markers v2**](30342/Daiichi2024_30342.24.05.19.UMAP.v2.html)
+-   [**Suggested Cell Type v2: res 0.4**](30342/annotation/Daiichi2024_30342.24.05.20.suggestedAnnotation.res0.4.html)
+-   [**Updated Cell Type (P)**](30342/annotation/Daiichi2024_30342.24.06.07.CelltypeUpdate.html)<br><br>
+
+**Subset cell type Analysis** 
+
+1. Dendritic Cells
+2. T Cells
+3. Cancer Cells
+
+##### Subset: Dendritic Cells
+
+  - Subset information
+  - [**DEG analysis**](30342/subset/DC/Daiichi2024_30342.24.05.23.DC.html)
+      - Volcanoplot
+      - DEG data table
+  - [**DEG UP/DN genes analysis**](30342/subset/DC/Daiichi2024_30342.24.05.23.DC.DEGs.html)<br><br>
+
+##### Subset:  T Cells
+
+  - T cells include various T subtypes. By clustering, the detailed T cell subtypes will be annotated.
+  - [**Subset information**](30342/subset/Tcell/Daiichi2024_30342.24.06.07.TCell_subset.html)
+  - [**UMAP/Clustering/markers**](30342/subset/Tcell/Daiichi2024_30342.24.06.07.TCell_UMAP_Clustering_markers.html)
+  - [Next step: T subtype annotation for DEG analysis]<br><br>
+
+##### Subset:  Cancer Cells
+
+  - Cancer cell 1 (5), Cancer cell 2 (12)
+  - [**Subset information**](30342/subset/CancerCell/Daiichi2024_30342.24.06.23.CancerCell_subset.html)
+  - [**UMAP/Clustering/markers**](30342/subset/CancerCell/Daiichi2024_30342.24.06.23.CancerCell_UMAP_Clustering_markers.html)
+  - [Next step: Cancer Cell subtype annotation for DEG analysis]
+
+
+##### Subset:  Macrophage
+
+  - Macrophage1_TAMs (1), Macrophage2 (9) ; resolution 0.2
+  - [**Subset information**](30342/subset/Macrophage/Daiichi2024_30342.24.07.03.Macrophage_subset.html)
+  - [**UMAP/Clustering/markers**](30342/subset/Macrophage/Daiichi2024_30342.24.07.03.Macrophage_UMAP_Clustering_markers.html)
+  - [Next step: DEGs]
+  - [**DEG analysis 1**](30342/subset/Macrophage/DEG/Daiichi2024_30342.24.07.03.Macrophage.DEG1.html)
+      1. P30342_M vs P30342_D
+      2. P30342_M vs P30342_I
+      3. P30342_M vs P30342_A
+
+      - Volcanoplot
+      - DEG data table
+      - GSEA plots
+  - [**DEG1 UP/DN genes analysis**](30342/subset/Macrophage/DEG/Daiichi2024_30342.24.07.03.Macrophage.DEG1_comparison.html)
+
+<br><hr>
+
+#### P30348
+
+-   [**UMAP,Clustering**](30348/Daiichi2024_30348.24.06.11.html)
+-   [**Suggested Cell Types**](30348/annotation/Daiichi2024_30348.24.06.10.suggestedAnnotation.html)
+-   [**UMI Distribution**](30348/Daiichi2024_30348.24.05.21.QC.html)
+-   [**Cell Type updated**](30348/annotation/Daiichi2024_30348.24.05.14.annotation_update.html)
 <br><br>
 
-  **30348**
-  * [P2 QC](Paweletz/Daiichi/Daiichi2024_30348.24.05.21.QC.html)
-  * [P2 UMAP/Cluster/Marker](Paweletz/Daiichi/Daiichi2024_30348.24.06.11.html)
+**Subset cell type Analysis**
+
+1. Dendritic Cells
+2. Cancer Cells
+3. T Cells
+
+##### Subset: Dendritic Cells
+
+  - Subset information 
+  - Cluster5 (res 0.2)
+  - [**DEG analysis**](30348/subset/DC/Daiichi2024_30348.24.06.06.DC.html)
+      - Volcanoplots
+      - DEG table
+
+##### Subset: Cancer Cells
+
+  - Cancer cell 1 (0), Cancer cell 2 (2)
+  - [**Subset information**](30348/subset/CancerCell/Daiichi2024_30348.24.06.25.CancerCell_subset.html)
+  - [**UMAP/Clustering/markers**](30348/subset/CancerCell/Daiichi2024_30348.24.06.25.CancerCell_UMAP_Clustering_markers.html)
+  - [Next step: Cancer subtype annotation for DEG analysis]
+
+##### Subset:  T Cells 
+  - Cluster1 (res 0.2)
+  - [**Subset information**](30348/subset/TCell/Daiichi2024_30348.24.07.01.TCell_subset.html)
+  - [**UMAP/Clustering/markers**](30348/subset/TCell/Daiichi2024_30348.24.07.01.TCell_UMAP_Clustering_markers.html)
+  - [Next step: T subtype annotation for DEG analysis]<br><br>
+
 <hr>
 
 ### Daiichi DS-1062a bulk RNA-seq analysis (Paweletz:Patrick)
 
-* [Project Index](Paweletz/Daiichi_bulk_RNASeq/Daiichi_2024_RNAseq_index.html)
+* [Project Introduction](Paweletz/Daiichi_bulk_RNASeq/Daiichi_2024_RNAseq_index.html)
 
-  **30342**
-    * [PCA Plot](Paweletz/Daiichi_bulk_RNASeq/Daiichi_2024_bulk_30342_PCA.html)
-    * [TPM matrix/count table](Paweletz/Daiichi_bulk_RNASeq/Daiichi_2024_bulk_30342_TOM.html)
-    * [ssGSEA](Paweletz/Daiichi_bulk_RNASeq/Daiichi_2024_bulk_30342_ssGESA.html)
-    * [Immune Cell Type Composition (TIMER)](Paweletz/Daiichi_bulk_RNASeq/Daiichi_2024_bulk_30342_timer.html)
+#### Patient 30342  
+
+
+* [**PCA & Data matrix (combined report)**](30342/Daiichi_2024_bulk_30342_PCA_TPM_combined.html)
+* [**PCA Plot**](30342/Daiichi_2024_bulk_30342_PCA.html)
+* [**TPM matrix/count table download**](30342/Daiichi_2024_bulk_30342_TPM.html)
+* [**ssGSEA**](30342/Daiichi_2024_bulk_30342_ssGSEA_update.24.06.25.html)
+  * HALLMARK pathways
+  * scRNA-seq celltype marker genes
+<!-- * [**Immune Cell Type Composition (TIMER test)**](30342/Daiichi_2024_bulk_30342_timer.html) -->
+* [**DEG Analysis (1)**](30342/DEG/Daiichi_2024_bulk_30342_DEG1_update.24.06.25.html)
+  * Dxd/DMSO
+  * IgG-Dxd/DMSO
+  * DS-1062a/DMSO<br>
+  * [Comparison of 3 DEGs (UP/DN)](30342/DEG/Daiichi_2024_bulk_30342_DEG1_comparison_update.html)
+  <br>
+* [**DEG Analysis (2)**](30342/DEG/Daiichi_2024_bulk_30342_DEG2_DS1062a_comparions.html)
+  * DS-1062a/Dxd
+  * DS-1062a/IgG-Dxd
+  * Comprison of 2 DEGs (UP/DN)<br>
+* [**DEG Analysis (3)**](30342/DEG/Daiichi_2024_bulk_30342_DEG_3.html)
+  * IgG-Dxd/Dxd
+
+
+#### Patient 30348  
+
+* [**PCA Plot**](30348/Daiichi_2024_bulk_30348_PCA.html)
+* [**TPM matrix/count table download**](30348/Daiichi_2024_bulk_30348_TPM.html)
+* [**ssGSEA**](30348/Daiichi_2024_bulk_30348_ssGSEA.html)
+  * HALLMARK pathways
+  * scRNA-seq celltype marker genes
+* [**DEG Analysis (1)**](30348/DEG/Daiichi_2024_bulk_30348_DEG1.html)
+  * Dxd/DMSO
+  * IgG-Dxd/DMSO
+  * DS-1062a/DMSO<br>
+  * [Comparison of 3 DEGs (UP/DN)](30348/DEG/Daiichi_2024_bulk_30348_DEG1_DS1062a_comparions.html)
+  <br>
+* [**DEG Analysis (2)**](30348/DEG/Daiichi_2024_bulk_30348_DEG2_DS1062a_comparions.html)
+  * DS-1062a/Dxd
+  * DS-1062a/IgG-Dxd
+  * Comprison of 2 DEGs (UP/DN)<br>
+* [**DEG Analysis (3)**](30348/DEG/Daiichi_2024_bulk_30348_DEG3.html)
+  * IgG-Dxd/Dxd
+
+
 
 <br>
 <hr>
@@ -94,9 +228,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <hr>
 
-### STING agnist testing in microfluidic device (Barbie:Yuqing)
+### STING agnist testing in microfluidic device (Barbie)
 
-* [GESA plot request](Barbie/RNA_seq_Fig4_Request.24.05.03.GSEAPlots.html)
 * [UMI 500-5000 filtering]
 * [Individual cell type analysis]
   * [HUVEC]
@@ -104,6 +237,8 @@ knitr::opts_chunk$set(echo = TRUE)
 * [DEG analysis]
 * [Annotation]
 * [Initial Report & Bioinformatics analysis design]
+* [GESA plot request](Barbie/RNA_seq_Fig4_Request.24.05.03.GSEAPlots.html)
+
 
 <hr>
 
