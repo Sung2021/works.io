@@ -1,5 +1,5 @@
 ---
-title: "THE FESTIVAL OF GENOMICS & BIODATA in Boston 2024"
+title: "FOG in Boston 2024"
 subtitle: "Personl Note"
 author: "Sung"
 output: 
@@ -24,6 +24,32 @@ knitr::opts_chunk$set(echo=F, message=F, warning=F)
 
 ### **Notes** 
 
+
+#### **Giotto**
+
+* [Giotto tutorial](https://giottosuite.readthedocs.io/en/latest/)
+* An open-source and technology-agnostic spatial multi-omics analysis platform
+* [Seq-scope Tutorial using Giotto](https://giottosuite.readthedocs.io/en/latest/subsections/datasets/seqscope_mouse_liver_221115.html)
+  * Seq-scope : now the resolution of this technique is 0.5um. 
+  * [pub](https://lee.lab.medicine.umich.edu/seq-scope)
+  * [Spatial Transcriptomic Tools (STtools)](https://github.com/jyxi7676/STtools)
+
+<br><br>
+
+#### **Monkeybread by Ming Tang**
+
+* [Monkeybread Tutorial](https://monkeybread.readthedocs.io/en/v0.6.0/notebooks/tutorial.html#) 
+  * python
+  * Tool for analyzing **cell closeness in spatial transcriptomic data**. Developed at Immunitas Therapeutics.
+<br><br>
+
+#### Nanovials 
+
+* [Partillion Bioscience](https://www.partillion.com/technology)
+* Nanovials are nanoliter-sized particles that act as millions of suspendable wells for individual cells. 
+* For secretome
+
+<br><br>
 
 #### **Sanofi Presentation**
 
