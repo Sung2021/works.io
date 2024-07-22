@@ -36,7 +36,11 @@ knitr::opts_chunk$set(echo = TRUE)
 * [Data Preparation from TCGA DB]
 * [MSLN/TACSTD2/STING expression to choose the populations to investigate](Barbie/MSLN/TCGA_BRCA_MSLN_geneExpression.html)
 * [TROP2 positive/negative population]
-* [Feature Selection]
+* [Public source analysis: Barbie Nature 2012(?, 2009?) paper]
+  * Data preparation and cleaning
+  * TROP2 expression (boxplot)
+  * PAM50 genes expression (heatmap)
+
 
 <hr>
 
@@ -74,13 +78,15 @@ UMI \>= 1000 & mt% \<= 10% (24.05.07)
 -   [**UMAP,Clustering,markers**](30342/Daiichi2024_30342.24.05.07.html)
 -   [**UMAP,Clustering,markers v2**](30342/Daiichi2024_30342.24.05.19.UMAP.v2.html)
 -   [**Suggested Cell Type v2: res 0.4**](30342/annotation/Daiichi2024_30342.24.05.20.suggestedAnnotation.res0.4.html)
--   [**Updated Cell Type (P)**](30342/annotation/Daiichi2024_30342.24.06.07.CelltypeUpdate.html)<br><br>
+-   [**Updated Cell Type (P)**](30342/annotation/Daiichi2024_30342.24.06.07.CelltypeUpdate.html)
+-   [ssGSEA analysis]<br><br>
 
 **Subset cell type Analysis** 
 
 1. Dendritic Cells
 2. T Cells
 3. Cancer Cells
+4. Macrophage
 
 ##### Subset: Dendritic Cells
 
@@ -95,7 +101,8 @@ UMI \>= 1000 & mt% \<= 10% (24.05.07)
   - T cells include various T subtypes. By clustering, the detailed T cell subtypes will be annotated.
   - [**Subset information**](30342/subset/Tcell/Daiichi2024_30342.24.06.07.TCell_subset.html)
   - [**UMAP/Clustering/markers**](30342/subset/Tcell/Daiichi2024_30342.24.06.07.TCell_UMAP_Clustering_markers.html)
-  - [Next step: T subtype annotation for DEG analysis]<br><br>
+  - [**DEG of all T cells**]
+  - [Next step: Each T Cell subtype annotation for further DEG analysis]<br><br>
 
 ##### Subset:  Cancer Cells
 
@@ -120,6 +127,23 @@ UMI \>= 1000 & mt% \<= 10% (24.05.07)
       - DEG data table
       - GSEA plots
   - [**DEG1 UP/DN genes analysis**](30342/subset/Macrophage/DEG/Daiichi2024_30342.24.07.03.Macrophage.DEG1_comparison.html)
+  
+
+##### Subset:  NKT_NK
+
+  - NKT_NK(2) ; resolution 0.2
+  - [**Subset information**]
+  - [**UMAP/Clustering/markers**]
+  - [DEG analysis1]
+      1. P30342_M vs P30342_D
+      2. P30342_M vs P30342_I
+      3. P30342_M vs P30342_A
+
+      - Volcanoplot
+      - DEG data table
+      - GSEA plots
+  - [DEG1 UP/DN genes analysis]
+ 
 
 <br><hr>
 

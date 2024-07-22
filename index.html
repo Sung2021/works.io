@@ -1542,6 +1542,8 @@ margin-left: 0 !important;
           T Cells</a></li>
           <li><a href="#subset-cancer-cells" id="toc-subset-cancer-cells">Subset: Cancer Cells</a></li>
           <li><a href="#subset-macrophage" id="toc-subset-macrophage">Subset: Macrophage</a></li>
+          <li><a href="#subset-nkt_nk" id="toc-subset-nkt_nk">Subset:
+          NKT_NK</a></li>
           </ul></li>
           <li><a href="#p30348" id="toc-p30348">P30348</a>
           <ul>
@@ -1640,7 +1642,12 @@ margin-left: 0 !important;
 <li><a href="Barbie/MSLN/TCGA_BRCA_MSLN_geneExpression.html">MSLN/TACSTD2/STING
 expression to choose the populations to investigate</a></li>
 <li>[TROP2 positive/negative population]</li>
-<li>[Feature Selection]</li>
+<li>[Public source analysis: Barbie Nature 2012(?, 2009?) paper]
+<ul>
+<li>Data preparation and cleaning</li>
+<li>TROP2 expression (boxplot)</li>
+<li>PAM50 genes expression (heatmap)</li>
+</ul></li>
 </ul>
 <hr>
 </div>
@@ -1687,13 +1694,15 @@ v2</strong></a></li>
 <li><a href="30342/annotation/Daiichi2024_30342.24.05.20.suggestedAnnotation.res0.4.html"><strong>Suggested
 Cell Type v2: res 0.4</strong></a></li>
 <li><a href="30342/annotation/Daiichi2024_30342.24.06.07.CelltypeUpdate.html"><strong>Updated
-Cell Type (P)</strong></a><br><br></li>
+Cell Type (P)</strong></a></li>
+<li>[ssGSEA analysis]<br><br></li>
 </ul>
 <p><strong>Subset cell type Analysis</strong></p>
 <ol style="list-style-type: decimal">
 <li>Dendritic Cells</li>
 <li>T Cells</li>
 <li>Cancer Cells</li>
+<li>Macrophage</li>
 </ol>
 <div id="subset-dendritic-cells" class="section level5">
 <h5>Subset: Dendritic Cells</h5>
@@ -1717,7 +1726,9 @@ cell subtypes will be annotated.</li>
 <li><a href="30342/subset/Tcell/Daiichi2024_30342.24.06.07.TCell_subset.html"><strong>Subset
 information</strong></a></li>
 <li><a href="30342/subset/Tcell/Daiichi2024_30342.24.06.07.TCell_UMAP_Clustering_markers.html"><strong>UMAP/Clustering/markers</strong></a></li>
-<li>[Next step: T subtype annotation for DEG analysis]<br><br></li>
+<li>[<strong>DEG of all T cells</strong>]</li>
+<li>[Next step: Each T Cell subtype annotation for further DEG
+analysis]<br><br></li>
 </ul>
 </div>
 <div id="subset-cancer-cells" class="section level5">
@@ -1752,6 +1763,26 @@ analysis 1</strong></a>
 </ul></li>
 <li><a href="30342/subset/Macrophage/DEG/Daiichi2024_30342.24.07.03.Macrophage.DEG1_comparison.html"><strong>DEG1
 UP/DN genes analysis</strong></a></li>
+</ul>
+</div>
+<div id="subset-nkt_nk" class="section level5">
+<h5>Subset: NKT_NK</h5>
+<ul>
+<li>NKT_NK(2) ; resolution 0.2</li>
+<li>[<strong>Subset information</strong>]</li>
+<li>[<strong>UMAP/Clustering/markers</strong>]</li>
+<li>[DEG analysis1]
+<ol style="list-style-type: decimal">
+<li>P30342_M vs P30342_D</li>
+<li>P30342_M vs P30342_I</li>
+<li>P30342_M vs P30342_A</li>
+</ol>
+<ul>
+<li>Volcanoplot</li>
+<li>DEG data table</li>
+<li>GSEA plots</li>
+</ul></li>
+<li>[DEG1 UP/DN genes analysis]</li>
 </ul>
 <br>
 <hr>
