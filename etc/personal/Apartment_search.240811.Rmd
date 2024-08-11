@@ -7,7 +7,7 @@ output:
     theme: flatly
     toc: yes
     toc_float:
-      collapsed: true
+      collapsed: false
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left", 
