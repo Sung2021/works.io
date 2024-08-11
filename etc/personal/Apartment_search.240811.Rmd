@@ -1,0 +1,119 @@
+---
+title: "Apartment Search in AA"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    theme: flatly
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+## Apartment
+
+### Ann Arbor Woods
+
+* 2167 Medford Rd, Ann Arbor, MI 48104 
+* (734) 821-2662
+* (833) 482-6902
+* [Apartment.com link](https://www.apartments.com/ann-arbor-woods-ann-arbor-mi/qswnlmz/)
+* [link](https://www.annarborwoodsapartments.com/)
+* Administrative Fee $150 Application Fee $75
+* Cat One Time Fee $300 Monthly Pet Rent $30
+* Utility not included
+* One unit available at apartment.com 
+  * 02-40 (2B/1BR), $1,438, 800 sqft
+  * availibility Oct. 22
+
+
+<br><br>
+
+
+### Spruce Knob
+
+* 2960 Birch Hollow Dr, Ann Arbor, MI 48108
+* McKinley Properties
+* 844-621-3396
+* Left the message via webpage on 24.08.11 
+* [homepage](https://www.mckinley.com/apartments/michigan/ann-arbor/spruce-knob/contact/)
+
+
+### Evergreen Apartment 
+
+* I like this one
+* Near Kroger/Aldi
+* 3089 Woodland Hills Dr, Ann Arbor, MI 48108
+* 8447273026
+* 866-696-5505
+* Left the message via webpage on 24.08.11 
+* [link](https://www.mckinley.com/apartments/michigan/ann-arbor/evergreen/contact/)
+
+
+### Ridgewood Apartment 
+
+* I like this one
+* (734) 971-0635
+* Near Aldi
+* Administative Fee $150, Applicatioin $50
+
+
+
+
+### Pine Valley Apartments
+
+* 1521 Pine Valley Blvd, Ann Arbor, MI 48104
+* On Packard St
+* [link](https://www.apartments.com/pine-valley-apartments-ann-arbor-mi/63d3fsr/#reviewsSection)
+* Application Fee $60
+* Maybe I take 1B/2B
+*  (734) 822-0887
+* 
+
+
+### The Ivanhoe Apartments
+
+* 1529-1537 Pine Valley Blvd, Ann Arbor, MI 48104 (next to Pine Valley Apartment)
+* On Packard St
+* (734) 390-4150
+* Application Fee $50
+* [link](https://www.apartments.com/the-ivanhoe-apartments-ann-arbor-mi/t2dmrl9/)
+* Pet $350 one time, $30 monthly
+
+
+### Meadows
+
+* 1606-1890 Meadow Woods Blvd, Ypsilanti, MI 48197
+* (734) 887-1650
+
+
+
+
+### The Pines of Cloverlane  
+
+* 4907 Cloverlane St, Ypsilanti, MI 48197
+* Reviews are pretty bad since 2022. 
+
+
+### Hamptons of Cloverlane Apartments
+
+* 3103 Homestead Commons Dr, Ann Arbor, MI 48108 (very close to King George Blvd)
+* Not sure 
+* [Apartment.com link](https://www.apartments.com/hamptons-of-cloverlane-apartments-ypsilanti-mi/rtgqc22/#reviewsSection)
+* Application fees  <br>
+  Administrative Fee
+  $150<br>
+  Application Fee
+  $85<br>
+  Monthly Pet Rent $30 <br>
+  One Time Fee $325 <br>
+
