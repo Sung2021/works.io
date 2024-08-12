@@ -38,46 +38,55 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 
 <br><br>
 
+### Pine Valley Apartments
+
+* 1521 Pine Valley Blvd, Ann Arbor, MI 48104
+* On Packard St
+* [link](https://www.apartments.com/pine-valley-apartments-ann-arbor-mi/63d3fsr/#reviewsSection)
+* $1,300 - $2,100 
+* 2 Bedroom $1,500 - $1,530
+* Application Fee $60
+* Maybe I take 1B or 2B
+* 734.971.5210
+* info@pinevalleyapartments.com
+
+
+
 
 ### Spruce Knob
 
 * 2960 Birch Hollow Dr, Ann Arbor, MI 48108
 * McKinley Properties
 * 844-621-3396
+* $1429~1629 for 2B
+* $1329 for 1B one available 09-06-2024
 * Left the message via webpage on 24.08.11 
 * [homepage](https://www.mckinley.com/apartments/michigan/ann-arbor/spruce-knob/contact/)
 
 
 ### Evergreen Apartment 
 
-* I like this one
+* The windows are positioned high (I don't like this)
 * Near Kroger/Aldi
 * 3089 Woodland Hills Dr, Ann Arbor, MI 48108
-* 8447273026
+* McKinley Properties
 * 866-696-5505
 * Left the message via webpage on 24.08.11 
-* [link](https://www.mckinley.com/apartments/michigan/ann-arbor/evergreen/contact/)
+* [homepage](https://www.mckinley.com/apartments/michigan/ann-arbor/evergreen/contact/)
 
 
 ### Ridgewood Apartment 
 
-* I like this one
+* [homepage](https://peak-management.com/ridgewood/)
 * (734) 971-0635
 * Near Aldi
+* 4141 Green Meadows Boulevard, Ypsilanti, MI 48197
+* $1,429 - $1,574
 * Administative Fee $150, Applicatioin $50
+* [Apartment.com](https://www.apartments.com/ridgewood-apartments-ypsilanti-mi/pdf09jt/)
 
 
 
-
-### Pine Valley Apartments
-
-* 1521 Pine Valley Blvd, Ann Arbor, MI 48104
-* On Packard St
-* [link](https://www.apartments.com/pine-valley-apartments-ann-arbor-mi/63d3fsr/#reviewsSection)
-* Application Fee $60
-* Maybe I take 1B/2B
-*  (734) 822-0887
-* 
 
 
 ### The Ivanhoe Apartments
