@@ -21,6 +21,18 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 
 ## Apartment
 
+
+### The Pines of Cloverlane  
+
+* 4907 Cloverlane St, Ypsilanti, MI 48197
+* [application link](https://thepinesofcloverlane.securecafe.com/onlineleasing/the-pines-of-cloverlane-apartments/guestlogin.aspx?PropLeadSource_455324=portal&RCStandardCampaignId_455324=455839&_yTrackUser=Mjk4NDYxMjE0OSMxNDc0MDAwMDEx-%252fmRXgLi2KsE%253d&_yTrackVisit=NDk2MDAxODA4OSMxMTc4MDcyNzY3-AYVnHSExSEE%253d&_yTrackReqDT=19211220241608)
+* 7348879015
+
+<!-- * Reviews are pretty bad since 2022.  -->
+
+<hr><br><br><br>
+
+
 ### Ann Arbor Woods
 
 * 2167 Medford Rd, Ann Arbor, MI 48104 
@@ -38,7 +50,7 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 
 <br><br>
 
-### Pine Valley Apartments
+### ~~Pine Valley Apartments~~
 
 * 1521 Pine Valley Blvd, Ann Arbor, MI 48104
 * On Packard St
@@ -46,6 +58,7 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 * $1,300 - $2,100 
 * 2 Bedroom $1,500 - $1,530
 * Application Fee $60
+* Reservation fee $250 
 * Maybe I take 1B or 2B
 * 734.971.5210
 * info@pinevalleyapartments.com
@@ -53,14 +66,15 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 
 
 
-### Spruce Knob
+### ~~Spruce Knob~~
 
 * 2960 Birch Hollow Dr, Ann Arbor, MI 48108
 * McKinley Properties
 * 844-621-3396
 * $1429~1629 for 2B
-* $1329 for 1B one available 09-06-2024
+* $1329 for 1B one available ~~09-06-2024~~
 * Left the message via webpage on 24.08.11 
+* No availability on Oct 24.08.14
 * [homepage](https://www.mckinley.com/apartments/michigan/ann-arbor/spruce-knob/contact/)
 
 
@@ -93,6 +107,7 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 
 * 1529-1537 Pine Valley Blvd, Ann Arbor, MI 48104 (next to Pine Valley Apartment)
 * On Packard St
+* (844) 572-0518 Homepage
 * (734) 390-4150
 * Application Fee $50
 * [link](https://www.apartments.com/the-ivanhoe-apartments-ann-arbor-mi/t2dmrl9/)
@@ -107,10 +122,6 @@ knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left",
 
 
 
-### The Pines of Cloverlane  
-
-* 4907 Cloverlane St, Ypsilanti, MI 48197
-* Reviews are pretty bad since 2022. 
 
 
 ### Hamptons of Cloverlane Apartments
