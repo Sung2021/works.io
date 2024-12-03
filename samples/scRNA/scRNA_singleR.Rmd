@@ -1,0 +1,516 @@
+---
+title: "SingleR"
+subtitle: "Cell type Annotation"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    code_folding: none
+    toc: true
+    toc_depth: 6
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, warning=FALSE, message=FALSE, results = "markup")
+options(warn = F)
+
+library(ggplot2)
+library(ggrepel)
+library(dplyr)
+library(Seurat)
+library(scCustomize)
+library(SingleCellExperiment)
+library(SeuratWrappers)
+```
+
+```{r, echo=FALSE}
+dir <- "~/Desktop/Uconn/ASPM_Mouse/"
+obj.srt = readRDS(paste0(dir,"rds/WT_umi5000_mito5.obj_singlet.rds"))
+```
+
+<hr>
+
+Packages 
+
+* SingleR (Good fit for Human, immune cell anntation)
+
+## SingleR {.tabset}
+
+### Processing 
+```{r, eval=FALSE}
+library(SingleR)
+library(celldex)
+library(SingleCellExperiment)
+
+# SingleCellExperiment 
+
+count.mtx = obj.srt@assays$RNA@layers$counts
+rownames(count.mtx) = rownames(obj.srt)
+colnames(count.mtx) = colnames(obj.srt)
+
+sce <- SingleCellExperiment(assays = list(counts = count.mtx))
+
+# ls('package:celldex')
+# ref <- HumanPrimaryCellAtlasData()
+ref <- MouseRNAseqData()
+
+# logcounts : to use MouseRNAseqData, count should be logcounts
+assay(sce, "logcounts") <- log1p(assay(sce, "counts"))
+
+# Annotation 
+# pred <- SingleR(test = sce, ref = ref, labels = ref$label.main)
+pred2 <- SingleR(test = sce, ref = ref, labels = ref$label.fine)
+# pred2$pruned.labels %>% table()
+pred2 %>% saveRDS(paste0(dir,"rds/pred2_singleR.rds"))
+obj.srt$singleR_label = pred2[colnames(obj.srt),]$labels
+```
+
+
+```{r}
+pred2 = readRDS(paste0(dir,"rds/pred2_singleR.rds"))
+obj.srt$singleR_label = pred2[colnames(obj.srt),]$labels
+```
+
+### SingleR annotation {.tabset}
+
+#### UMAP (split)
+
+```{r, fig.width=11, fig.height=8, out.width="90%"}
+DimPlot(obj.srt, group.by = "singleR_label", 
+        split.by = "singleR_label", ncol = 5, pt.size = 0.1) +theme_bw()
+```
+
+#### Selected Cell Types (split)
+
+```{r, fig.width=16, fig.height=4, out.width="80%"}
+obj.tmp = subset(obj.srt, singleR_label %in% c("Neurons", "NPCs", "OPCs","aNSCs","Microglia"))
+DimPlot(obj.tmp, group.by = "singleR_label", 
+        split.by = "singleR_label", ncol = 5, pt.size = 0.1) +theme_bw()
+```
+
+### Annotation Table
+
+```{r}
+obj.srt@meta.data %>% select(RNA_snn_res.0.4, singleR_label) %>% table() %>% data.frame() %>% tidyr::spread(RNA_snn_res.0.4, Freq) %>% 
+  DT::datatable(extensions = "Buttons",
+                width = "800px",
+                options = list(scrollX=TRUE,
+                               dom="Bfrtip",
+                               buttons=c("csv","excel")))
+```
+
+### Heatmap
+```{r, fig.width=13, fig.height=5, out.width="90%"}
+df = obj.tmp@meta.data %>% select(RNA_snn_res.0.4, singleR_label) %>% table() %>% data.frame() %>% tidyr::spread(RNA_snn_res.0.4, Freq)
+rownames(df) = df$singleR_label
+df = df[,-1]
+df %>% pheatmap::pheatmap(display_numbers = T, fontsize_number = "0f.%",
+                          colorRampPalette(c("white", "#FF1493"))(75))
+```
+
+### Score Heatmap
+
+```{r, fig.width=10, fig.height=7, out.width="90%"}
+SingleR::plotScoreHeatmap(pred2)
+```
+
+
+
+<!-- <details> -->
+<!--   <summary>Cell Type Description</summary> -->
+
+<!-- 1. NPCs (Neural Progenitor Cells) -->
+
+<!-- 	•	역할: 신경 전구 세포로, 신경계의 발달 과정에서 뉴런, 별아교세포(Astrocyte), 희소돌기아교세포(Oligodendrocyte)와 같은 세포로 분화할 수 있는 다능성 세포입니다. -->
+<!-- 	•	발견 위치: 주로 발달 중인 뇌와 성인의 신경생성 영역(예: 해마)에서 발견됩니다. -->
+<!-- 	•	기능: 신경계 재생 및 유지에 기여. -->
+
+<!-- 2. OPCs (Oligodendrocyte Progenitor Cells) -->
+
+<!-- 	•	역할: 희소돌기아교세포(Oligodendrocyte)로 분화하는 전구 세포입니다. 희소돌기아교세포는 중추신경계에서 축삭을 감싸는 미엘린을 형성합니다. -->
+<!-- 	•	발견 위치: 중추신경계 전반에 걸쳐 존재. -->
+<!-- 	•	기능: 중추신경계의 미엘린 재생 및 신경 보호. -->
+
+<!-- 3. Neurons -->
+
+<!-- 	•	역할: 신경 신호를 생성, 전달, 처리하는 주요 세포. 감각 입력을 수용하고, 정보 처리를 통해 신체의 반응을 조절합니다. -->
+<!-- 	•	발견 위치: 중추신경계(뇌와 척수) 및 말초신경계. -->
+<!-- 	•	기능: 뇌 활동, 운동, 감각 반응, 학습 및 기억의 주요 구성 요소. -->
+
+<!-- 4. Erythrocytes (Red Blood Cells) -->
+
+<!-- 	•	역할: 산소를 운반하는 혈액 세포. 헤모글로빈을 통해 산소를 결합하여 조직으로 전달하고 이산화탄소를 제거합니다. -->
+<!-- 	•	발견 위치: 혈액. -->
+<!-- 	•	기능: 신체 내 산소 및 이산화탄소 교환. -->
+
+<!-- 5. Fibroblasts Activated -->
+
+<!-- 	•	역할: 활성화된 섬유아세포로, 조직 손상 및 염증 시 콜라겐을 포함한 세포외기질(ECM) 성분을 분비하여 상처 치유를 돕습니다. -->
+<!-- 	•	발견 위치: 결합 조직. -->
+<!-- 	•	기능: ECM 유지, 조직 복구, 염증 반응에서 중요한 역할. -->
+
+<!-- 6. aNSCs (Adult Neural Stem Cells) -->
+
+<!-- 	•	역할: 성인 신경 줄기세포로, 뉴런, 별아교세포, 희소돌기아교세포로 분화 가능. -->
+<!-- 	•	발견 위치: 성인의 신경생성 지역(예: 해마 치상회 및 측뇌실). -->
+<!-- 	•	기능: 신경계 유지 및 재생. -->
+
+<!-- 7. Microglia -->
+
+<!-- 	•	역할: 중추신경계의 면역세포로, 이물질을 제거하고 신경 손상을 감지하며 염증 반응을 조절합니다. -->
+<!-- 	•	발견 위치: 중추신경계. -->
+<!-- 	•	기능: 신경계 면역 감시 및 손상 복구. -->
+
+<!-- 8. T Cells -->
+
+<!-- 	•	역할: 적응 면역 시스템의 주요 구성 요소로, 감염 세포 제거, 면역 반응 조절 및 항원 인식 수행. -->
+<!-- 	•	발견 위치: 혈액, 림프 조직, 염증 부위. -->
+<!-- 	•	기능: 세포성 면역 반응에서 중심적 역할 수행. -->
+
+<!-- 9. Ependymal Cells -->
+
+<!-- 	•	역할: 뇌실과 척수 중앙관을 감싸는 세포로, 뇌척수액(CSF) 순환 및 생산에 기여. -->
+<!-- 	•	발견 위치: 뇌실 및 척수의 내벽. -->
+<!-- 	•	기능: CSF 생성 및 신경계의 화학적 환경 유지. -->
+
+<!-- 10. Endothelial Cells -->
+
+<!-- 	•	역할: 혈관 내벽을 형성하며, 혈액 및 조직 간 물질 교환을 조절. -->
+<!-- 	•	발견 위치: 혈관 및 림프관 내벽. -->
+<!-- 	•	기능: 혈관 신생, 혈관 투과성 조절, 염증 반응 조정. -->
+
+<!-- 11. Macrophages -->
+
+<!-- 	•	역할: 이물질을 탐식(phagocytosis)하고 염증을 조절하며 손상된 조직을 복구. -->
+<!-- 	•	발견 위치: 조직 및 염증 부위. -->
+<!-- 	•	기능: 선천 면역 반응, 조직 항상성 유지. -->
+
+<!-- 12. Fibroblasts -->
+
+<!-- 	•	역할: 결합 조직의 주요 세포로, 세포외기질 성분(콜라겐, 프로테오글리칸 등)을 합성. -->
+<!-- 	•	발견 위치: 결합 조직. -->
+<!-- 	•	기능: 조직 구조 유지 및 상처 복구. -->
+
+<!-- 13. Granulocytes -->
+
+<!-- 	•	역할: 과립을 가진 면역 세포로, 감염에 대응하여 염증 매개체 분비. (예: 호중구, 호산구, 호염구) -->
+<!-- 	•	발견 위치: 혈액 및 염증 부위. -->
+<!-- 	•	기능: 선천 면역에서 미생물 제거. -->
+
+<!-- 14. qNSCs (Quiescent Neural Stem Cells) -->
+
+<!-- 	•	역할: 조용 상태(quiescent)에 있는 신경 줄기세포로, 필요 시 활성화되어 뉴런 및 교세포로 분화. -->
+<!-- 	•	발견 위치: 성인의 신경생성 영역. -->
+<!-- 	•	기능: 신경계 재생을 위한 준비 상태 유지. -->
+
+<!-- 15. Macrophages Activated -->
+
+<!-- 	•	역할: 염증 또는 자극에 의해 활성화된 대식세포로, 병원체 제거 및 염증 반응 조정. -->
+<!-- 	•	발견 위치: 염증 부위 및 감염 조직. -->
+<!-- 	•	기능: 항원 제시, 염증 유도 및 조직 복구. -->
+
+<!-- 16. Astrocytes -->
+
+<!-- 	•	역할: 뉴런과 혈관을 연결하고, 뇌 환경을 조절하며, 신경세포의 대사와 시냅스 기능을 지원. -->
+<!-- 	•	발견 위치: 중추신경계. -->
+<!-- 	•	기능: 신경 보호, 혈뇌장벽 유지, 이온 및 신경전달물질 조절. -->
+
+<!-- 17. NK Cells (Natural Killer Cells) -->
+
+<!-- 	•	역할: 선천 면역 세포로, 감염된 세포나 암세포를 신속히 제거. -->
+<!-- 	•	발견 위치: 혈액 및 림프 조직. -->
+<!-- 	•	기능: 감염 초기 방어 및 암세포 제거. -->
+
+<!-- 18. Monocytes -->
+
+<!-- 	•	역할: 혈액을 순환하며 조직으로 이동해 대식세포 또는 수지상세포로 분화. -->
+<!-- 	•	발견 위치: 혈액 및 감염 조직. -->
+<!-- 	•	기능: 병원체 제거 및 염증 반응 조절. -->
+
+<!-- </details> -->
+<!-- <br> -->
+
+
+### Number of Cells {.tabset}
+
+#### By SingleR annotation  
+```{r, fig.width=8, fig.height=5, out.width="70%"}
+res = "singleR_label"
+obj.srt@meta.data %>% ggplot(aes(!!sym(res), fill=!!sym(res))) + 
+  geom_bar(alpha=0.7, color="grey5", size=0.1) +
+  geom_text(stat="count", aes(label= ..count..), vjust=-0.5, size=3) +
+  xlab("") + 
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust=1, hjust=1)) +
+  ggtitle(res)
+```
+
+
+#### By SingleR annotation (% of Cluster)
+```{r, fig.width=8, fig.height=8, out.width="70%"}
+meta_data <- as.data.frame(obj.srt@meta.data)
+
+res <- "singleR_label"
+
+meta_data_filtered <- meta_data %>%
+  filter(singleR_label %in% c("Microglia", "Neurons", "NPCs", "OPCs")) %>%
+  group_by(singleR_label, RNA_snn_res.0.4) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(singleR_label) %>%
+  mutate(percentage = count / sum(count) * 100)
+
+# ggplot 
+ggplot(meta_data_filtered, aes(x = singleR_label, y = percentage, fill = RNA_snn_res.0.4)) +
+  geom_bar(stat = "identity", alpha = 0.7, color = "black", position = "fill") +
+  geom_text(
+    aes(label = paste0(round(percentage, 1), "%")), 
+    position = position_fill(vjust = 0.5),  # 막대 중앙에 위치
+    size = 3
+  ) +
+  xlab("") + 
+  ylab("Percentage") + 
+  theme_classic() +
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)
+  ) +
+  ggtitle(res)
+```
+
+
+#### By SingleR annotation (% of Cluster)
+```{r, fig.width=12, fig.height=8, out.width="70%"}
+meta_data <- as.data.frame(obj.srt@meta.data)
+
+res <- "singleR_label"
+
+meta_data_filtered <- meta_data %>%
+  filter(singleR_label %in% c("Microglia", "Neurons", "NPCs", "OPCs")) %>%
+  group_by(RNA_snn_res.0.4, singleR_label) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(singleR_label) %>%
+  mutate(percentage = count / sum(count) * 100)
+
+# ggplot 작성
+ggplot(meta_data_filtered, aes(x = RNA_snn_res.0.4, y = percentage, 
+                               fill = singleR_label)) +
+  geom_bar(stat = "identity", alpha = 0.7, color = "black", position = "fill") +
+  geom_text(
+    aes(label = paste0(round(percentage, 1), "%")), 
+    position = position_fill(vjust = 0.5),  # 막대 중앙에 위치
+    size = 3
+  ) +
+  xlab("") + 
+  ylab("Percentage") + 
+  theme_classic() +
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)
+  ) +
+  ggtitle(res)
+```
+
+#### Table
+
+```{r}
+meta_data_filtered %>% DT::datatable()
+```
+
+### Additional Info
+
+<details><summary>Comparison: NPCs, OPCs, Neurons</summary>
+<br><br>
+NPCs (Neural Progenitor Cells), OPCs (Oligodendrocyte Progenitor Cells), Neurons의 역할과 발현 시기를 비교
+
+1. Neural Progenitor Cells (NPCs)
+
+	•	역할:
+	•	신경계 발달 초기에 발생하며, 뉴런, 별아교세포(Astrocytes), 희소돌기아교세포(Oligodendrocytes)로 분화할 수 있는 다능성 세포.
+	•	신경계 재생과 유지에도 중요한 역할을 수행.
+	•	발현 시기:
+	•	발생 초기(Embryogenesis): 신경관(neural tube)이 형성된 후, 배아의 신경 발생 단계에서 NPCs는 가장 먼저 발현합니다. 뉴런 및 교세포로의 분화를 통해 초기 신경계를 형성합니다.
+	•	성체(Adulthood): 신경생성(neurogenesis)이 유지되는 특정 영역(예: 해마의 치상회, 측뇌실 하부)에서 발견되며, 손상 복구 및 재생 과정에서 활성화됩니다.
+	•	주요 발현 장소:
+	•	발달 중인 신경관 및 성체 신경생성 영역.
+
+2. Oligodendrocyte Progenitor Cells (OPCs)
+
+	•	역할:
+	•	희소돌기아교세포(Oligodendrocytes)로 분화하여 중추신경계(CNS)에서 미엘린 형성을 담당.
+	•	미엘린은 뉴런의 축삭(axon)을 감싸 신경 신호 전달 속도를 증가시킵니다.
+	•	신경계 손상 시 미엘린 재생과 축삭 보호 역할.
+	•	발현 시기:
+	•	배아 후기(Late Embryogenesis): NPCs가 OPCs로 분화되기 시작하며, 신경 발생이 어느 정도 진행된 이후에 발현됩니다.
+	•	출생 후(Postnatal): 신경계 성숙 과정에서 활발히 증식하며 미엘린화를 진행.
+	•	성체(Adulthood): 신경 손상이나 탈수초(demyelination) 질환이 발생하면 다시 활성화되어 희소돌기아교세포로 분화합니다.
+	•	주요 발현 장소:
+	•	중추신경계 전반.
+
+3. Neurons
+
+	•	역할:
+	•	뉴런은 감각 정보 처리, 운동 신호 전달, 학습과 기억, 그리고 뇌의 고차원적 기능(인지 및 의사결정)을 담당.
+	•	신경 신호를 전기적 및 화학적으로 생성, 전달.
+	•	발현 시기:
+	•	배아 중기(Mid-Embryogenesis): NPCs가 뉴런으로 분화하면서 신경계의 기본 구조가 형성되기 시작.
+	•	출생 후(Postnatal): 성숙 과정을 통해 시냅스가 형성되고 뉴런 네트워크가 강화됨.
+	•	성체(Adulthood): 기존 뉴런이 유지되며, 제한적이지만 성체 신경생성 영역에서는 새로운 뉴런 생성 가능.
+	•	주요 발현 장소:
+	•	중추신경계(뇌, 척수) 및 말초신경계.
+
+<br>
+발현 시기 비교
+
+| 세포 유형      | 발생 초기 (Embryogenesis)   | 출생 후 (Postnatal)              | 성체 (Adulthood)              |
+|----------------|-----------------------------|-----------------------------------|--------------------------------|
+| **NPCs**       | 가장 먼저 발현              | 제한된 영역에서 유지              | 해마 등 신경생성 영역에서 활동 |
+| **OPCs**       | NPCs 이후 발현              | 미엘린화를 위해 활발히 활동       | 손상 시 활성화 및 미엘린 재생  |
+| **Neurons**    | NPCs가 분화하여 발현         | 시냅스 형성 및 뉴런 네트워크 강화 | 제한적으로 성체 신경생성        |
+
+요약
+
+	•	NPCs는 신경 발생 초기에 발생하여 뉴런 및 OPCs의 전구체 역할을 수행하며, 성체에서도 신경 재생의 원천으로 작용합니다.
+	•	OPCs는 NPCs가 분화하여 형성되며, 신경계 성숙 단계에서 미엘린화를 통해 신경 신호 전달을 최적화합니다.
+	•	Neurons는 NPCs에서 발생하며, 신경계의 주요 기능을 수행하는 최종 분화 세포로서 초기 발달 단계부터 성숙한 상태까지 지속적으로 활동합니다.
+
+
+</details>
+
+
+<!-- ## scmap -->
+
+<!-- <details><summary>Not yet tested</summary> -->
+
+<!-- ```{r, eval=FALSE} -->
+<!-- library(scmap) -->
+<!-- library(SingleCellExperiment) -->
+
+<!-- # Reference 데이터와 쿼리 데이터 준비 -->
+<!-- sce_ref <- SingleCellExperiment(assays = list(logcounts = ref_counts_matrix)) -->
+<!-- sce_query <- SingleCellExperiment(assays = list(logcounts = query_counts_matrix)) -->
+
+<!-- # Reference 데이터 인덱싱 -->
+<!-- sce_ref <- indexCluster(sce_ref) -->
+
+<!-- # Annotation 실행 -->
+<!-- scmap_results <- scmapCluster(projection = sce_query, index_list = list(ref = sce_ref)) -->
+<!-- ``` -->
+
+<!-- </details> -->
+
+<!-- ## CellTypist  -->
+
+<!-- <details><summary>Not yet tested</summary> -->
+
+<!-- [python based tutorial link](https://celltypist.readthedocs.io/en/latest/notebook/celltypist_tutorial.html) -->
+<!-- ```{r, eval=FALSE} -->
+<!-- library(reticulate) -->
+<!-- celltypist <- import("celltypist") -->
+
+<!-- # Annotation 실행 -->
+<!-- model <- celltypist$models$fetch_latest_model() -->
+<!-- prediction <- celltypist$annotate("your_data.csv", model = model) -->
+<!-- ``` -->
+
+<!-- </details> -->
+
+
+<!-- ## Azimuth -->
+
+<!-- <details><summary>Not yet tested</summary> -->
+
+<!-- ```{r, eval=FALSE} -->
+<!-- library(Seurat) -->
+<!-- library(SeuratData) -->
+
+<!-- # Azimuth Reference를 이용한 Annotation -->
+<!-- reference <- Azimuth::GetReference("Human") -->
+<!-- seurat_obj <- Azimuth::RunAzimuth(seurat_obj, reference) -->
+<!-- ``` -->
+
+<!-- ```{r, eval=FALSE} -->
+<!-- library(Seurat) -->
+<!-- library(SeuratData) -->
+
+<!-- # Azimuth Reference를 이용한 Annotation -->
+<!-- reference <- Azimuth::GetReference("Human") -->
+<!-- seurat_obj <- Azimuth::RunAzimuth(seurat_obj, reference) -->
+
+
+<!-- library(Azimuth) -->
+
+<!-- query_data <- obj.srt -->
+
+<!-- # 1. Query 데이터 로드 -->
+<!-- # 예를 들어, 이미 처리된 Seurat 객체를 로드합니다. (raw 데이터를 처리하는 단계는 생략) -->
+<!-- query_data <- readRDS("query_data.rds")  # Seurat 객체 파일 경로를 지정하세요 -->
+
+<!-- # 2. 참조 데이터 로드 -->
+<!-- # Azimuth의 사전 훈련된 참조 데이터 세트를 사용합니다. -->
+<!-- # 참조 데이터는 Azimuth 웹사이트 또는 GitHub에서 다운로드할 수 있습니다. -->
+<!-- reference_path <- "https://azimuth-public.s3.amazonaws.com/refs/human_pbmcs_azimuth_v1.0.0.tar.gz" -->
+<!-- reference <- Azimuth::LoadReference(reference_path) -->
+
+<!-- # 3. Azimuth 기반 세포 타입 어노테이션 수행 -->
+<!-- query_annotated <- Azimuth::RunAzimuth( -->
+<!--   query = query_data, -->
+<!--   reference = reference -->
+<!-- ) -->
+
+<!-- # 4. 결과 확인 -->
+<!-- # Azimuth는 Seurat 객체 메타데이터에 세포 타입 정보를 추가합니다. -->
+<!-- head(query_annotated@meta.data) -->
+
+<!-- # 5. 결과 시각화 -->
+<!-- # UMAP에 세포 타입 어노테이션을 시각화합니다. -->
+<!-- DimPlot(query_annotated, reduction = "ref.umap", group.by = "predicted.celltype.l2", label = TRUE) -->
+
+<!-- # 6. 결과 저장 -->
+<!-- # 세포 타입 어노테이션이 완료된 Seurat 객체 저장 -->
+<!-- saveRDS(query_annotated, file = "query_data_annotated.rds") -->
+
+<!-- ``` -->
+
+
+<!-- ## scPred -->
+
+<!-- ```{r, eval=FALSE} -->
+<!-- # https://powellgenomicslab.github.io/scPred/articles/introduction.html#summary-1 -->
+<!-- library(scPred) -->
+
+<!-- reference <- scPred::pbmc_1 -->
+<!-- query <- scPred::pbmc_2 -->
+
+<!-- reference <- reference %>%  -->
+<!--   NormalizeData() %>%  -->
+<!--   FindVariableFeatures() %>%  -->
+<!--   ScaleData() %>%  -->
+<!--   RunPCA() %>%  -->
+<!--   RunUMAP(dims = 1:30) -->
+
+<!-- DimPlot(reference, group.by = "cell_type", label = TRUE, repel = TRUE) -->
+
+<!-- reference <- trainModel(reference) -->
+<!-- get_probabilities(reference) %>% head() -->
+<!-- get_scpred(reference) -->
+
+<!-- plot_probabilities(reference) -->
+<!-- reference <- trainModel(reference, model = "mda", reclassify = c("cMono", "ncMono")) -->
+
+<!-- ``` -->
+
+
+<!-- </details> -->
+
+
+<br>
+<hr>
+<br>
+```{r}
+sessionInfo()
+```
+
+

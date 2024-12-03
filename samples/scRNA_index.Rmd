@@ -1,45 +1,63 @@
 ---
-title: "scRNA-seq"
-subtitle: "Workflow"
+title: "scRNA-seq workflow"
+subtitle: " "
 date: "`r format(Sys.Date())`"
-output:  
-  rmdformats::robobook: 
-    code_folding: show 
-    number_sections: FALSE
+output:
+  html_document:
+    toc: true
     toc_depth: 6
-    toc_float: false
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = F)
 ```
-<br>
 
-[Link to the previous version](https://sung2021.github.io/samplePages/scRNAseq.html)  
-<br><br>
-
+[Link to the version1](https://sung2021.github.io/samplePages/scRNAseq.html)  <br>
+<hr>
 
 ### Initial Processing  
 
-* [**Raw data processing and initial filitering**](https://sung2021.github.io/works.io/samples/processing/scRNA_preprocessing.html)
-  
-<br>  
-  
-### UMAP/Clustering  
+* [**QC processing and initial filitering**](https://sung2021.github.io/works.io/samples/processing/scRNA_preprocessing.html)
+  * UMI cutoff
+  * mitochondrial DNA cutoff
+  * Doublet Removal
 
-  * [**UMAP/Clustering Example**](scRNA/scRNA_UMAP.html)  
-  * [**Clustering GSEA**](scRNA/Daiichi2024_30342.24.05.11.clusterGSEA.html)
+### Integration
+
+  * Harmony
   
-<br>  
+### Clustering Ananlysis 
 
-### Cell type annotation (Immune cell type)  
+  * [**UMAP/Clustering/Marker Genes**](scRNA/scRNA_UMAP.html)
+    * UMAP colored by conditions
+    * Number of cells by cluster
+    * Sankey plot of 2+ resolutions 
+    * Marker genes by clusters
+  * [**GSEA**](scRNA/Daiichi2024_30342.24.05.11.clusterGSEA.html)
+    * GSEA by cluster marker genes
+      * BP
+      * MF
+      * CC
+    * NES plot
 
-  * [**Annotation by scType Example**](scRNA/scRNA_scType.html)
-  * [**Manual Annotation Example**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)   
+### Cell type annotation  
+
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;Immune cell type -->
+ 
   
+  * [**Annotation by scType**](scRNA/scRNA_scType.html)
+  * [**Annotation by singleR**](scRNA/scRNA_singleR.html)
+  * [Reference geneset](scRNA/annotation_reference.html)
+  <!-- * [**Manual Annotation**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)    -->
+
+### Trajectory by monocle3
+  * Trajectory graph
+
+<hr>
+
+### Further Analysis  
+
+  * [**Population changes**](scRNA/Daiichi2024_30342.24.05.12.analysis_population.html)
   
-<br>  
-
-### Analysis  
-
-  * [**Population Analysis**](scRNA/Daiichi2024_30342.24.05.12.analysis_population.html)
+<br><br><br><br><br>
