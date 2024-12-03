@@ -1,0 +1,89 @@
+---
+title: "Integration"
+subtitle: "Harmony"
+#author: "Sung Rye Park"
+#date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    code_folding: none
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = F)
+```
+<br>
+
+## Processing files before integration
+
+```{r}
+# save the list of rds files 
+dir <- "path/"
+obj_list = readRDS(paste0(dir,"rds/obj_list.rds"))
+# merge 
+obj.srt = merge(obj_list[[1]], 
+                y = c(obj_list[[2]], obj_list[[3]]), 
+                add.cell.ids = names(obj_list))
+
+obj.srt <- JoinLayers(obj.srt)
+```
+
+```{r}
+## Apply sctransform normalization
+
+n_features = 2000
+n_pcs = 10
+dims_for_neighbors = 10
+resolutions = c(0.1,0.2,0.5,1)
+umap_dims = 1:10
+
+# Step 1: Find variable features
+obj.srt <- FindVariableFeatures(obj.srt, 
+                                selection.method = 'vst', 
+                                nfeatures = n_features)
+
+# Step 2: Normalize and scale data
+obj.srt <- NormalizeData(obj.srt)
+
+all.genes <- rownames(obj.srt)
+obj.srt <- ScaleData(obj.srt, features = VariableFeatures(obj.srt))
+# obj.srt <- ScaleData(obj.srt, features = all.genes)
+
+# Step 3: Run PCA
+obj.srt <- RunPCA(obj.srt, 
+                  features = VariableFeatures(object = obj.srt), npcs = n_pcs)
+  
+# Step 4: Find neighbors
+obj.srt <- FindNeighbors(obj.srt, dims = dims_for_neighbors)
+  
+# Step 5: Find clusters
+obj.srt <- FindClusters(obj.srt, resolution = resolutions)
+
+# Step 6: Run UMAP
+obj.srt <- RunUMAP(obj.srt, dims = umap_dims)
+```
+
+
+## Harmony Integration
+
+```{r}
+library(harmony)
+obj.srt <- RunHarmony(
+  object = obj.srt, 
+  group.by.vars = "orig.ident"
+)
+
+# 4. Neighbors & Clustering
+obj.srt <- FindNeighbors(obj.srt, reduction = "harmony", dims = 1:10)
+obj.srt <- FindClusters(obj.srt, resolution = c(0.1,0.2,0.3,0.4))
+
+# 5. UMAP 
+obj.srt <- RunUMAP(obj.srt, reduction = "harmony", dims = 1:10)
+```
+
+
+```{r}
+DimPlot(obj.srt, reduction = "harmony")
+```
+

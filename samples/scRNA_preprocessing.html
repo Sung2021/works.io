@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Sung Rye Park" />
 
-<meta name="date" content="2024-12-03" />
 
-<title>scRNA-seq workflow</title>
+<title>QC Processing</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1478,88 +1478,222 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">scRNA-seq workflow</h1>
-<h4 class="date">2024-12-03</h4>
+<h1 class="title toc-ignore">QC Processing</h1>
+<h4 class="author">Sung Rye Park</h4>
 
 </div>
 
 
-<a href="https://sung2021.github.io/samplePages/scRNAseq.html">Link to
-the version1</a> <br>
-<hr>
-<div id="initial-processing" class="section level3">
-<h3>Initial Processing</h3>
+<p><br></p>
+<div id="raw-data-processing" class="section level2">
+<h2>Raw data processing</h2>
+<p><strong>cellranger</strong> :</p>
 <ul>
-<li><a href="scRNA_preprocessing.html"><strong>QC processing and initial
-filitering</strong></a>
+<li>10x Genomics’s Chromium system to process single cell RNA-seq raw
+data.</li>
+<li>Easy to use but need large computing resources and Linux
+environment.<br />
+<br></li>
+<li>Input : Fastq files, cellranger genome index<br />
+<br></li>
+</ul>
+<div id="cellranger-countaggr" class="section level3">
+<h3>cellranger count/aggr</h3>
+<pre class="bash"><code># cellranger count for transcriptome data processing 
+cellranger count --id=SampleA_GEX \
+--transcriptome=/path/to/reference/transcriptomes/Mouse_GEX_2020/refdata-gex-mm10-2020-A \
+--fastqs=/path/to/raw_data/SampleA \
+--sample=SampleA \
+--expect-cells=10000
+
+# cellranger aggr to aggregate multiple cellranger count output to one file 
+cellranger aggr --id=Aggregate_GEX \
+--csv=/path/to/aggregate_info/Aggregate_GEX.csv
+</code></pre>
+</div>
+<div id="aggregate_gex.csv-example" class="section level3">
+<h3>Aggregate_GEX.csv example</h3>
+<pre class="bash"><code>library_id,molecule_h5
+SampleA,/path/to/SampleA/outs/molecule_info.h5
+SampleB,/path/to/SampleB/outs/molecule_info.h5
+SampleC,/path/to/SampleC/outs/molecule_info.h5
+</code></pre>
+</div>
+<div id="output" class="section level3">
+<h3>Output</h3>
+<p><strong>Aggregated Feature-Barcode Matrices</strong></p>
 <ul>
-<li>UMI cutoff</li>
-<li>mitochondrial DNA cutoff</li>
-<li>Doublet Removal (scrublet)</li>
-<li>Filtered sample plots</li>
-<li>Subset samples</li>
-</ul></li>
+<li>matrix.mtx<br />
+</li>
+<li>genes.tsv<br />
+</li>
+<li>barcodes.tsv</li>
 </ul>
 </div>
-<div id="integration" class="section level3">
-<h3>Integration</h3>
+</div>
+<div id="read-cellranger-output-in-r" class="section level2">
+<h2>Read Cellranger output in R</h2>
+<pre class="r"><code>library(Seurat)
+obj.raw = Read10X(&#39;raw_data/Path/filtered_feature_bc_matrix/&#39;)
+obj.srt = CreateSeuratObject(counts = obj.raw, project = &#39;project_name&#39;)</code></pre>
+</div>
+<div id="doublet-removal-by-scrublet" class="section level2 tabset">
+<h2 class="tabset">Doublet removal (by scrublet)</h2>
+<p>scrublet runs in python env.<br />
+Input file : count matrix from seurat object. Run scrublet in conda
+environment.</p>
+<div id="conda-environment" class="section level3">
+<h3>conda environment</h3>
+<pre class="bash"><code># Create and activate a new conda environment
+conda create -n bioinfo_env python=3.8 -y
+conda activate bioinfo_env
+
+# Install pip if not already installed
+conda install pip -y
+
+# Install necessary packages with pip
+pip install numpy pandas scanpy scrublet
+
+# run python
+python</code></pre>
+</div>
+<div id="run-python-script-for-scrublet" class="section level3">
+<h3>Run python script for scrublet</h3>
+<pre class="python"><code>import numpy as np
+import pandas as pd
+import scanpy as sc
+import scrublet as scr
+
+def run_scrublet(input_file, output_file, expected_doublet_rate=0.1):
+    df = pd.read_csv(input_file, header=0, index_col=0)
+    adata = sc.AnnData(df)
+    
+    # Set the expected_doublet_rate parameter
+    sc.external.pp.scrublet(adata, expected_doublet_rate=expected_doublet_rate)
+    
+    # Save the observation (results) to CSV
+    adata.obs.to_csv(output_file)
+
+input_file = &#39;input.count.csv&#39;
+output_file = &#39;output.scr.csv&#39;
+
+# Adjust the expected_doublet_rate parameter
+expected_doublet_rate = 0.1
+run_scrublet(input_file, output_file, expected_doublet_rate)</code></pre>
+<p><br></p>
+</div>
+<div id="add-the-doublet-info" class="section level3">
+<h3>Add the doublet info</h3>
+<p>Add the scrublet output information to the seurat object.</p>
+<pre class="r"><code>## import scrublet result
+df= read.csv(&#39;path/output.scr.csv&#39;, row.names = 1)
+
+# If the previous process changes the name of cell ID, 
+# Use the following code to correct it. 
+rownames(df) = gsub(pattern = &#39;_&#39;, replacement = &#39;-&#39; ,rownames(df))
+
+## add doublet info to the srt obj
+
+obj.srt[[&#39;doublet_score&#39;]] = df[rownames(obj.srt@meta.data),]$doublet_score
+obj.srt[[&#39;predicted_doublet&#39;]] =df[rownames(obj.srt@meta.data),]$predicted_doublet
+
+obj.srt %&gt;% saveRDS(&quot;path/saved.obj.rds&quot;)
+
+# You might want to check the number of doublets in the data
+obj.srt@meta.data %&gt;% select(predicted_doublet) %&gt;% table()</code></pre>
+<p><br></p>
+<p><br><br></p>
+</div>
+</div>
+<div id="filtering" class="section level2">
+<h2>Filtering</h2>
 <ul>
-<li><a href="scRNA_integration_harmony.html"><strong>Harmony</strong></a>
+<li><p>Filtering by UMI &amp; mitocondrial content ratio</p></li>
+<li><p>3 versions of Filtering</p>
 <ul>
-<li>Preprocessing before integration</li>
-<li>Harmony integration</li>
+<li>UMI &gt;=1000 &amp; mito % &lt;=15</li>
+<li>UMI &gt;=2000 &amp; mito % &lt;=10</li>
+<li>UMI &gt;=5000 &amp; mito % &lt;=5</li>
 </ul></li>
 </ul>
+<div id="example" class="section level3 tabset">
+<h3 class="tabset">Example</h3>
+<div id="read-the-raw-data" class="section level4">
+<h4>Read the raw data</h4>
+<pre class="r"><code>dir &lt;- &quot;path/to/cellrangeroutput/&quot;
+wt_numbers &lt;- 1:3
+
+# lapply &gt; Seurat object
+obj_list &lt;- lapply(wt_numbers, function(i) {
+  data_dir &lt;- paste0(dir, &quot;WT_&quot;, i, &quot;/&quot;)
+  obj.raw &lt;- Read10X(data.dir = data_dir)
+  obj.srt &lt;- CreateSeuratObject(counts = obj.raw, project = paste0(&quot;WT&quot;, i))
+  return(obj.srt)
+})
+
+# Name the list
+names(obj_list) &lt;- paste0(&quot;wt&quot;, wt_numbers)
+
+# list
+obj_list
+
+# save the list of rds files 
+dir &lt;- &quot;~/path/to/project/&quot;
+obj_list %&gt;% saveRDS(paste0(dir, &quot;rds/obj_all_list.rds&quot;))</code></pre>
 </div>
-<div id="clustering-ananlysis" class="section level3">
-<h3>Clustering Ananlysis</h3>
-<ul>
-<li><a href="scRNA/scRNA_UMAP.html"><strong>UMAP/Clustering/Marker
-Genes</strong></a>
-<ul>
-<li>UMAP colored by conditions</li>
-<li>Number of cells by cluster</li>
-<li>Sankey plot of 2+ resolutions</li>
-<li>Marker genes by clusters</li>
-</ul></li>
-<li><a href="scRNA/Daiichi2024_30342.24.05.11.clusterGSEA.html"><strong>GSEA</strong></a>
-<ul>
-<li>GSEA by cluster marker genes
-<ul>
-<li>BP</li>
-<li>MF</li>
-<li>CC</li>
-</ul></li>
-<li>NES plot</li>
-</ul></li>
-</ul>
+<div id="add-mitochondrial-content-info-to-the-data" class="section level4">
+<h4>Add mitochondrial content info to the data</h4>
+<pre class="r"><code># Add mitochondrial percentage to meta data
+# mm10 mitochondrial genes : ^mt-
+# ref (https://www.michaelchimenti.com/2019/03/calculate-mitochondrial-for-mouse-scrna-seq/)
+obj_list &lt;- lapply(obj_list, function(obj) {
+  obj[[&quot;percent.mt&quot;]] &lt;- PercentageFeatureSet(obj, pattern = &quot;^mt-&quot;)
+  return(obj)
+})</code></pre>
 </div>
-<div id="cell-type-annotation" class="section level3">
-<h3>Cell type annotation</h3>
-<!-- &nbsp;&nbsp;&nbsp;&nbsp;Immune cell type -->
-<ul>
-<li><a href="scRNA/scRNA_scType.html"><strong>Annotation by
-scType</strong></a></li>
-<li><a href="scRNA/scRNA_singleR.html"><strong>Annotation by
-singleR</strong></a></li>
-<li><a href="scRNA/annotation_reference.html">Reference geneset</a>
-<!-- * [**Manual Annotation**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)    --></li>
-</ul>
+<div id="plot-the-filtered-samples" class="section level4">
+<h4>Plot the filtered samples</h4>
+<pre class="r"><code>umi = 1000
+mitoratio = 15
+
+plots &lt;- lapply(obj_list, function(obj) {
+  count_filtered &lt;- sum(obj@meta.data$nCount_RNA &gt;= umi &amp; obj@meta.data$percent.mt &lt;= mitoratio)
+  ggplot(obj@meta.data, aes(nCount_RNA, percent.mt)) + 
+    geom_point(size=0.2) +
+    theme_bw() +
+    scale_x_log10() + 
+    geom_vline(xintercept = umi, color=&quot;salmon&quot;) +
+    geom_hline(yintercept = mitoratio, color=&quot;salmon&quot;) +
+  ggtitle(obj@meta.data$orig.ident[1]) +
+    labs(caption = paste0(&quot;UMI cutoff :&quot;, umi, &quot; and mito % : &quot;, mitoratio)) +
+    geom_text(aes(x = Inf, y = Inf, label = paste(&quot;Count:&quot;, count_filtered)), 
+              hjust = 1.1, vjust = 1.5, size = 3, color = &quot;blue&quot;)
+})
+
+plot_grid(plotlist = plots, ncol = 3)  </code></pre>
 </div>
-<div id="trajectory-by-monocle3" class="section level3">
-<h3>Trajectory by monocle3</h3>
-<ul>
-<li>Trajectory graph</li>
-</ul>
-<hr>
 </div>
-<div id="further-analysis" class="section level3">
-<h3>Further Analysis</h3>
-<ul>
-<li><a href="scRNA/Daiichi2024_30342.24.05.12.analysis_population.html"><strong>Population
-changes</strong></a></li>
-</ul>
-<p><br><br><br><br><br></p>
+</div>
+<div id="subset-samples" class="section level2">
+<h2>Subset samples</h2>
+<pre class="r"><code># subset
+subset_list &lt;- lapply(obj_list, function(obj) {
+  subset_obj &lt;- subset(obj, subset = nCount_RNA &gt;= 1000 &amp; percent.mt &lt;= 15)
+  return(subset_obj)
+})
+
+# merge 
+obj.srt = merge(subset_list[[1]], 
+                y = c(subset_list[[2]], subset_list[[3]]), 
+                add.cell.ids = names(subset_list))
+
+obj.srt &lt;- JoinLayers(obj.srt)
+
+# plot
+obj.srt@meta.data %&gt;% ggplot(aes(nCount_RNA, percent.mt)) +
+  geom_point(size=0.2) +
+  theme_bw() +
+  facet_wrap(.~orig.ident, ncol = 3)</code></pre>
 </div>
 
 
@@ -1611,7 +1745,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2,h3,h4,h5,h6",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {

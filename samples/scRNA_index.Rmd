@@ -18,14 +18,18 @@ knitr::opts_chunk$set(echo = TRUE, eval = F)
 
 ### Initial Processing  
 
-* [**QC processing and initial filitering**](https://sung2021.github.io/works.io/samples/processing/scRNA_preprocessing.html)
+* [**QC processing and initial filitering**](scRNA_preprocessing.html)
   * UMI cutoff
   * mitochondrial DNA cutoff
-  * Doublet Removal
+  * Doublet Removal (scrublet)
+  * Filtered sample plots
+  * Subset samples
 
 ### Integration
 
-  * Harmony
+  * [**Harmony**](scRNA_integration_harmony.html)
+    * Preprocessing before integration
+    * Harmony integration
   
 ### Clustering Ananlysis 
 

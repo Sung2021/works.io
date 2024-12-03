@@ -10,9 +10,8 @@
 
 
 
-<meta name="date" content="2024-12-03" />
 
-<title>scRNA-seq workflow</title>
+<title>Integration</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1478,88 +1477,72 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">scRNA-seq workflow</h1>
-<h4 class="date">2024-12-03</h4>
+<h1 class="title toc-ignore">Integration</h1>
+<h3 class="subtitle">Harmony</h3>
 
 </div>
 
 
-<a href="https://sung2021.github.io/samplePages/scRNAseq.html">Link to
-the version1</a> <br>
-<hr>
-<div id="initial-processing" class="section level3">
-<h3>Initial Processing</h3>
-<ul>
-<li><a href="scRNA_preprocessing.html"><strong>QC processing and initial
-filitering</strong></a>
-<ul>
-<li>UMI cutoff</li>
-<li>mitochondrial DNA cutoff</li>
-<li>Doublet Removal (scrublet)</li>
-<li>Filtered sample plots</li>
-<li>Subset samples</li>
-</ul></li>
-</ul>
+<p><br></p>
+<div id="processing-files-before-integration" class="section level2">
+<h2>Processing files before integration</h2>
+<pre class="r"><code># save the list of rds files 
+dir &lt;- &quot;path/&quot;
+obj_list = readRDS(paste0(dir,&quot;rds/obj_list.rds&quot;))
+# merge 
+obj.srt = merge(obj_list[[1]], 
+                y = c(obj_list[[2]], obj_list[[3]]), 
+                add.cell.ids = names(obj_list))
+
+obj.srt &lt;- JoinLayers(obj.srt)</code></pre>
+<pre class="r"><code>## Apply sctransform normalization
+
+n_features = 2000
+n_pcs = 10
+dims_for_neighbors = 10
+resolutions = c(0.1,0.2,0.5,1)
+umap_dims = 1:10
+
+# Step 1: Find variable features
+obj.srt &lt;- FindVariableFeatures(obj.srt, 
+                                selection.method = &#39;vst&#39;, 
+                                nfeatures = n_features)
+
+# Step 2: Normalize and scale data
+obj.srt &lt;- NormalizeData(obj.srt)
+
+all.genes &lt;- rownames(obj.srt)
+obj.srt &lt;- ScaleData(obj.srt, features = VariableFeatures(obj.srt))
+# obj.srt &lt;- ScaleData(obj.srt, features = all.genes)
+
+# Step 3: Run PCA
+obj.srt &lt;- RunPCA(obj.srt, 
+                  features = VariableFeatures(object = obj.srt), npcs = n_pcs)
+  
+# Step 4: Find neighbors
+obj.srt &lt;- FindNeighbors(obj.srt, dims = dims_for_neighbors)
+  
+# Step 5: Find clusters
+obj.srt &lt;- FindClusters(obj.srt, resolution = resolutions)
+
+# Step 6: Run UMAP
+obj.srt &lt;- RunUMAP(obj.srt, dims = umap_dims)</code></pre>
 </div>
-<div id="integration" class="section level3">
-<h3>Integration</h3>
-<ul>
-<li><a href="scRNA_integration_harmony.html"><strong>Harmony</strong></a>
-<ul>
-<li>Preprocessing before integration</li>
-<li>Harmony integration</li>
-</ul></li>
-</ul>
-</div>
-<div id="clustering-ananlysis" class="section level3">
-<h3>Clustering Ananlysis</h3>
-<ul>
-<li><a href="scRNA/scRNA_UMAP.html"><strong>UMAP/Clustering/Marker
-Genes</strong></a>
-<ul>
-<li>UMAP colored by conditions</li>
-<li>Number of cells by cluster</li>
-<li>Sankey plot of 2+ resolutions</li>
-<li>Marker genes by clusters</li>
-</ul></li>
-<li><a href="scRNA/Daiichi2024_30342.24.05.11.clusterGSEA.html"><strong>GSEA</strong></a>
-<ul>
-<li>GSEA by cluster marker genes
-<ul>
-<li>BP</li>
-<li>MF</li>
-<li>CC</li>
-</ul></li>
-<li>NES plot</li>
-</ul></li>
-</ul>
-</div>
-<div id="cell-type-annotation" class="section level3">
-<h3>Cell type annotation</h3>
-<!-- &nbsp;&nbsp;&nbsp;&nbsp;Immune cell type -->
-<ul>
-<li><a href="scRNA/scRNA_scType.html"><strong>Annotation by
-scType</strong></a></li>
-<li><a href="scRNA/scRNA_singleR.html"><strong>Annotation by
-singleR</strong></a></li>
-<li><a href="scRNA/annotation_reference.html">Reference geneset</a>
-<!-- * [**Manual Annotation**](scRNA/Daiichi2024_30342.24.05.12.suggestedAnnotation.html)    --></li>
-</ul>
-</div>
-<div id="trajectory-by-monocle3" class="section level3">
-<h3>Trajectory by monocle3</h3>
-<ul>
-<li>Trajectory graph</li>
-</ul>
-<hr>
-</div>
-<div id="further-analysis" class="section level3">
-<h3>Further Analysis</h3>
-<ul>
-<li><a href="scRNA/Daiichi2024_30342.24.05.12.analysis_population.html"><strong>Population
-changes</strong></a></li>
-</ul>
-<p><br><br><br><br><br></p>
+<div id="harmony-integration" class="section level2">
+<h2>Harmony Integration</h2>
+<pre class="r"><code>library(harmony)
+obj.srt &lt;- RunHarmony(
+  object = obj.srt, 
+  group.by.vars = &quot;orig.ident&quot;
+)
+
+# 4. Neighbors &amp; Clustering
+obj.srt &lt;- FindNeighbors(obj.srt, reduction = &quot;harmony&quot;, dims = 1:10)
+obj.srt &lt;- FindClusters(obj.srt, resolution = c(0.1,0.2,0.3,0.4))
+
+# 5. UMAP 
+obj.srt &lt;- RunUMAP(obj.srt, reduction = &quot;harmony&quot;, dims = 1:10)</code></pre>
+<pre class="r"><code>DimPlot(obj.srt, reduction = &quot;harmony&quot;)</code></pre>
 </div>
 
 
@@ -1611,7 +1594,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2,h3,h4,h5,h6",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
