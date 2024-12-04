@@ -1,7 +1,7 @@
 ---
 title: "scRNA-seq workflow"
 subtitle: " "
-date: "`r format(Sys.Date())`"
+#date: "`r format(Sys.Date())`"
 output:
   html_document:
     toc: true
@@ -38,12 +38,12 @@ knitr::opts_chunk$set(echo = TRUE, eval = F)
     * Number of cells by cluster
     * Sankey plot of 2+ resolutions 
     * Marker genes by clusters
-  * [**GSEA**](scRNA/Daiichi2024_30342.24.05.11.clusterGSEA.html)
+  * [**GSEA**](scRNA/scRNA_GSEA.html)
     * GSEA by cluster marker genes
       * BP
       * MF
       * CC
-    * NES plot
+    * GSEA info table
 
 ### Cell type annotation  
 
