@@ -1,0 +1,161 @@
+---
+title: "UMAP/Clustering/Markers"
+subtitle: "scRNA-seq"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    code_folding: none
+    toc: true
+    toc_depth: 6
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, warning=FALSE, message=FALSE, results = "markup")
+options(warn = F)
+
+library(ggplot2)
+library(ggrepel)
+library(dplyr)
+library(Seurat)
+library(scCustomize)
+library(SingleCellExperiment)
+library(SeuratWrappers)
+```
+
+```{r, echo=FALSE}
+dir <- "~/Desktop/Uconn/GSE110010/"
+obj.srt = readRDS(paste0(dir, "rds/GSE110010.obj.srt.init.249727.rds"))
+```
+
+<hr>
+
+## Clustering {.tabset} 
+
+* resolution 0.4  
+<br>
+
+```{r, echo=FALSE}
+resolution_values <- c(0.2, 0.4)
+```
+
+### Resolution 0.4 UMAP
+
+```{r}
+# Resolution and color palette
+i=2
+res= paste0("RNA_snn_res.", resolution_values[i])
+palette <- wesanderson::wes_palette("FantasticFox1", length(levels(obj.srt@meta.data[,res])), type = "continuous")
+```
+
+
+```{r,fig.width=7, fig.height=6, out.width='80%'}
+DimPlot(obj.srt, group.by = res, cols = palette, alpha = 0.8) + 
+  theme(plot.title = element_blank()) + xlab("UMAP1") + ylab("UMAP2")
+```
+
+### Resolution 0.4 UMAP (label)
+```{r,fig.width=7, fig.height=6, out.width='80%'}
+DimPlot(obj.srt, group.by = res, alpha = 0.8,
+        label = T, label.box = T, label.size = 3, cols = palette) + theme(plot.title = element_blank())
+```
+
+### Cell numbers 
+```{r, fig.width=10, fig.height=6}
+obj.srt@meta.data %>% ggplot(aes(!!sym(res), fill=!!sym(res))) + 
+  geom_bar(alpha=0.7, color="grey5", size=0.1) +
+  geom_text(stat="count", aes(label= ..count..), vjust=-0.5, size=3) +
+  scale_fill_manual(values=palette) + 
+  xlab("") + 
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        axis.text.x = element_text(angle = 45, vjust=0.5)) +
+  ggtitle("Cluster")
+```
+
+## Markers {.tabset}
+
+* resolution 0.4  
+
+```{r, eval=FALSE, echo=F}
+# Marker gene Identification
+find_and_save_markers <- function(obj.srt, cluster_id, logfc_threshold = 1.2,
+                                  test_method = 'wilcox', min_percent = 0.25) {
+  Idents(obj.srt) = cluster_id
+  all.markers = FindAllMarkers(obj.srt, logfc.threshold = log2(logfc_threshold),
+                               only.pos = TRUE,
+                               test.use = test_method, min.pct = min_percent)
+  return(all.markers)
+}
+# apply:
+
+resolution_values <- c(0.2, 0.4)
+
+# Loop through each resolution value
+for (resolution_number in resolution_values) {
+  # Construct the resolution name
+  res <- paste0("RNA_snn_res.", resolution_number)
+  all.markers= find_and_save_markers(obj.srt= obj.srt, cluster_id = res,
+                                   logfc_threshold = 1.2, test_method = 'wilcox', min_percent = 0.25)
+  output_file = paste0(dir,"data/mks/GSE110010_", res, ".markers.csv")
+  write.csv(all.markers, file = output_file, row.names = T)
+}
+```
+
+
+```{r, echo=FALSE}
+mks = read.csv(paste0(dir,"data/mks/GSE110010_RNA_snn_res.0.4.markers.csv"), row.names = 1)
+mks$cluster = paste0("cluster", mks$cluster)
+```
+
+
+### Marker Table
+```{r}
+mks %>% DT::datatable(width = "700px", extensions = "Buttons", options = list(dom="Bfrtip",buttons=c("csv","excel"), scrollX=TRUE), filter = "bottom")
+
+```
+
+### Top marker table
+
+```{r}
+df = mks %>% group_by(cluster) %>% top_n(50, avg_log2FC)
+df2 = data.frame(matrix(nrow = length(unique(df$cluster)), ncol = 1))
+rownames(df2) = unique(df$cluster)
+colnames(df2) = "cluster"
+df2$cluster = rownames(df2)
+for(i in rownames(df2)){
+  tmp=df %>% filter(cluster== i) %>% top_n(20, avg_log2FC) %>% select(gene) %>% pull() %>% paste0(collapse = ", ")
+  df2[i,"top 20 genes"] = tmp
+  tmp=df %>% filter(cluster== i) %>% top_n(50, avg_log2FC) %>% select(gene) %>% pull() %>% paste0(collapse = ", ")
+  df2[i,"top 50 genes"] = tmp
+}
+
+df2 %>%
+  DT::datatable(extensions = "Buttons",
+                rownames = F,
+                width = "800px",
+                options = list(scrollX=TRUE,
+                               dom="Bfrtip",
+                               buttons=c("csv","excel")))
+```
+
+### Top marker plot 
+
+```{r,fig.width=14, fig.height=6}
+top_genes = mks %>% group_by(cluster) %>% top_n(5, avg_log2FC) %>% select(gene) %>% pull() %>% unique()
+
+DotPlot(obj.srt, features = top_genes, group.by = "RNA_snn_res.0.4", cols = c("grey88","red")) +theme_bw() +ylab("")+ xlab("") +RotatedAxis()
+```
+
+
+
+
+<br>
+<hr>
+<br>
+```{r}
+sessionInfo()
+```
+
+
