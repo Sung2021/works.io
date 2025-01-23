@@ -5,7 +5,7 @@ Idents(obj.srt) = "condition"
 obj.tmp = subset(obj.srt, Cell_Type == type)
 logfc=log2(1)
 ##===========================
-mks= FindMarkers(obj.tmp, ident.1 = "GOF", ident.2 = "WT", 
+mks= FindMarkers(obj.tmp, ident.1 = "Treat", ident.2 = "Control", 
                  logfc.threshold = logfc)
 mks$DE = 'no_sig'
 pval=0.05
