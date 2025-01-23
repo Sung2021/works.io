@@ -196,3 +196,27 @@ my.colors <- c(colorRampPalette(colors = c("blue","white"))(20),
                colorRampPalette(colors = c("white","red"))(30))
 test.df %>% t() %>% pheatmap::pheatmap(color = my.colors, fontsize_row = 6)
 
+
+============================================================
+## Venn diagram
+
+gsea.list = list(kod35_wtd35_dn= kod35_wtd35_dn,
+                 wtd56_wtd35_dn= wtd56_wtd35_dn,
+                 wtd56_wtd35_up= wtd56_wtd35_up,
+                 kod35_wtd35_up= kod35_wtd35_up)
+
+## generate venndiagram data
+## generate venn diagram
+ven_gsea <- VennDetail::venndetail(gsea.list)
+plot(ven_gsea, type = "upset")
+```
+
+```{r}
+ven_gsea@result$Subset %>% table() %>% data.frame()
+ven_gsea@result %>% DT::datatable(extensions = "Buttons",
+                              filter = 'bottom',
+                              width = "700px",
+                              options = list(autoWidth = TRUE,
+                               fixedHeader = TRUE,
+                               dom="Bfrtip", buttons=c("csv","excel")))
+```
