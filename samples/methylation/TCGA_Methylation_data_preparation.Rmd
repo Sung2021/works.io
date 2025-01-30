@@ -1,0 +1,95 @@
+---
+title: "Data Preparation"
+subtitle: "TCGA"
+author: "Sung Rye Park"
+#date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    code_folding: none
+    toc: yes
+    toc_float:
+      collapsed: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+```{r}
+library(dplyr)
+
+#______________loading packages__________________#
+library(TCGAbiolinks)
+library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+library(IlluminaHumanMethylation450kmanifest)
+library(minfi)
+library(limma)
+library(missMethyl) # Analysing Illumina HumanMethylation BeadChip Data
+library(DMRcate)
+library(Gviz)
+library(ggplot2)
+library(RColorBrewer)
+library(edgeR)
+```
+
+```{r}
+dir= "~/Desktop/tmp/TCGA/"
+```
+
+
+## missMethyl library
+
+* missMethyl은 메틸레이션 데이터 분석에 사용되는 R 패키지로, 특히 비차별적으로 메틸레이션된 CpG 사이트를 식별하고 메틸레이션 기반 경로 분석을 수행하는 데 유용합니다.
+* Illumina Human Methylation EPIC 배열(annotation 데이터) : EPIC 배열에 대한 유전자 주석(annotation) 데이터를 제공합니다
+* IlluminaHumanMethylation450kanno.ilmn12.hg19 패키지는 450k 메틸레이션 배열(annotation 데이터)에 대한 정보를 제공합니다. 
+  * 450k는 “450,000개의 CpG 사이트”를 의미합니다.
+
+## DMRcate library
+
+* DMRcate는 R 패키지로, DNA 메틸레이션 데이터에서 **차별적 메틸화 영역(Differentially Methylated Regions, DMR)**을 식별하고 시각화하는 데 사용됩니다. 주로 Illumina의 450k 또는 EPIC 메틸레이션 배열 데이터를 분석할 때 활용되며, DMRcate는 개별 CpG 사이트가 아닌, 인접한 CpG 사이트들 간의 메틸레이션 패턴 변화를 통합적으로 평가합니다.
+
+* 주요 특징 및 기능
+	1.	DMR(차별적 메틸화 영역) 탐지:
+	•	메틸레이션 데이터에서 특정 조건(예: 암 대 정상 조직) 간 메틸레이션 변화가 발생한 유전자 영역을 식별합니다.
+	•	단일 CpG가 아닌, 메틸레이션 패턴이 일관된 인접 CpG 사이트들을 클러스터로 묶어 분석합니다.
+	2.	인접 CpG 통합 분석:
+	•	메틸레이션 배열에서 CpG는 근처에 밀집된 경우가 많습니다.
+	•	DMRcate는 이 정보를 활용하여 인접한 CpG의 메틸레이션 값을 통합적으로 평가하여 DMR을 식별합니다.
+	3.	가중치 스무딩(Weighted Smoothing):
+	•	차별적 메틸레이션 신호를 강화하기 위해 커널 기반 스무딩(kernel-based smoothing) 기법을 사용합니다.
+	•	스무딩은 인접 CpG 사이트의 통계적 신뢰성을 높이는 데 도움을 줍니다.
+	4.	시각화 및 보고:
+	•	DMRcate는 탐지된 DMR을 게놈 브라우저 형식으로 시각화하거나 테이블 형태로 정리합니다.
+	•	DMR 위치, 크기, 관련 유전자 정보를 포함한 결과를 제공합니다.
+
+
+<br><hr><br>
+
+
+
+## Data download and preparation
+
+```{r}
+# 사용 가능한 data.category 확인
+categories <- TCGAbiolinks:::getProjectSummary("TCGA-COAD")
+categories$data_categories
+```
+
+```{r}
+# 데이터 유형 설정을 'Methylation Beta Value'로 변경
+query_met <- GDCquery(
+  project = "TCGA-COAD",
+  data.category = "DNA Methylation", 
+  data.type = "Methylation Beta Value"
+)
+
+# 데이터 다운로드 실행
+GDCdownload(query_met)
+```
+

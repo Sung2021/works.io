@@ -1,0 +1,95 @@
+library(clusterProfiler)# hallmark referencehallmark <- msigdbr::msigdbr(species = "Homo sapiens", category = "H") %>% dplyr::select(gs_name, gene_symbol)## https://cran.r-project.org/web/packages/msigdbr/vignettes/msigdbr-intro.html
+msigdb = msigdbr::msigdbr(species = "Homo sapiens", category = "C7", subcategory = 'IMMUNESIGDB') 
+msigdb %>% colnames()
+msigdb$gs_subcat %>% table()
+
+
+## findmarkers
+  # id1 is control
+  findmarkers = function(id1, id2, logfc=log2(1), fc=1.2){
+    ## add compare to the ident
+    Idents(obj.srt) = 'compare'
+    mks =FindMarkers(obj.srt, ident.1 = id2, ident.2 = id1, 
+                     logfc.threshold = logfc)
+    mks$DE = 'no_sig'
+    pval=0.05
+    up = mks %>% filter(avg_log2FC >= log2(fc) & p_val_adj < pval) %>% rownames()
+    dn = mks %>% filter(avg_log2FC <= -log2(fc) & p_val_adj < pval) %>% rownames()
+    mks[up,]$DE = 'UP'
+    mks[dn,]$DE = 'DN'
+    mks$DE = factor(mks$DE, levels = c('UP','DN','no_sig'))
+    mks =mks %>% arrange(desc(avg_log2FC))
+    mks$gene = rownames(mks)
+    return(mks)
+  }
+  mks=findmarkers(id1 = id1,id2 = id2)
+  mks[1:10,]
+  mks$DE %>% table()
+  ## volcanoplot
+  pval=0.05
+  mks$labels = ''
+  g.up =mks %>% filter(DE == 'UP') %>% arrange(desc(avg_log2FC))  %>% rownames()
+  mks[g.up,]$labels = g.up
+  g.dn =mks %>% filter(DE == 'DN') %>% arrange(avg_log2FC)  %>% rownames()
+  mks[g.dn,]$labels = g.dn
+  
+  fc=1.2
+  cond=id2
+  mks$group = 'no significantly regulated'
+  g.up =mks %>% filter(DE == 'UP') %>% arrange(desc(avg_log2FC))  %>% rownames()
+  mks[g.up,]$group = paste0('UP regulated in ', cond)
+  g.dn =mks %>% filter(DE == 'DN') %>% arrange(avg_log2FC)  %>% rownames()
+  mks[g.dn,]$group = paste0('DOWN regulated in ', cond)
+  mks$group = factor(mks$group, levels = c(paste0('UP regulated in ', cond),paste0('DOWN regulated in ', cond),'no significantly regulated'))
+  mks$group %>% table()
+  p=mks %>% 
+    ggplot(aes(avg_log2FC, -log10(p_val_adj), color=group)) + 
+    geom_point(size=1, alpha=0.5) + 
+    scale_color_manual(values = c('red','blue','grey')) +
+    theme_classic() +
+    geom_vline(xintercept = c(-log2(fc),log2(fc)), color='grey') +
+    geom_hline(yintercept = -log10(0.05)) +
+    guides(colour = guide_legend(override.aes = list(size=5))) +
+    ggtitle(paste0(cond,' population')) +
+    ggrepel::geom_text_repel(aes(label=labels), size = 2.5, 
+                             min.segment.length = Inf, show.legend = F) +
+    ggeasy::easy_center_title() ## to center title
+  print(p)
+  mks %>% write.csv(paste0('data/DEG/',id1,'.',id2,'.DEG.csv'))
+}
+
+
+## simple_GSEA_check_with_symbol_only
+
+library(clusterProfiler)
+hallmark <- msigdbr::msigdbr(species = "Mus musculus", category = "H") %>% dplyr::select(gs_name, gene_symbol)
+gobp <- msigdbr::msigdbr(species = "Mus musculus", category = "C5") %>% dplyr::select(gs_name, gene_symbol)
+
+gs_input # gene names as SYMBOLs
+
+ref = hallmark
+ref = gobp
+enrich.custom <- clusterProfiler::enricher(gs_input, TERM2GENE=ref, pvalueCutoff = 0.05)
+
+enrich.custom %>% arrange(desc(Count))
+df =enrich.custom@result %>% arrange(desc(Count))
+df[1:10,]
+
+
+# Draw plot 
+df.all %>% ggplot(aes(x = sample, y = forcats::fct_rev(ID), fill = NES, size = p.adjust)) +
+  geom_point(shape=21, color="darkgrey") +
+  theme_classic() +
+  scale_size_continuous(range = c(6,2), name = "FDR") +  # 상단 범례 제목 설정
+  scale_fill_gradient2(low = "darkblue", mid = "white", high = "red", name = "NES") +  # 하단 범례 제목 설정
+  xlab("") +
+  ylab("") +
+  ggtitle("Cell Line / H69") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggeasy::easy_center_title()
+
+
+
+
+
+

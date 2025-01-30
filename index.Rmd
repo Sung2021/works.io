@@ -1,6 +1,6 @@
 ---
-title: "Information Collection"
-subtitle: ""
+title: "Works index"
+subtitle: "works.io"
 author: "Sung Rye Park"
 date: "`r format(Sys.Date())`"
 output: html_document
@@ -11,66 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 <br><hr>
 
-## Methylation Analysis tutorials 
-
-* [A cross-package Bioconductor workflow for analysing methylation array data (30 April 2024)](https://www.bioconductor.org/packages/release/workflows/vignettes/methylationArrayAnalysis/inst/doc/methylationArrayAnalysis.html) <br>
-    The steps involved in a typical differential methylation analysis pipeline including: quality control, filtering, normalization, data exploration and statistical testing for probe-wise differential methylation.<br>
-    [Methylation_Analysis code practice](https://github.com/hamidghaedi/Methylation_Analysis)<br>
-    : [Code practice](code/Methylation_analysis_preactice.txt)
-<br><br>
-* [Analyzing DNA methylation data (Computational Genomics with R)](https://compgenomr.github.io/book/analyzing-dna-methylation-data.html)<br>
-    <details>
-      <summary>Content list</summary>
-    Processing raw data <br>
-    Quality check <br>
-    Alignment and post-alignment processing <br>
-    Methylation calling <br>
-    Filtering bases <br>
-    Exploratory analysis <br>
-    Clustering <br>
-   PCA <br>
-    Finding interesting regions <br>
-    Differential methylation <br>
-    Methylation segmentation <br>
-    Annotating interesting regions <br>
-    Nearest genes <br>
-    Annotation with other genomic features <br>
-    Integration with other quantitative genomics data <br>
-    </details>
-<br>
-* [methylkit](https://www.bioconductor.org/packages/release/bioc/vignettes/methylKit/inst/doc/methylKit.html)<br>
-      methylKit is an R package for analysis and annotation of DNA methylation information obtained by high-throughput bisulfite sequencing.<br>
-    <details>
-      <summary>Content list</summary>
-      Comparative Analysis<br>
-      Annotating DMR<br>
-      Convenience functions ; percMethylation(), methSeq()<br>
-    </details>
-<br>
-* [DNA Methylation: Array Workflow](https://nbis-workshop-epigenomics.readthedocs.io/en/latest/content/tutorials/methylationArray/Array_Tutorial.html)<br>
-    **Description**<br>
-    Epigenomics Workshop 2024 contents <br>
-    Analyzing 450K methylation array data using R <br><br>
-
-<hr>
-## Variant calling data analysis
-
-* [maftools : Summarize, Analyze and Visualize MAF Files](https://bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html)<br>
-    MAF file analysis package  <br><br>
-* [nf-core/sarek Github](https://github.com/nf-core/sarek)<br>
-    Pipeline for detecting variants <br>
-    Analysis pipeline to detect germline or somatic variants <br>
-    (pre-processing, variant calling and annotation) from WGS / targeted sequencing
-    
-    
-<hr>
-
-## Useful Packages 
-
-* [monocle in seurat](https://stuartlab.org/signac/articles/monocle)
-* [BPCells](https://bnprks.github.io/BPCells/index.html)
-  * High performance single cell analysis on RNA-seq and ATAC-seq
-
+[Brain trauma study: public snRNA-seq analysis](battelle/brain_trauma/brain_trauma_study.html)
 
 <hr>
 <br><br><br><br>

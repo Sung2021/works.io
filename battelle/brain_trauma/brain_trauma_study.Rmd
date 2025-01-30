@@ -1,0 +1,72 @@
+---
+title: "Brain trauma study"
+subtitle: "works.io"
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br><hr>
+
+# Papaer
+
+* Single-nucleus profiling of adult mice sub-ventricular zone after blast-related traumatic brain injury
+
+## 7 SVZ cell types
+
+### 1. Neurons
+  * Meg3
+  * Syt1, Snap25
+  
+### 2. NSC-astrocytes (Neuronal Stem Cells)
+  * Nr2e1, Hes5, Slc1a2
+
+### 3. Oligodendrocytes
+  * Mog, Aspa
+
+### 4. OPCs (progenitor cells)
+  * Pdgfra 
+  
+### Microglia
+  * Csf1r, Tmem119, P2ry12
+  
+### Ependymal Cells
+  * Dnah11, Spag16, Admts20
+  
+### Endothelium-mural cells
+  * Pecam1, Vwf, Vtn
+
+```{r}
+cell_data <- data.frame(
+  Cell_type = c("Neuron", "Microglia", "NSC-Astrocyte", "Oligodendrocyte", "OPC", 
+                "Ependymal", "Endothelial-Mural"),
+  Markers = c(
+    "Meg3, Syt1, Snap25",
+    "Csf1r, Tmem119, P2ry12",
+    "Slc1a3, Apoe, Aldoc, Aqp4",
+    "Mog, Aspa, Tubb4a, Apod",
+    "Pdgfra",
+    "Dnah11, Spag16, Adamts20, Ak7, Ak9, Armc3",
+    "Pecam1(CD31), Vwf, Vtn"
+  ),
+  stringsAsFactors = FALSE # 문자형 데이터 처리를 위해 문자열로 유지
+)
+
+print(cell_data)
+```
+
+
+<hr>
+
+## DEG cutoff 
+  * lnFC > 0.25, P < 0.05, Min. PCT > 0.1
+
+
+<hr>
+<br><br><br><br>
+<br><br><br><br>

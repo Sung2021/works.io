@@ -1,0 +1,69 @@
+---
+title: "TCGA BRCA RNA-seq Analysis"
+subtitle: ""
+author: "Sung Rye Park"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    code_folding: none
+    toc: yes
+    toc_float:
+      collapsed: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+
+### [Data preparation](subpages/TCGA_BRCA_PrepData.html)
+
+* Download data
+* Convert gene ID to Symbol format
+* Meta data information 
+<br><br>
+
+### [PCA & TSNE plot](subpages/TCGA_BRCA_PCA.html) 
+
+* Create DEG object 
+* Processing 
+* PCA plots 
+* TSNE plots
+<br><br>
+
+### [Differentially Expressed Genes (DEG) analysis](subpages/TCGA_BRCA_DEGs.html)  
+
+* DEGs: Tumor vs Normal Tissue
+* Create DEG list
+* Volcanoplots 
+* DEG table 
+<br><br>
+
+### [GSEA](subpages/TCGA_BRCA_GSEA.html)  
+
+* GSEA with HALLMARK pathways
+    * NES plot 
+    * Info table 
+* GSEA with KEGG pathways  
+    * NES plot 
+    * Info table 
+<br><br>
+
+### [ssGSEA](subpages/TCGA_BRCA_ssGSEA.html)  
+
+* HALLMARK pathways
+* KEGG pathways 
+<br><br><br><br><br>
+
+<!-- ### Meta data information    -->
+
+<!-- [link]()<br> -->
+<!-- <br><br><br><br><br> -->
+
+

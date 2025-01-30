@@ -1,0 +1,169 @@
+---
+title: "DEG"
+subtitle: "TCGA BRCA"
+author: "Sung Park"
+#date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    code_folding: none
+    toc: yes
+    toc_float:
+      collapsed: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, eval =T, fig.align = "left", 
+                      message=F, warning=F,
+                      results = "markup",
+                      error = TRUE,
+                      highlight = TRUE,
+                      prompt = FALSE,
+                      tidy = FALSE)
+```
+
+```{r, echo=FALSE}
+## load required packages
+library(cowplot)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(TCGAbiolinks)
+library(DESeq2)
+```
+
+```{r, echo=FALSE}
+dir= "~/Desktop/tmp/TCGA/"
+```
+
+<br>
+
+## Differentially Expressed Genes (DEG) analysis {.tabset}
+
+
+### Import count data
+```{r}
+TCGA_BRCA_countsMeta = readRDS(paste0(dir,"rds/TCGA_BRCA_countsMeta.rds")) 
+treament = TCGA_BRCA_countsMeta$meta$treatments
+```
+
+<!-- ```{r} -->
+<!-- TCGA_BRCA_tpmsMeta = readRDS(paste0(dir,"TCGA_BRCA_tpmsMeta.rds")) -->
+<!-- tpms = TCGA_BRCA_tpmsMeta$counts -->
+<!-- ``` -->
+
+### DEG strategy 
+
+Differentially Expressed Genes (DEG) between Tumor tissue and Normal tissue 
+
+Tumor tissue/Normal tissue  
+
+n = 1224   
+Tumor n = 1111   
+Normal n = 113   
+
+<br><br><br>
+
+
+### Create DEG object 
+
+Don't run.  
+```{r, eval=FALSE}
+# Generate info table
+info <- data.frame(matrix(nrow = ncol(count.mtx), ncol = 2))
+colnames(info) <- c('sample', 'cond')
+info$sample <- colnames(count.mtx)
+info$cond <- dds$sample_type
+info$cond <- factor(info$cond, 
+                    levels = c("Solid Tissue Normal","Primary Tumor")) # CTL going first
+# levels(info$cond)
+
+# DESeq
+dds <- DESeqDataSetFromMatrix(count.mtx, info, ~ cond)
+dds <- DESeq(dds) 
+# dds %>% saveRDS(paste0(dir,"TCGA_BRCA_countsMeta.dds.rds"))
+res <- results(dds)
+res <- data.frame(res)
+```
+
+```{r}
+# The Previous work was saved and read to here to save run time. 
+dds = readRDS(paste0(dir,"rds/TCGA_BRCA_countsMeta.dds.rds"))
+res <- results(dds)
+res <- data.frame(res)
+```
+
+### Add DEG information  
+
+```{r}
+# Add DEG information 
+fc = 2
+pval = 0.05
+
+res = res %>% mutate(DE=ifelse(log2FoldChange >= log2(fc) & padj < pval, 'UP',
+                               ifelse(log2FoldChange <= -log2(fc) & padj < pval, 'DN','no_sig')))
+res = na.omit(res)
+```
+
+### DEG table 
+
+```{r}
+res %>% DT::datatable(width = "700px", extensions = "Buttons", 
+                      options = list(dom="Bfrtip",
+                                     scrollX=TRUE,
+                                     buttons=c("csv","excel")))
+```
+
+### Volcanoplot 
+
+```{r}
+res$DE = factor(res$DE, levels = c('UP','DN','no_sig'))
+res %>% 
+  ggplot(aes(log2FoldChange, -log10(padj), color=DE)) + 
+  geom_point(size=1, alpha=0.5) + 
+  scale_color_manual(values = c("red3","royalblue3","grey"), guide = FALSE) +
+  theme_classic() +
+  geom_vline(xintercept = c(-log2(fc),log2(fc)), color='grey') +
+  geom_hline(yintercept = -log10(0.05),color='grey') +
+  guides(colour = guide_legend(override.aes = list(size=5))) +
+  ggtitle(paste0(levels(dds$cond)[2], " / ", levels(dds$cond)[1] )) +
+  ggeasy::easy_center_title() ## to center title
+```
+
+
+### Volcanoplot with Number of DEGs  
+```{r}
+t= paste0(levels(dds$cond)[2], " / ", levels(dds$cond)[1] )
+up = nrow(res[res$DE == "UP", ])
+dn = nrow(res[res$DE == "DN", ])
+res %>% ggplot(aes(log2FoldChange, -log10(padj), color=DE)) + 
+  geom_point(size=0.5, shape=19, alpha=0.7) +
+  geom_vline(xintercept = c(-log2(fc), log2(fc)), size=0.1, color="grey") +
+  geom_hline(yintercept = -log10(0.05), size=0.1, color="grey") +
+  scale_color_manual(values = c("red3","royalblue3","grey"), guide = FALSE) +
+  theme_bw() +
+  annotate("text", x = Inf, y = Inf, label = paste0("UP: ", up), 
+           hjust = 1.1, vjust = 2, size = 5, color = "red") +
+  annotate("text", x = -Inf, y = Inf, label = paste0("DN: ", dn), 
+           hjust = -0.1, vjust = 2, size = 5, color = "royalblue") +
+  theme_bw() + ggtitle(t)
+```
+
+
+### Number of DEGs  
+
+UP : Genes upregulated in Tumor compared to Normal Tissue  
+DN : Genes downregulated in Tumor compared to Normal Tissue  
+```{r, fig.width=5, fig.height=5, out.width="60%"}
+res %>% filter(DE != "no_sig") %>% 
+  ggplot(aes(DE, fill=DE)) + geom_bar(color="black", size=0.2) +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.1, size= 4, color=c("salmon","royalblue")) +
+  scale_fill_manual(values = c("salmon", "royalblue"), guide=F) +
+  theme_bw()
+```
+
+
+
+```{r}
+res %>% saveRDS(paste0(dir, "TCGA_BRCA_RNAseq_TN_DEGs.rds"))
+```
+

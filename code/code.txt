@@ -1,0 +1,198 @@
+## DEG Identification 
+
+deg_identification = function(type){
+Idents(obj.srt) = "condition"
+obj.tmp = subset(obj.srt, Cell_Type == type)
+logfc=log2(1)
+##===========================
+mks= FindMarkers(obj.tmp, ident.1 = "GOF", ident.2 = "WT", 
+                 logfc.threshold = logfc)
+mks$DE = 'no_sig'
+pval=0.05
+fc=1.2
+up = mks %>% filter(avg_log2FC >= log2(fc) & p_val_adj < pval) %>% rownames()
+dn = mks %>% filter(avg_log2FC <= -log2(fc) & p_val_adj < pval) %>% rownames()
+mks[up,]$DE = 'UP'
+mks[dn,]$DE = 'DN'
+mks$DE = factor(mks$DE, levels = c('UP','DN','no_sig'))
+mks =mks %>% arrange(desc(avg_log2FC))
+mks$gene = rownames(mks)
+
+return(mks)
+}
+
+
+## Volcanoplot 
+
+volcanoplot = function(deg, title){
+  genes = deg %>% filter(DE %in% c("UP","DN")) %>% 
+  filter(avg_log2FC >log2(fc)| avg_log2FC < - log2(fc)) %>% dplyr::select(gene) %>% pull()
+  hb_genes = mks$gene[grepl("Hb", mks$gene)]
+  genes = genes[!(genes %in% hb_genes)]
+
+deg %>% 
+  ggplot(aes(avg_log2FC, -log10(p_val_adj), color=DE)) + 
+  geom_point(size=0.2, alpha=0.8) + 
+  scale_color_manual(values = c('red','blue','grey90')) +
+  theme_bw() +
+  geom_vline(xintercept = c(-log2(fc),log2(fc)), color='grey90') +
+  geom_hline(yintercept = -log10(pval),color='grey90') +
+  ggrepel::geom_text_repel(data = deg[genes,], 
+    aes(label = gene), 
+    size = 2, 
+    max.overlaps = 10, max.time = 1, 
+    max.iter = 1000
+  ) + ggtitle(title)
+}
+
+
+## Data table 
+
+mks %>%
+  DT::datatable(extensions = "Buttons",
+                width = "700px",
+                filter = "bottom",
+                options = list(scrollX=TRUE,
+                               dom="Bfrtip",
+                               buttons=c("csv","excel")))
+
+
+ibrary(clusterProfiler)
+hallmark <- msigdbr::msigdbr(species = "Mus musculus", category = "H") %>% 
+  dplyr::select(gs_name, gene_symbol)
+
+perform_GSEA <- function(res, ref, pvalueCutoff = 1) {
+  ranking <- function(res) {
+    df <- res$avg_log2FC
+    names(df) <- rownames(res)
+    df <- sort(df, decreasing = TRUE)
+    return(df)
+  }
+  
+  ranked.res <- ranking(res)
+  set.seed(123)
+  x <- clusterProfiler::GSEA(geneList = ranked.res,
+                             TERM2GENE = ref,
+                             pvalueCutoff = pvalueCutoff,
+                             pAdjustMethod = "BH",
+                             verbose = TRUE,
+                             seed = TRUE)
+  
+  result <- x@result %>% arrange(desc(NES))
+  result <- result[, c('NES', 'pvalue', 'p.adjust', 'core_enrichment', 'ID')]
+  return(result)
+}
+```
+
+
+```{r}
+gsea.out = perform_GSEA(res = mks, ref = hallmark)
+```
+
+#### GSEA plot 1 
+```{r, fig.width=12, fig.height=9}
+gsea.out2 = gsea.out
+gsea.out2$ID = sub(pattern = "HALLMARK_", replacement = "", rownames(gsea.out2))
+gsea.out2 %>% ggplot(aes(reorder(ID, NES), NES)) +
+  geom_col(aes(fill= -p.adjust), color="grey2", size=0.2) +
+  coord_flip() +
+  labs(x="Pathway", y="Normalized Enrichment Score",
+       title= "GSEA") + 
+  theme_classic() +
+  scale_fill_gradient(low = "grey99",high = "salmon")
+```
+
+#### GSEA plot 2 
+```{r, fig.width=12, fig.height=9}
+gsea.out2 = gsea.out2 %>% mutate(sig=ifelse(p.adjust <= 0.05, "FDR <= 0.05", "FDR > 0.05"))
+
+gsea.out2 %>% ggplot(aes(reorder(ID, NES), NES)) +
+  geom_col(aes(fill= sig), color="grey1", size=0.2) +
+  coord_flip() +
+  labs(x="Pathway", y="Normalized Enrichment Score",
+       title= "GSEA: HALLMARK") + 
+  theme_classic() +
+  scale_fill_manual(values = c("#FF0000","grey99")) 
+```
+
+#### GSEA result table 
+```{r}
+gsea.out2 %>% DT::datatable(extensions = "Buttons",
+                              filter = 'bottom',
+                              width = "800px",
+                              options = list(scrollX=TRUE,
+                               dom="Bfrtip", buttons=c("csv","excel")))
+```
+
+
+```{r}
+df = gsea.out2 %>% filter(p.adjust <= 0.05)
+
+log2fc_plot = function(i){
+  gene_vector <- unlist(strsplit(df[i,]$core_enrichment, "/"))
+  p = mks[gene_vector,] %>% 
+  ggplot(aes(avg_log2FC, reorder(gene, avg_log2FC), fill=DE)) + 
+  geom_point(size=2, shape=21, color="grey33") + 
+  scale_fill_manual(values = c("red", "grey88")) +
+  theme_bw() +
+    ggtitle(df[i,]$ID)
+  print(p)
+}
+```
+
+```{r, fig.width=6, fig.height=8, out.width="45%"}
+for(i in 1:nrow(df)){
+  log2fc_plot(i)
+}
+```
+
+
+
+### ssGSEA test using HALLMARK {.tabset}
+
+#### Preparation 
+```{r}
+library(clusterProfiler)
+hallmark <- msigdbr::msigdbr(species = "Mus musculus", category = "H") %>% 
+  dplyr::select(gs_name, gene_symbol)
+gs_names = hallmark$gs_name %>% unique()
+
+
+hallmarkList = list()
+
+for (i in seq_along(gs_names)) {
+  hallmarkList[[gs_names[i]]] <- hallmark %>% 
+    filter(gs_name == gs_names[i]) %>% 
+    dplyr::select(gene_symbol) %>% 
+    pull()
+}
+```
+
+```{r}
+obj.srt$cell_type_condition = paste0(obj.srt$Cell_Type,"_", obj.srt$condition)
+
+Idents(obj.srt) = "cell_type_condition"      
+avg_exp <- AverageExpression(obj.srt)
+tpms = avg_exp$RNA %>% as.data.frame() 
+
+## Perform ssgsea 
+library(corto)
+
+## Input data : tpm (count.mtx is accepted as well) 
+test = ssgsea(tpms,hallmarkList)
+
+## Reshape it to plot 
+test.df = test %>% t() %>% data.frame()
+rownames(test.df) = colnames(tpms)
+
+## p value of ssgsea 
+pval = corto::z2p(test)
+colnames(pval) = rownames(test.df)
+```
+
+#### pheatmap 
+```{r, fig.width=10, fig.height=10}
+my.colors <- c(colorRampPalette(colors = c("blue","white"))(20), 
+               colorRampPalette(colors = c("white","red"))(30))
+test.df %>% t() %>% pheatmap::pheatmap(color = my.colors, fontsize_row = 6)
+
